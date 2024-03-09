@@ -78,19 +78,24 @@ $smgType = getFlashData('smg_type');
             </div>
 
             
-            <button type="submit" class="mg-btn btn btn-primary btn-block">
-                Send
+            <button type="submit" class="mg-btn primary">
+                Submit
             </button>
             <hr>
             
-            <p class="text-center">
-                <a href="?module=auth&action=login">Sign in</a>
-            </p>
-            
-            <p class="text-center">
-                <a href="?module=auth&action=register">Sign up</a>
-            </p>
         </form>
+        <div style="display: flex; justify-content: space-between">
+
+            <button class=" rounded" style="width: 48%;">
+    
+                 <a href="?module=auth&action=login" >Sign in</a>
+            </button>
+            
+            <button class=" rounded" style="width: 48%;">
+    
+                <a href="?module=auth&action=register" >Sign up</a>
+            </button>
+        </div>
     </div>
 </div>
 

@@ -23,18 +23,21 @@ if(!defined('_CODE')) {
           <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
         </a>
 
+        
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="#" class="nav-link px-2 link-secondary">Overview</a></li>
-          <li><a href="#" class="nav-link px-2 link-dark">Inventory</a></li>
-          <li><a href="#" class="nav-link px-2 link-dark">Customers</a></li>
-          <li><a href="#" class="nav-link px-2 link-dark">Products</a></li>
+          <li><a href="#" class=" px-2 nav-item">Overview</a></li>
+          <li><a href="#" class=" px-2 nav-item">Inventory</a></li>
+          <li><a href="#" class=" px-2 nav-item">Customers</a></li>
+          <li><a href="#" class=" px-2 nav-item">Products</a></li>
         </ul>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-        </form>
+        <button class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 primary" >
+            Add Question
+        </button>
+        
+        
 
-        <div class="dropdown text-end">
+        <div class="menu-item dropdown text-end">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
           </a>
@@ -48,4 +51,4 @@ if(!defined('_CODE')) {
         </div>
       </div>
     </div>
-  </header>
+  </header> 

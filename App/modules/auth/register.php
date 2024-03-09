@@ -125,12 +125,12 @@ $old = getFlashData('old');
 <div class="row">
     <div class="col-4" style="margin: 50px auto;">
         <h2 class="text-center text-uppercase">Sign up</h2>
+        <form action="" method="post">
             <?php
             if (!empty($smg)) {
                 getSmg($smg, $smgType);
             }
             ?>
-        <form action="" method="post">
             <div class="form-group mg-form">
                 <label for="">Fullname</label>
                 <input name="fullname" type="fullname" class="form-control" placeholder="Enter your name" value=<?php echo getOldValue($old, 'fullname') ?>>
@@ -171,13 +171,13 @@ $old = getFlashData('old');
                 ?>
             </div>
 
-            <button type="submit" style="margin-top: 20px;" class="mg-btn btn btn-primary btn-block">
+            <button type="submit" class="mg-btn primary">
                 Sign up
             </button>
             <hr>
 
             <p class="text-center">
-                <a href="?module=auth&action=login">Sign in</a>
+                <a href="?module=auth&action=login">I already had an account  <span>❤</span> </a>
             </p>
         </form>
     </div>

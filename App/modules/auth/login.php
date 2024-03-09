@@ -6,9 +6,9 @@ $data = [
     'titlePage' => 'Sign in'
 ];
 
-if(checkLogin()) {
+if (checkLogin()) {
     reDirect('?module=home&action=dashboard');
-}   
+}
 if ($_POST) {
     $filterAll = filter();
     if (!empty(trim($filterAll['email'])) && !empty(trim($filterAll['password']))) {
@@ -20,7 +20,7 @@ if ($_POST) {
             $userId = $userQuery['id'];
             if (password_verify($password, $passwordHash)) {
                 //create tokenlogin
-                $tokenLogin = sha1(uniqid().time());
+                $tokenLogin = sha1(uniqid() . time());
                 //insert to tokenlogin table
                 $dataInsert = [
                     'user_id' => $userId,
@@ -28,17 +28,16 @@ if ($_POST) {
                 ];
                 $inserStatus = insert('tokenlogin', $dataInsert);
 
-                if($inserStatus) {
+                if ($inserStatus) {
                     // insert success
                     setSession('loginToken', $tokenLogin);
-                    
+
                     reDirect('?module=home&action=dashboard');
                 } else {
                     setFlashData('smg', 'Cannot sign in, please try again!');
                     setFlashData('smg_type', 'danger');
                     reDirect('?module=auth&action=login');
                 }
-                
             } else {
                 setFlashData('smg', 'Password is not correct! Please type again !');
                 setFlashData('smg_type', 'danger');
@@ -77,17 +76,22 @@ layouts('header', $data);
 
                 <input name="password" type="password" class="form-control" placeholder="Enter your password">
             </div>
-            <button type="submit" class="mg-btn btn btn-primary btn-block">
+            <button type="submit" class="mg-btn primary">
                 Sign in
             </button>
-            <hr>
-            <p class="text-center">
-                <a href="?module=auth&action=forgot">Forgot password?</a>
-            </p>
-            <p class="text-center">
-                <a href="?module=auth&action=register">Sign up</a>
-            </p>
+
+
         </form>
+        <button class="mg-btn rounded">
+
+            <a href="?module=auth&action=register">Sign up</a>
+        </button>
+
+
+        <hr>
+        <p class="text-center">
+            <a href="?module=auth&action=forgot">Forgot password?</a>
+        </p>
     </div>
 </div>
 
