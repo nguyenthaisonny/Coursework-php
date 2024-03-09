@@ -13,8 +13,8 @@ $data = [
 // filter data from form
 if (isPost()) {
     $filterAll = filter();
+
     
-    var_dump($filterAll['password']);
     $errors = []; // Array has errs
     //validate fullname: required , min 5
     if (empty($filterAll['fullname'])) {
@@ -63,24 +63,47 @@ if (isPost()) {
 
     if (empty($errors)) {
         //handle insert to database
-        var_dump(date('Y-m-d H:i:s'));
-        $activeToken = sha1(uniqid().time());
+        
+        $activeToken = sha1(uniqid() . time());
         $dataInsert = [
             'fullname' => $filterAll['fullname'],
             'email' => $filterAll['email'],
             'phone' => $filterAll['phone'],
             'password' => password_hash($filterAll['password'], PASSWORD_DEFAULT),
             'activeToken' => $activeToken,
-            
-            
+
+
 
 
         ];
         $insertStatus = insert('users', $dataInsert);
-        
-        setFlashData('smg', 'Sign up success!');
-        setFlashData('smg_type', 'success');
+        if ($insertStatus) {
+            $linkActive = _WEB_HOST . '/?module=auth&action=active&token=' . $activeToken;
+            setFlashData('smg', 'Sign up success!');
+            setFlashData('smg_type', 'success');
+            // send mail verify
+            $subject = $filterAll['fullname'] . ' [verify your account!] ';
+            $content = 'Hi ' . $filterAll['fullname'] . '</br>';
+            $content .= ' .PLease click this link below to active your account! ' . '</br>';
+            $content .= $linkActive . '</br>';
+            $content .= ' Thanks';
 
+            $sendMail = sendMail($filterAll['email'], $subject, $content);
+            if ($sendMail) {
+                setFlashData('smg', 'Sign up success! Please check your email to active your account ^^');
+                setFlashData('smg_type', 'success');
+                reDirect('?module=auth&action=login');
+            } else {
+                setFlashData('smg', 'Opps, The system get some errors :(( Please try again! ');
+                setFlashData('smg_type', 'danger');
+                
+            }
+        } else {
+            setFlashData('smg', 'Sign up fail, please try again!');
+            setFlashData('smg_type', 'danger');
+            
+        }
+        
     } else {
         setFlashData('errors', $errors);
         setFlashData('old', $filterAll);
@@ -90,6 +113,7 @@ if (isPost()) {
         reDirect('?module=auth&action=register');
     }
 }
+
 layouts('header', $data);
 $errors = getFlashData('errors');
 // print_r($errors);
@@ -101,49 +125,49 @@ $old = getFlashData('old');
 <div class="row">
     <div class="col-4" style="margin: 50px auto;">
         <h2 class="text-center text-uppercase">Sign up</h2>
-        <form action="" method="post">
             <?php
             if (!empty($smg)) {
                 getSmg($smg, $smgType);
             }
             ?>
+        <form action="" method="post">
             <div class="form-group mg-form">
                 <label for="">Fullname</label>
-                <input name="fullname" type="fullname" class="form-control" placeholder="Enter your name" value=<?php echo getOldValue($old, 'fullname')?>>
+                <input name="fullname" type="fullname" class="form-control" placeholder="Enter your name" value=<?php echo getOldValue($old, 'fullname') ?>>
                 <?php
-                echo formErr('fullname','<span class="error" >','</span>', $errors );
+                echo formErr('fullname', '<span class="error" >', '</span>', $errors);
                 ?>
             </div>
             <div class="form-group mg-form">
                 <label for="">Email</label>
                 <input name="email" type="email" class="form-control" placeholder="Enter your email" value=<?php echo  getOldValue($old, 'email') ?>>
                 <?php
-                echo formErr('email','<span class="error" >','</span>', $errors );
+                echo formErr('email', '<span class="error" >', '</span>', $errors);
                 ?>
             </div>
             <div class="form-group mg-form">
                 <label for="">Phone number</label>
                 <input name="phone" type="number" class="form-control" placeholder="Enter your phone" value=<?php echo  getOldValue($old, 'phone') ?>>
                 <?php
-                
-                echo formErr('phone','<span class="error" >','</span>', $errors );
+
+                echo formErr('phone', '<span class="error" >', '</span>', $errors);
                 ?>
             </div>
             <div class="form-group mg-form">
                 <label for="">Password</label>
-                <input name="password" type="password" class="form-control" placeholder="Enter your password" value=<?php echo  getOldValue($old, 'password')?>>
+                <input name="password" type="password" class="form-control" placeholder="Enter your password" value=<?php echo  getOldValue($old, 'password') ?>>
                 <?php
-                
-                echo formErr('password','<span class="error" >','</span>', $errors );
+
+                echo formErr('password', '<span class="error" >', '</span>', $errors);
                 ?>
             </div>
 
             <div class="form-group mg-form">
                 <label for="">Confirmed password</label>
-                <input name="password_confirm" type="password" class="form-control" placeholder="Confirm your password" value=<?php echo  getOldValue($old, 'password_confirm')?>>
+                <input name="password_confirm" type="password" class="form-control" placeholder="Confirm your password" value=<?php echo  getOldValue($old, 'password_confirm') ?>>
                 <?php
-                
-                echo formErr('password_confirm','<span class="error" >','</span>', $errors );
+
+                echo formErr('password_confirm', '<span class="error" >', '</span>', $errors);
                 ?>
             </div>
 

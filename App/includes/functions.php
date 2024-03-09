@@ -38,12 +38,23 @@ function sendMail($to, $subject, $content)
         $mail->setFrom('ilovebesun1996@gmail.com', 'Sonny');
         $mail->addAddress($to);     //Add a recipient
         //Content
+        $mail->CharSet = 'UTF-8';
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = $subject;
         $mail->Body    = $content;
+        // //SSL certificate
+        // $mail->SMTPOptions = array(
+        //     'ssl' => array(
+        //         'verify_peer' => false,
+        //         'verify_peer_name' => false,
+        //         'allow_self_signed' => true
+        //     )
+        //     );
 
-
-        $mail->send();
+        $sendMail = $mail->send();
+        if ($sendMail) {
+            return $sendMail;
+        }
         echo 'Message has been sent';
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
@@ -140,28 +151,77 @@ function isPhone($phone)
     return false;
 }
 //Alert smg
-function getSmg($smg, $type='succes') {
-    echo '<div style="text-align: center;" class="alert alert-'.$type.'">';
+function getSmg($smg, $type = 'success')
+{
+    echo '<div style="text-align: center;" class="alert alert-' . $type . '">';
     echo $smg;
     echo '</div>';
 }
 
 // direct func
-function reDirect($path = 'index.php') {
+function reDirect($path = 'index.php')
+{
     header("Location: $path");
     exit();
 }
 // echo err
-function formErr($fileName, $beforeHtml = '', $afterHtml = '', $errors) {
+function formErr($fileName, $beforeHtml = '', $afterHtml = '', $errors)
+{
     // if(!empty($fileName)) {
-        
-        return !empty($errors[$fileName]) ? $beforeHtml . reset($errors[$fileName]) . $afterHtml : null;
+
+    return !empty($errors[$fileName]) ? $beforeHtml . reset($errors[$fileName]) . $afterHtml : null;
 
     // }
     // echo null;
-    
-}
-function getOldValue($old, $fileName) {
 
-    return !empty($old[ $fileName]) ? $old[$fileName] : null;
+}
+function getOldValue($old, $fileName)
+{
+
+    return !empty($old[$fileName]) ? $old[$fileName] : null;
+}
+//check login func
+function checkLogin()
+{
+    $checkLogin = false;
+    if (getSession('loginToken')) {
+        
+        $loginToken = getSession('loginToken');
+        $queyToken = getRaw("SELECT user_id FROM tokenlogin WHERE token = '$loginToken'");
+        $userId = $queyToken['user_id'];
+        $queryStatus = getRaw("SELECT status FROM users WHERE id = '$userId'");
+        if (!empty($queyToken) && $queryStatus['status'] == 1) {
+            $checkLogin = true;
+        } else {
+            if($queryStatus['status'] == 0) {
+
+                setFlashData('smg', 'Your account has not been actived!');
+                setFlashData('smg_type', 'danger');
+            }
+            removeSession('loginToken');
+        }
+    }
+    return $checkLogin;
+
+}
+function checkAdmin() {
+    $checkAdmin = false;
+    if (getSession('loginToken')) {
+        
+        $loginToken = getSession('loginToken');
+        $queyToken = getRaw("SELECT user_id FROM tokenlogin WHERE token = '$loginToken'");
+        $userId = $queyToken['user_id'];
+        $queryStatus = getRaw("SELECT role FROM users WHERE id = '$userId'");
+        if (!empty($queyToken) && $queryStatus['role'] == 'admin') {
+            $checkAdmin = true;
+        } else {
+            if($queryStatus['role'] != 'admin') {
+
+                setFlashData('smg', 'You can not access this page!');
+                setFlashData('smg_type', 'danger');
+            }
+            removeSession('loginToken');
+        }
+    }
+    return $checkAdmin;
 }

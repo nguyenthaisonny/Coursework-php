@@ -8,7 +8,7 @@ function query($sql, $data = [], $check = false) {
     global $conn;
     $result = false;
     
-    print_r($data);
+    
     try{
         $statement = $conn -> prepare($sql);
         if(!empty($data)) {

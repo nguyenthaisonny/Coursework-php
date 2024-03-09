@@ -2,12 +2,20 @@
 if(!defined('_CODE')) {
     die('Access denied...');
 }
+$data = [
+    'titlePage' => 'Home'
+];
 
-require_once(_WEB_PATH_TEMPLATES.'/layout/header.php'); ?>
+
+if(!checkLogin()) {
+    reDirect('?module=auth&action=login');
+}
+layouts('headerIn', $data);
+?>
 <h1>dashboard</h1>
 
 
 
 <?php 
-require_once(_WEB_PATH_TEMPLATES.'/layout/footer.php')
+layouts('footerIn')
 ?>
