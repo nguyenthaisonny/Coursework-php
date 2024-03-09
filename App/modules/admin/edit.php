@@ -24,7 +24,7 @@ if (!empty($filterAll['id'])) {
         //exist
         setFlashData('user_detail', $userDetail);
     } else {
-        reDirect('?module=users&action=list');
+        reDirect('?module=admins&action=list');
     }
 }
 if (isPost()) {
@@ -190,8 +190,11 @@ if (!empty($userDetail)) {
             </div>
 
             <input type="hidden" name="id" value=<?php echo $userId; ?>>
-            <button type="submit" class="mg-btn btn btn-primary btn-block">Submit</button>
-            <a href="?module=users&action=list" class="mg-btn btn btn-primary btn-block">Back</a>
+            <div style="display: flex; justify-content: space-between;"> 
+
+            <a href="?module=users&action=list" style="width: 49%;" class="mg-btn btn btn-primary btn-block">Back</a>
+                <button type="submit" style="width: 49%;" class="mg-btn btn btn-primary btn-block">Submit</button>
+            </div>
 
     </div>
 </div>

@@ -84,12 +84,12 @@ if (isPost()) {
             $linkActive = _WEB_HOST . '/?module=auth&action=active&token=' . $activeToken;
             setFlashData('smg', 'Success! A new user was just added');
             setFlashData('smg_type', 'success');
-            reDirect('?module=users&action=list');
+            reDirect('?module=admin&action=list');
             
         } else {
             setFlashData('smg', 'System faces errors! Please try again.');
             setFlashData('smg_type', 'danger');
-            reDirect('?module=users&action=add');
+            reDirect('?module=admin&action=add');
         }
     } else {
         setFlashData('errors', $errors);
@@ -97,7 +97,7 @@ if (isPost()) {
         setFlashData('smg', 'Plesase check your data again !');
         setFlashData('smg_type', 'danger');
 
-        reDirect('?module=users&action=add');
+        reDirect('?module=admin&action=add');
     }
 }
 
@@ -175,7 +175,7 @@ $old = getFlashData('old');
 
 
             <button type="submit" class="mg-btn btn btn-primary btn-block">Submit</button>
-            <a href="?module=users&action=list" class="mg-btn btn btn-primary btn-block">Back</a>
+            <a href="?module=admin&action=list" class="mg-btn btn btn-primary btn-block">Back</a>
 
     </div>
 </div>

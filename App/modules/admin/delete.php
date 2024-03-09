@@ -32,4 +32,4 @@ if (!empty($filterAll['id'])) {
     setFlashData('smg', 'Link does not exist');
     setFlashData('smg_type', 'danger');
 }
-reDirect('?module=users&action=list');
+reDirect('?module=admin&action=list');

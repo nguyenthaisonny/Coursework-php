@@ -37,7 +37,7 @@ layouts('headerIn', $data);
     ?>
     <p>
 
-        <a href="?module=users&action=add" class="btn btn-success btn-sm">Add user <i class="fa-solid fa-plus"></i></a>
+        <a href="?module=admin&action=add" class="btn btn-success btn-sm">Add user <i class="fa-solid fa-plus"></i></a>
     </p>
     <table class="table table-bordered">
         <thead>
