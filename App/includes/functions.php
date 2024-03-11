@@ -225,6 +225,20 @@ function checkAdmin() {
     }
     return $checkAdmin;
 }
+function checkAdminNotSignOut() {
+    $checkAdmin = false;
+    if (getSession('loginToken')) {
+        
+        $loginToken = getSession('loginToken');
+        $queyToken = getRaw("SELECT user_id FROM tokenlogin WHERE token = '$loginToken'");
+        $userId = $queyToken['user_id'];
+        $queryStatus = getRaw("SELECT role FROM users WHERE id = '$userId'");
+        if (!empty($queyToken) && $queryStatus['role'] == 'admin') {
+            $checkAdmin = true;
+        } 
+    }
+    return $checkAdmin;
+}
 //handle convert file image to URL
 function srcData($image)
 {

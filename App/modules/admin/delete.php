@@ -4,7 +4,7 @@ if (!defined('_CODE')) {
 }
 $isAdmin = checkAdmin();
 if(!$isAdmin) {
-    reDirect('?module=home&action=dashboard');
+    reDirect('?module=home&action=forum');
 }
 //check whether id exist
 // delete login token -> delete user

@@ -1,7 +1,7 @@
 <?php
 
 const _MODULE = 'home';
-const _ACTION = 'dashboard';
+const _ACTION = 'forum';
 const _CODE = true;
 //DB data
 const _HOST = 'localhost';

@@ -11,7 +11,7 @@ $data = [
 
 $isAdmin = checkAdmin();
 if (!$isAdmin) {
-    reDirect('?module=home&action=dashboard');
+    reDirect('?module=home&action=forum');
 }
 // filter data from form
 if (isPost()) {

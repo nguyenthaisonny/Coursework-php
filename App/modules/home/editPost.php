@@ -10,32 +10,38 @@ $data = [
 if (!checkLogin()) {
     reDirect('?module=auth&action=login');
 }
-if (isGet()) {
+if (isPost()) {
     $filterAll = filter();
 
     if (!empty($filterAll['postName']) || !empty($filterAll['description'])) {
         if (getSession('loginToken')) {
-
+            $postId = $_GET['postId'];
             $loginToken = getSession('loginToken');
             $queyToken = getRaw("SELECT user_id FROM tokenlogin WHERE token = '$loginToken'");
             $userId = $queyToken['user_id'];
-            $dataInsert = [
+            $dataUpdate = [
                 'postName' => $filterAll['postName'],
                 'description' => $filterAll['description'],
                 'update_at' => date('Y:m:d H:i:s'),
-                'userId' => $userId
-            ];
-            $insertStatus = insert('posts', $dataInsert);
-            if ($insertStatus) {
 
-                setFlashData('smg', 'A new Post was just uploaded!');
-                setFlashData('smg_type', 'success');
+            ];
+            if ($userId = $_GET['userEditId'] || checkAdminNotSignOut()) {
+
+                $updateStatus = update('posts', $dataUpdate, "id='$postId'");
+                if ($updateStatus) {
+
+                    setFlashData('smg', 'This post was just updated');
+                    setFlashData('smg_type', 'success');
+                } else {
+                    setFlashData('smg', 'System faces errors! Please try again.');
+                    setFlashData('smg_type', 'danger');
+                }
             } else {
-                setFlashData('smg', 'System faces errors! Please try again.');
+                setFlashData('smg', 'Error! Can not edit post of another user.');
                 setFlashData('smg_type', 'danger');
             }
         }
-        reDirect('?module=home&action=dashboard');
+        reDirect('?module=home&action=forum');
     }
 }
 $listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
@@ -43,7 +49,7 @@ $listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
 $smg = getFlashData('smg');
 $smgType = getFlashData('smg_type');
 
-layouts('headerDashboard', $data);
+layouts('headerEditPost', $data);
 ?>
 
 
@@ -56,7 +62,7 @@ layouts('headerDashboard', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;" data-toggle="modal" data-target="#newPostModel">
                         Upload <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
@@ -111,9 +117,7 @@ layouts('headerDashboard', $data);
                         <option value="3">Unsolved</option>
                         <option value="3">No Replies Yet</option>
                     </select>
-                    <span class="input-icon input-icon-sm ml-auto w-auto">
-                        <input type="text" class="form-control form-control-sm bg-gray-200 border-gray-200 shadow-none mb-4 mt-4" placeholder="Search forum" />
-                    </span>
+
                 </div>
                 <!-- /Inner main header -->
 
@@ -130,6 +134,8 @@ layouts('headerDashboard', $data);
                             $count++;
                     ?>
                             <div class="card mb-2">
+
+
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
                                         <div style="display: flex;align-items: center;">
@@ -148,22 +154,23 @@ layouts('headerDashboard', $data);
                                             <p class="text-secondary">
                                                 <?php echo $item['description'] ?>
                                             </p>
-                                            
+
                                             <div>
-                                            
-                                            <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> 19</span>
-                                            <span><i class="far fa-comment ml-2"></i> 3</span>
-                                        </div>
+
+                                                <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> 19</span>
+                                                <span><i class="far fa-comment ml-2"></i> 3</span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="text-muted small text-center align-self-center" style="display: flex; flex-direction: column; justify-content: space-between">
-                                       
-                                        <div >
-    
-                                            <a href="<?php echo _WEB_HOST; ?>/?module=admin&action=edit&id=<?php echo $item['id'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                                        <div>
+
+                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <a href="<?php echo _WEB_HOST; ?>/?module=admin&action=delete&id=<?php echo $item['id'] ?>" onclick="return confirm('Delete this row?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         <?php
@@ -172,7 +179,7 @@ layouts('headerDashboard', $data);
                         ?>
                         <tr>
                             <td colspan="7">
-                                <div class="alert alert-danger text-center">None of user</div>
+                                <div class="alert alert-danger text-center">None of Post</div>
                             </td>
                         </tr>
                     <?php
@@ -210,7 +217,7 @@ layouts('headerDashboard', $data);
                                     <div class="mt-3 font-size-sm">
                                         <p>Hellooo :)</p>
                                         <p>
-                                            I'm newbie with laravel and i want to fetch data from database in realtime for my dashboard anaytics and i found a solution with ajax but it dosen't work if any one have a simple solution it will be
+                                            I'm newbie with laravel and i want to fetch data from database in realtime for my forum anaytics and i found a solution with ajax but it dosen't work if any one have a simple solution it will be
                                             helpful
                                         </p>
                                         <p>Thank</p>
@@ -235,7 +242,7 @@ layouts('headerDashboard', $data);
                                     <small class="text-muted ml-2">1 hour ago</small>
                                     <div class="mt-3 font-size-sm">
                                         <p>What exactly doesn't work with your ajax calls?</p>
-                                        <p>Also, WebSockets are a great solution for realtime data on a dashboard. Laravel offers this out of the box using broadcasting</p>
+                                        <p>Also, WebSockets are a great solution for realtime data on a forum. Laravel offers this out of the box using broadcasting</p>
                                     </div>
                                     <button class="btn btn-xs text-muted has-icon"><i class="fa fa-heart" aria-hidden="true"></i>1</button>
                                     <a href="javascript:void(0)" class="text-muted small">Reply</a>
@@ -251,16 +258,21 @@ layouts('headerDashboard', $data);
             <!-- /Inner main -->
         </div>
 
-        <!-- New Thread Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="overlay">
+            <div class="overlay-content">
+
+            </div>
+        </div>
+        <!-- Edit Thread Modal -->
+        <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">New Post</h5>
+                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit Post</h5>
 
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form method="post">
                             <div class="form-group">
                                 <label class="col-form-label">Title:</label>
                                 <input name="postName" type="text" class="form-control">
@@ -270,17 +282,25 @@ layouts('headerDashboard', $data);
                                 <input name="description" type="text" class="form-control">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="mg-btn  rounded " data-dismiss="modal">Close</button>
-                                <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                             </div>
+                            <button type="button" class="mg-btn small rounded">
+                                <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum">back</a>
+                            </button>
+                            <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
+</div>
 
-
-    <?php
-    layouts('footerIn')
-    ?>
+<script>
+    var myModal = new bootstrap.Modal(document.getElementById('editmodal'), {})
+    myModal.show()
+</script>
+<?php
+layouts('footerIn')
+?>

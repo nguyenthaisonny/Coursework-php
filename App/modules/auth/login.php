@@ -7,7 +7,7 @@ $data = [
 ];
 
 if (checkLogin()) {
-    reDirect('?module=home&action=dashboard');
+    reDirect('?module=home&action=forum');
 }
 if ($_POST) {
     $filterAll = filter();
@@ -32,7 +32,7 @@ if ($_POST) {
                     // insert success
                     setSession('loginToken', $tokenLogin);
 
-                    reDirect('?module=home&action=dashboard');
+                    reDirect('?module=home&action=forum');
                 } else {
                     setFlashData('smg', 'Cannot sign in, please try again!');
                     setFlashData('smg_type', 'danger');

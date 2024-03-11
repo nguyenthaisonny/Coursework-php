@@ -30,7 +30,7 @@ if (getSession('loginToken')) {
   <link rel="stylesheet" href="<?php echo _WEB_HOST_TEMPLATES ?>/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="<?php echo _WEB_HOST_TEMPLATES ?>/css/dashboard.css">
+  <link rel="stylesheet" href="<?php echo _WEB_HOST_TEMPLATES ?>/css/forum.css">
   
   <link rel="stylesheet" href="<?php echo _WEB_HOST_TEMPLATES ?>/css/style.css?ver=<?php echo rand(); ?>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -50,7 +50,7 @@ if (getSession('loginToken')) {
 
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="?module=home&action=dashboard" class=" px-2 nav-item">Dashboard</a></li>
+          <li><a href="?module=home&action=forum" class=" px-2 nav-item">Forum</a></li>
           <li><a href="?module=user&action=post" class=" px-2 nav-item">Post</a></li>
           <li><a href="#" class=" px-2 nav-item">Customers</a></li>
           <li><a href="#" class=" px-2 nav-item">Products</a></li>
@@ -68,12 +68,13 @@ if (getSession('loginToken')) {
           </a>
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
 
+            <?php echo checkAdminNotSignOut() ?  "<li><a class='dropdown-item' href='?module=admin&action=list'>User managment</a></li>" : null;?>
             <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="?module=user&action=profile&id=<?php echo $userId ?>">Profile</a></li>
             <li>
+              <li><a class="dropdown-item" href="?module=user&action=profile&id=<?php echo $userId ?>">Profile</a></li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="?module=auth&action=logout#">Sign out</a></li>
+            <li><a class="dropdown-item" href="?module=auth&action=logout">Sign out</a></li>
           </ul>
         </div>
       </div>

@@ -49,7 +49,7 @@ if (getSession('loginToken')) {
 
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="?module=home&action=dashboard" class=" px-2 nav-item">Dashboard</a></li>
+          <li><a href="?module=home&action=forum" class=" px-2 nav-item">Dashboard</a></li>
           <li><a href="?module=user&action=post" class=" px-2 nav-item">Post</a></li>
           <li><a href="#" class=" px-2 nav-item">Customers</a></li>
           <li><a href="#" class=" px-2 nav-item">Products</a></li>
