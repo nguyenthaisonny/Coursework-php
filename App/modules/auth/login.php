@@ -76,13 +76,13 @@ layouts('header', $data);
 
                 <input name="password" type="password" class="form-control" placeholder="Enter your password">
             </div>
-            <button type="submit" class="mg-btn primary">
+            <button type="submit" class="mg-btn large primary">
                 Sign in
             </button>
 
 
         </form>
-        <button class="mg-btn rounded">
+        <button class="mg-btn large rounded">
 
             <a href="?module=auth&action=register">Sign up</a>
         </button>

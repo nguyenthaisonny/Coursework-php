@@ -171,7 +171,7 @@ $old = getFlashData('old');
                 ?>
             </div>
 
-            <button type="submit" class="mg-btn primary">
+            <button type="submit" class="mg-btn large primary">
                 Sign up
             </button>
             <hr>

@@ -10,7 +10,7 @@ $data = [
 // echo $result;
 
 $isAdmin = checkAdmin();
-if(!$isAdmin) {
+if (!$isAdmin) {
     reDirect('?module=home&action=dashboard');
 }
 // filter data from form
@@ -73,7 +73,7 @@ if (isPost()) {
             'email' => $filterAll['email'],
             'phone' => $filterAll['phone'],
             'password' => password_hash($filterAll['password'], PASSWORD_DEFAULT),
-            'status' => $filterAll['status'],
+            'status' => $filterAll['status']
 
 
 
@@ -85,7 +85,6 @@ if (isPost()) {
             setFlashData('smg', 'Success! A new user was just added');
             setFlashData('smg_type', 'success');
             reDirect('?module=admin&action=list');
-            
         } else {
             setFlashData('smg', 'System faces errors! Please try again.');
             setFlashData('smg_type', 'danger');
@@ -163,20 +162,25 @@ $old = getFlashData('old');
                     </div>
                     <div class="form-group">
                         <label for="">Status</label>
-                        <select name="status" id="" class="form-control" >
-                            <option value="0" <?php echo getOldValue($old, 'status') == 0 ? 'selected' : false;?>>Not active</option>
-                            <option value="1" <?php echo getOldValue($old, 'status') == 1 ? 'selected' : false;?>>Active</option>
+                        <select name="status" id="" class="form-control">
+                            <option value="0" <?php echo getOldValue($old, 'status') == 0 ? 'selected' : false; ?>>Not active</option>
+                            <option value="1" <?php echo getOldValue($old, 'status') == 1 ? 'selected' : false; ?>>Active</option>
 
                         </select>
                     </div>
 
                 </div>
             </div>
+            <div style="display: flex; justify-content: space-between;">
 
+                <button class="mg-btn medium rounded">
 
-            <button type="submit" class="mg-btn btn btn-primary btn-block">Submit</button>
-            <a href="?module=admin&action=list" class="mg-btn btn btn-primary btn-block">Back</a>
+                    <a href="?module=admin&action=list">Back</a>
+                </button>
+                <button type="submit" class="mg-btn medium primary">Submit</button>
+            </div>
 
+            </from>
     </div>
 </div>
 

@@ -7,7 +7,7 @@ $data = [
 
 ];
 $isAdmin = checkAdmin();
-if(!$isAdmin) {
+if (!$isAdmin) {
     reDirect('?module=home&action=dashboard');
 }
 // $result = countRow('SELECT * FROM users');
@@ -85,6 +85,7 @@ if (isPost()) {
             'phone' => $filterAll['phone'],
 
             'status' => $filterAll['status'],
+            'update_at' => date('Y:m:d H:i:s')
 
 
 
@@ -109,7 +110,7 @@ if (isPost()) {
         setFlashData('smg', 'Plesase check your data again !');
         setFlashData('smg_type', 'danger');
     }
-    reDirect('?module=users&action=edit&id=' . $userId);
+    reDirect('?module=admin&action=edit&id=' . $userId);
 }
 
 layouts('header', $data);
@@ -190,10 +191,14 @@ if (!empty($userDetail)) {
             </div>
 
             <input type="hidden" name="id" value=<?php echo $userId; ?>>
-            <div style="display: flex; justify-content: space-between;"> 
+            <div style="display: flex; justify-content: space-between;">
+                <button class="mg-btn medium rounded">
+                    <a href="?module=admin&action=list">Back</a>
 
-            <a href="?module=users&action=list" style="width: 49%;" class="mg-btn btn btn-primary btn-block">Back</a>
-                <button type="submit" style="width: 49%;" class="mg-btn btn btn-primary btn-block">Submit</button>
+                </button>
+
+
+                <button type="submit" class="mg-btn medium primary">Submit</button>
             </div>
 
     </div>

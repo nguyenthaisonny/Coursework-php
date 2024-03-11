@@ -14,3 +14,4 @@ define('_WEB_HOST_TEMPLATES', _WEB_HOST. '/templates');
 // config path
 define('_WEB_PATH', __DIR__);
 define('_WEB_PATH_TEMPLATES', _WEB_PATH. '/templates');
+define ('UPLOAD_PATH', __DIR__. '/../uploads');

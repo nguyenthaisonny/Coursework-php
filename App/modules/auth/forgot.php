@@ -78,24 +78,24 @@ $smgType = getFlashData('smg_type');
             </div>
 
             
-            <button type="submit" class="mg-btn primary">
+            <button type="submit" class="mg-btn large primary">
                 Submit
             </button>
             <hr>
             
         </form>
-        <div style="display: flex; justify-content: space-between">
+        
 
-            <button class=" rounded" style="width: 48%;">
+            <button class="mg-btn large rounded" >
     
                  <a href="?module=auth&action=login" >Sign in</a>
             </button>
             
-            <button class=" rounded" style="width: 48%;">
+            <button class="mg-btn large rounded" >
     
                 <a href="?module=auth&action=register" >Sign up</a>
             </button>
-        </div>
+        
     </div>
 </div>
 
