@@ -13,7 +13,7 @@ if (!empty($filterAll['id'])) {
     $userId = $filterAll['id'];
     $userDetail = countRow("SELECT * FROM users WHERE id=$userId");
     if ($userDetail > 0) {
-        $deleteToken = delete('tokenlogin', "user_id=$userId");
+        $deleteToken = delete('tokenlogin', "userId=$userId");
         if ($deleteToken) {
             $deleteUser = delete('users', "id=$userId");
             if ($deleteUser) {

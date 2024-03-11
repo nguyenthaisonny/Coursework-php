@@ -17,8 +17,8 @@ $filterAll = filter();
 if (getSession('loginToken')) {
     $postId = $_GET['postId'];
     $loginToken = getSession('loginToken');
-    $queyToken = getRaw("SELECT user_id FROM tokenlogin WHERE token = '$loginToken'");
-    $userId = $queyToken['user_id'];
+    $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+    $userId = $queyToken['userId'];
     
     if ($userId = $_GET['userIdDelete'] || checkAdminNotSignOut()) {
 

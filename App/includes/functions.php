@@ -187,8 +187,8 @@ function checkLogin()
     if (getSession('loginToken')) {
         
         $loginToken = getSession('loginToken');
-        $queyToken = getRaw("SELECT user_id FROM tokenlogin WHERE token = '$loginToken'");
-        $userId = $queyToken['user_id'];
+        $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+        $userId = $queyToken['userId'];
         $queryStatus = getRaw("SELECT status FROM users WHERE id = '$userId'");
         if (!empty($queyToken) && $queryStatus['status'] == 1) {
             $checkLogin = true;
@@ -209,8 +209,8 @@ function checkAdmin() {
     if (getSession('loginToken')) {
         
         $loginToken = getSession('loginToken');
-        $queyToken = getRaw("SELECT user_id FROM tokenlogin WHERE token = '$loginToken'");
-        $userId = $queyToken['user_id'];
+        $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+        $userId = $queyToken['userId'];
         $queryStatus = getRaw("SELECT role FROM users WHERE id = '$userId'");
         if (!empty($queyToken) && $queryStatus['role'] == 'admin') {
             $checkAdmin = true;
@@ -230,8 +230,8 @@ function checkAdminNotSignOut() {
     if (getSession('loginToken')) {
         
         $loginToken = getSession('loginToken');
-        $queyToken = getRaw("SELECT user_id FROM tokenlogin WHERE token = '$loginToken'");
-        $userId = $queyToken['user_id'];
+        $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+        $userId = $queyToken['userId'];
         $queryStatus = getRaw("SELECT role FROM users WHERE id = '$userId'");
         if (!empty($queyToken) && $queryStatus['role'] == 'admin') {
             $checkAdmin = true;

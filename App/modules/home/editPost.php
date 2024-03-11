@@ -17,8 +17,8 @@ if (isPost()) {
         if (getSession('loginToken')) {
             $postId = $_GET['postId'];
             $loginToken = getSession('loginToken');
-            $queyToken = getRaw("SELECT user_id FROM tokenlogin WHERE token = '$loginToken'");
-            $userId = $queyToken['user_id'];
+            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+            $userId = $queyToken['userId'];
             $dataUpdate = [
                 'postName' => $filterAll['postName'],
                 'description' => $filterAll['description'],

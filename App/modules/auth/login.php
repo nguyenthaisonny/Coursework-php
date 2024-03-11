@@ -23,7 +23,7 @@ if ($_POST) {
                 $tokenLogin = sha1(uniqid() . time());
                 //insert to tokenlogin table
                 $dataInsert = [
-                    'user_id' => $userId,
+                    'userId' => $userId,
                     'token' => $tokenLogin
                 ];
                 $inserStatus = insert('tokenlogin', $dataInsert);
