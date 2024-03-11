@@ -2,7 +2,7 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-require_once('./App/templates/layout/');
+
 $data = [
     'titlePage' => 'Profile'
 ];
@@ -117,7 +117,7 @@ if (isPost()) {
 
 
 
-layouts('headerIn', $data);
+layouts('headerProfile', $data);
 $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
