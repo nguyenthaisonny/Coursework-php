@@ -93,9 +93,7 @@ if (isPost()) {
 
 
         ];
-        if (!empty($filterAll['password'])) {
-            $dataUpdate['password'] = password_hash($filterAll['password'], PASSWORD_DEFAULT);
-        }
+       
         $condition = "id = $userId";
         $updateStatus = update('users', $dataUpdate, $condition);
         if ($updateStatus) {
@@ -153,10 +151,12 @@ if (!empty($userDetail)) {
                     <img class="img-account-profile rounded-circle mb-2" src= <?php echo !empty(getOldValue($old, 'profileImage')) ? getOldValue($old, 'profileImage') : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758" ;?> alt="">
                     
 
-                    <!-- Profile picture help block-->
-                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                    <!-- Profile picture upload button-->
-                    <button class="mg-btn rounded" style="margin-top: 0;">Upload new image</button>
+                    <!-- Profile info-->
+                    <h6 style="margin: 16px 0 0 0;font-size: 14px; font-weight: 500;" ><?php echo getOldValue($old, 'fullname')?></h6>
+                    <p class="small font-italic text-muted mb-4" ><?php echo getOldValue($old, 'email')?></p>
+
+                    <!-- Profile picture button-->
+                    
                 </div>
             </div>
         </div>
@@ -185,7 +185,7 @@ if (!empty($userDetail)) {
                             <!-- Form Group (first name)-->
                             <div class="col-md-6">
                                 <label class="small mb-1">Email Address</label>
-                                <input name="email" class="form-control" type="email"  value=<?php echo  getOldValue($old, 'email') ?>>
+                                <input name="email" class="form-control" type="email"  placeholder="Enter your email"  value=<?php echo  getOldValue($old, 'email') ?>>
                                 <?php
                                 echo formErr('email', '<span class="error" >', '</span>', $errors);
                                 ?>
@@ -193,7 +193,7 @@ if (!empty($userDetail)) {
                             <!-- Form Group (last name)-->
                             <div class="col-md-6">
                                 <label class="small mb-1">Phone</label>
-                                <input name="phone" class="form-control"  type="number" value=<?php echo  getOldValue($old, 'phone') ?>>
+                                <input name="phone" class="form-control"  placeholder="Enter your phone" type="number" value=<?php echo  getOldValue($old, 'phone') ?>>
                             </div>
                             <?php
 
@@ -202,7 +202,7 @@ if (!empty($userDetail)) {
                         </div>
                         <!-- Form Row        -->
                         <div class="mb-3">
-                            <label class="small mb-1" for="inputUsername">Upload avatar</label>
+                            <label class="small mb-1" for="inputUsername">Upload avatar (JPG or PNG no larger than 5 MB)</label>
 
                             <input name="profileImage" class="form-control" id="inputUsername" type="file" placeholder="Enter your username">
                             <?php

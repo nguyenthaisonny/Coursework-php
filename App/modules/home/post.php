@@ -123,7 +123,7 @@ layouts('headerForum', $data);
                 <!-- Inner main body -->
 
                 <!-- Forum List -->
-                <div class="inner-main-body p-2 p-sm-3 collapse forum-content show">
+                <div class="inner-main-body p-2 p-sm-3 collapse forum-content">
                     <?php
                     if (!empty($listPost)) :
                         $count = 0;
@@ -139,7 +139,7 @@ layouts('headerForum', $data);
                                     <div class="media forum-item">
                                         <div style="display: flex;align-items: center;">
 
-                                            <a href="" data-toggle="collapse" data-target=".forum-content"><img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                            <a href="#" data-toggle="collapse" data-target=".forum-content"><img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                             <div style="padding-left: 6px;">
                                                 <div style="display: flex; align-items: center; justify-content: space-between;">
                                                     <h6 style="margin: 0;padding: 0"><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
@@ -149,7 +149,7 @@ layouts('headerForum', $data);
                                             </div>
                                         </div>
                                         <div class="media-body" style="margin-top: 10px;">
-                                            <h6><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>$userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h6>
+                                            <h6><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $item['postName'] ?></a></h6>
                                             <p class="text-secondary">
                                                 <?php echo $item['description'] ?>
                                             </p>
@@ -200,8 +200,8 @@ layouts('headerForum', $data);
                 <!-- /Forum List -->
 
                 <!-- Forum Detail -->
-                <div class="inner-main-body p-2 p-sm-3 collapse forum-content">
-                    <a href="#" class="btn btn-light btn-sm mb-3 has-icon" data-toggle="collapse" data-target=".forum-content"><i class="fa fa-arrow-left mr-2"></i>Back</a>
+                <div id = 'postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse" >
+                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm mb-3 has-icon "  data-target=".forum-content"><i class="fa fa-arrow-left mr-2"></i>Back</a>
                     <div class="card mb-2">
                         <div class="card-body">
                             <div class="media forum-item">
@@ -229,7 +229,7 @@ layouts('headerForum', $data);
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-2">
+                    <div class="card mb-2 ">
                         <div class="card-body">
                             <div class="media forum-item">
                                 <a href="javascript:void(0)" class="card-link">
@@ -284,10 +284,18 @@ layouts('headerForum', $data);
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>
-
+<script>
+    var myCollapse = document.getElementById('postCollapse')
+    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+        
+        
+       
+        
+    })
+</script>
 
 <?php
 layouts('footerIn')
