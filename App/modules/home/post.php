@@ -10,39 +10,125 @@ $data = [
 if (!checkLogin()) {
     reDirect('?module=auth&action=login');
 }
-if (isPost()) {
-    $filterAll = filter();
+// echo $result;
+$filterAll = filter();
 
-    if (!empty($filterAll['postName']) || !empty($filterAll['description'])) {
-        if (getSession('loginToken')) {
 
-            $loginToken = getSession('loginToken');
-            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userId = $queyToken['userId'];
-            $dataInsert = [
-                'postName' => $filterAll['postName'],
-                'description' => $filterAll['description'],
-                'update_at' => date('Y:m:d H:i:s'),
-                'userId' => $userId
-            ];
-            $insertStatus = insert('posts', $dataInsert);
-            if ($insertStatus) {
+if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
+    $userEditId = $filterAll['userIdEdit'];
+    $postId = $filterAll['postId'];
 
-                setFlashData('smg', 'A new Post was just uploaded!');
-                setFlashData('smg_type', 'success');
-            } else {
-                setFlashData('smg', 'System faces errors! Please try again.');
-                setFlashData('smg_type', 'danger');
-            }
-        }
+    // check whether exist in database
+    //if exist => get info
+    //if not exist => navigat to list page
+    $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId'");
+    if (!empty($listQuestion)) {
+        //exist
+        setFlashData('listQuestion', $listQuestion);
+    } else {
         reDirect('?module=home&action=forum');
     }
 }
-$listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
+if (isPost()) {
+    
+    $filterAll = filter();
 
+
+    $errors = []; // Array has errs
+    //validate fullname: required , min 5
+    if (empty($filterAll['fullname'])) {
+        $errors['fullname']['required'] = 'Fullname is required!';
+    } else {
+        if (strlen($filterAll['fullname'] < 6)) {
+            $errors['fullname']['min'] = 'Fullname should be more than 5 characters!';
+        }
+    }
+
+    //Email Validate: required, true notation, check email existed
+    if (empty($filterAll['email'])) {
+        $errors['email']['required'] = 'Email is required!';
+    } else {
+        $email = $filterAll['email'];
+        $userId = $filterAll['id'];
+        $sql = "SELECT id FROM users WHERE email = '$email' AND id <> $userId";
+        if (countRow($sql) > 0) {
+            $errors['email']['unique'] = 'This email has already existed!';
+        }
+    }
+    //valide phone number: required, true notation
+    if (empty($filterAll['phone'])) {
+        $errors['phone']['required'] = 'Phone number is required!';
+    } else {
+        if (!isPhone($filterAll['phone'])) {
+            $errors['phone']['isPhone'] = 'Invalid phone number';
+        }
+    }
+
+    // handle Image upload
+    // if (isset($_FILES['profileImage'])) {
+    //     $image = $_FILES['profileImage']['name'];
+    // }
+    $target_dir = './templates/img/';
+    $profileImage = $target_dir.$_FILES["profileImage"]["name"];
+    move_uploaded_file($_FILES["profileImage"]["tmp_name"], $profileImage);
+    //validat image
+    
+        
+    
+
+    if (empty($errors)) {
+        //handle insert to database
+
+        $activeToken = sha1(uniqid() . time());
+        $dataUpdate = [
+            'fullname' => $filterAll['fullname'],
+            'email' => $filterAll['email'],
+            'phone' => $filterAll['phone'],
+            'profileImage' => $profileImage
+
+
+
+
+
+
+        ];
+       
+        $condition = "id = $userId";
+        $updateStatus = update('users', $dataUpdate, $condition);
+        if ($updateStatus) {
+            $linkActive = _WEB_HOST . '/?module=auth&action=active&token=' . $activeToken;
+            setFlashData('smg', 'Edit profile success!');
+            setFlashData('smg_type', 'success');
+        } else {
+            setFlashData('smg', 'System faces errors! Please try again.');
+            setFlashData('smg_type', 'danger');
+        }
+    } else {
+        setFlashData('errors', $errors);
+        setFlashData('old', $filterAll);
+        setFlashData('smg', 'Plesase check your data again !');
+        setFlashData('smg_type', 'danger');
+    }
+    reDirect('?module=user&action=profile&id=' . $userId);
+}
+$errors = getFlashData('errors');
+// print_r($errors);
 $smg = getFlashData('smg');
-$smgType = getFlashData('smg_type');
+$smgType = getFlashData(('smg_type'));
+$old = getFlashData('old');
+$ok = getFlashData('ok');
+$no = getFlashData('no');
+$listQuestion = getFlashData('listQuestion');
 
+if (!empty($listQuestion)) {
+    $old = $listQuestion;
+    
+    echo '<prev>';
+    print_r($old);
+    echo '</prev>';
+    
+
+}
 layouts('headerForum', $data);
 ?>
 
@@ -125,9 +211,9 @@ layouts('headerForum', $data);
                 <!-- Forum List -->
                 <div class="inner-main-body p-2 p-sm-3 collapse forum-content">
                     <?php
-                    if (!empty($listPost)) :
+                    if (!empty($listQuestion)) :
                         $count = 0;
-                        foreach ($listPost as $item) :
+                        foreach ($listQuestion as $item) :
                             $userId = $item['userId'];
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
@@ -200,35 +286,57 @@ layouts('headerForum', $data);
                 <!-- /Forum List -->
 
                 <!-- Forum Detail -->
-                <div id = 'postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse" >
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm mb-3 has-icon "  data-target=".forum-content"><i class="fa fa-arrow-left mr-2"></i>Back</a>
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <div class="media forum-item">
-                                <a href="javascript:void(0)" class="card-link">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle" width="50" alt="User" />
-                                    <small class="d-block text-center text-muted">Newbie</small>
-                                </a>
-                                <div class="media-body ml-3">
-                                    <a href="javascript:void(0)" class="text-secondary">Mokrani</a>
-                                    <small class="text-muted ml-2">1 hour ago</small>
-                                    <h5 class="mt-1">Realtime fetching data</h5>
-                                    <div class="mt-3 font-size-sm">
-                                        <p>Hellooo :)</p>
-                                        <p>
-                                            I'm newbie with laravel and i want to fetch data from database in realtime for my forum anaytics and i found a solution with ajax but it dosen't work if any one have a simple solution it will be
-                                            helpful
-                                        </p>
-                                        <p>Thank</p>
+                <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse">
+                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm mb-3 has-icon " data-target=".forum-content"><i class="fa fa-arrow-left mr-2"></i>Back</a>
+                    <?php
+                    if (!empty($listQuestion)) :
+                        $count = 0;
+                        foreach ($listQuestion as $item) :
+                            $userId = $item['userId'];
+                            $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
+                            $count++;
+                    ?>
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="media forum-item">
+                                        <div style="display:flex; align-items: center;">
+
+                                            <a href="javascript:void(0)" class="card-link">
+                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle" width="50" alt="User" />
+                                               
+                                            </a>
+                                            <div  style="margin-left: 8px;">
+                                                <h6 style="margin: 0;padding: 0"><a href="#"  class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
+                                                <p style="margin: 0; font-size: 14px; font-weight: 300;"><?php echo $userDetail['email'] ?></p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted ml-2" style="font-size: 16px; font-weight:300;"><?php echo $item['create_at']; ?></small>
+                                        <div class="media-body ml-3">
+                                            <h5 class="mt-1"><?php echo $item['title']; ?></h5>
+                                            <div class="mt-3 font-size-sm">
+                                                <div><?php echo $item['content']; ?></div>
+                                            </div>
+                                        </div>
+                                        <div class="text-muted small text-center">
+                                            <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> 19</span>
+                                            <span><i class="far fa-comment ml-2"></i> 3</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="text-muted small text-center">
-                                    <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> 19</span>
-                                    <span><i class="far fa-comment ml-2"></i> 3</span>
-                                </div>
                             </div>
-                        </div>
-                    </div>
+                        <?php
+                        endforeach;
+                    else :
+                        ?>
+                        <tr>
+                            <td colspan="7">
+                                <div class="alert alert-danger text-center">None of Post</div>
+                            </td>
+                        </tr>
+                    <?php
+
+                    endif;
+                    ?>
                     <div class="card mb-2 ">
                         <div class="card-body">
                             <div class="media forum-item">
@@ -290,10 +398,10 @@ layouts('headerForum', $data);
 <script>
     var myCollapse = document.getElementById('postCollapse')
     var bsCollapse = new bootstrap.Collapse(myCollapse, {
-        
-        
-       
-        
+
+
+
+
     })
 </script>
 

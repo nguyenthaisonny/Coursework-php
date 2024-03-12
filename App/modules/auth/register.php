@@ -133,7 +133,7 @@ $old = getFlashData('old');
             ?>
             <div class="form-group mg-form">
                 <label for="">Fullname</label>
-                <input name="fullname" type="fullname" class="form-control" placeholder="Enter your name" value=<?php echo getOldValue($old, 'fullname') ?>>
+                <input name="fullname" type="text" class="form-control" placeholder="Enter your name" value=<?php echo getOldValue($old, 'fullname') ?>>
                 <?php
                 echo formErr('fullname', '<span class="error" >', '</span>', $errors);
                 ?>

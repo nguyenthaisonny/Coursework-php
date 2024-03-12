@@ -27,7 +27,7 @@ if (!empty($filterAll['id'])) {
         //exist
         setFlashData('user_detail', $userDetail);
     } else {
-        reDirect('?module=home&action=dasboard');
+        reDirect('?module=home&action=forum');
     }
 }
 if (isPost()) {
@@ -124,8 +124,7 @@ $old = getFlashData('old');
 $ok = getFlashData('ok');
 $no = getFlashData('no');
 $userDetail = getFlashData('user_detail');
-echo $ok;
-echo $no;
+
 if (!empty($userDetail)) {
     $old = $userDetail;
     // echo '<prev>';

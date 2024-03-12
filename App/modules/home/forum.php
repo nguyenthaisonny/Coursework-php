@@ -132,7 +132,7 @@ layouts('headerForum', $data);
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
                     ?>
-                            <div class="card mb-2">
+                            <div class="card mb-2" style="position: relative;">
 
 
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
@@ -140,16 +140,16 @@ layouts('headerForum', $data);
                                         <div style="display: flex;align-items: center;">
 
                                             <a href="" data-toggle="collapse" data-target=".forum-content"><img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
-                                            <div style="padding-left: 6px;">
+                                            <div style="padding-left: 6px; justify-content: space-between;">
                                                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                                                    <h6 style="margin: 0;padding: 0"><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                    <p style="margin: 0; font-size: 14px; padding-top: 4px; margin-left: 6px; font-weight: 300;"><?php echo $item['create_at']; ?></p>
+                                                    <h6 style="margin: 0;padding: 0;"><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
+                                                    <p style="margin: 0; font-size: 14px; padding-top: 4px; margin-left: 6px; font-weight: 300;position: absolute; top:10px; right:16px;"> Latest: <?php echo $item['create_at']; ?></p>
                                                 </div>
-                                                <p style="margin: 0"><?php echo $userDetail['email'] ?></p>
+                                                <p style="margin: 0;font-size: 14px; font-weight: 300;"><?php echo $userDetail['email'] ?></p>
                                             </div>
                                         </div>
                                         <div class="media-body" style="margin-top: 10px;">
-                                            <h6><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>$userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h6>
+                                            <h6><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h6>
                                             <p class="text-secondary">
                                                 <?php echo $item['description'] ?>
                                             </p>
