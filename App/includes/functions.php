@@ -187,15 +187,15 @@ function checkLogin()
     if (getSession('loginToken')) {
         
         $loginToken = getSession('loginToken');
-        $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-        $userId = $queyToken['userId'];
+        $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+        $userId = $queryToken['userId'];
         $queryStatus = getRaw("SELECT status FROM users WHERE id = '$userId'");
-        if (!empty($queyToken) && $queryStatus['status'] == 1) {
+        if (!empty($queryToken) && $queryStatus['status'] == 1) {
             $checkLogin = true;
         } else {
             if($queryStatus['status'] == 0) {
 
-                setFlashData('smg', 'Your account has not been actived!');
+                setFlashData('smg', 'Your account has not been actived! Please check your email again.');
                 setFlashData('smg_type', 'danger');
             }
             removeSession('loginToken');

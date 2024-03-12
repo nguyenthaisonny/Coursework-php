@@ -56,7 +56,7 @@ if (!empty($token)) {
 ?>
         <div class="row">
             <div class="col-4" style="margin: 50px auto;">
-                <h2 class="text-center text-uppercase">Sign up</h2>
+                <h2 class="text-center text-uppercase">Reset password</h2>
                 <form action="" method="post">
                     <?php
                     if (!empty($smg)) {
@@ -73,7 +73,7 @@ if (!empty($token)) {
                         ?>
                     </div>
 
-                    <div class="form-group mg-form">
+                    <div class="form-group mg-form" >
                         <label for="">Confirmed password</label>
                         <input name="password_confirm" type="password" class="form-control" placeholder="Confirm your password" value=<?php  ?>>
                         <?php
@@ -82,11 +82,11 @@ if (!empty($token)) {
                         ?>
                     </div>
                     <input type="hidden" name='token' value=<?php echo $token; ?>>
-
-                    <button type="submit" style="margin-top: 20px;" class="mg-btn btn btn-primary btn-block">
+                    
+                    
+                    <button type="submit"  class="mg-btn primary large">
                         Submit
                     </button>
-                    <hr>
 
                 </form>
             </div>

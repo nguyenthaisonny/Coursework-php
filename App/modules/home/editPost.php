@@ -10,6 +10,9 @@ $data = [
 if (!checkLogin()) {
     reDirect('?module=auth&action=login');
 }
+
+
+
 if (isPost()) {
     $filterAll = filter();
 
@@ -17,15 +20,17 @@ if (isPost()) {
         if (getSession('loginToken')) {
             $postId = $_GET['postId'];
             $loginToken = getSession('loginToken');
-            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userId = $queyToken['userId'];
+            $queryToken = getRaw("SELECT userId, id FROM tokenlogin WHERE token = '$loginToken'");
+            $userIdLogin = $queryToken['userId'];
+            $userIdEdit = $_GET['userIdEdit'];
+            
             $dataUpdate = [
                 'postName' => $filterAll['postName'],
                 'description' => $filterAll['description'],
                 'update_at' => date('Y:m:d H:i:s'),
 
             ];
-            if ($userId = $_GET['userEditId'] || checkAdminNotSignOut()) {
+            if (($userIdLogin == $userIdEdit ) || checkAdminNotSignOut()) {
 
                 $updateStatus = update('posts', $dataUpdate, "id='$postId'");
                 if ($updateStatus) {
@@ -45,6 +50,7 @@ if (isPost()) {
     }
 }
 $listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
+
 
 $smg = getFlashData('smg');
 $smgType = getFlashData('smg_type');
@@ -281,6 +287,8 @@ layouts('headerEditPost', $data);
                                 <label class="col-form-label">Description</label>
                                 <input name="description" type="text" class="form-control">
                             </div>
+                            
+
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn small rounded">

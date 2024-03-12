@@ -3,13 +3,14 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $data = [
-    'titlePage' => 'Home'
+    'titlePage' => 'Forum'
 ];
 
 
 if (!checkLogin()) {
     reDirect('?module=auth&action=login');
 }
+
 if (isPost()) {
     $filterAll = filter();
 
@@ -129,6 +130,7 @@ layouts('headerForum', $data);
                         $count = 0;
                         foreach ($listPost as $item) :
                             $userId = $item['userId'];
+                            
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
                     ?>
@@ -137,7 +139,7 @@ layouts('headerForum', $data);
 
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
-                                        <div style="display: flex;align-items: center;">
+                                        <div style="display: flex;align-items: flex-start;">
 
                                             <a href="" data-toggle="collapse" data-target=".forum-content"><img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                             <div style="padding-left: 6px; justify-content: space-between;">
@@ -145,12 +147,12 @@ layouts('headerForum', $data);
                                                     <h6 style="margin: 0;padding: 0;"><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
                                                     <p style="margin: 0; font-size: 14px; padding-top: 4px; margin-left: 6px; font-weight: 300;position: absolute; top:10px; right:16px;"> Latest: <?php echo $item['create_at']; ?></p>
                                                 </div>
-                                                <p style="margin: 0;font-size: 14px; font-weight: 300;"><?php echo $userDetail['email'] ?></p>
+                                                <p style="margin: 0;font-size: 14px; font-weight: 300;line-height: 14px;"><?php echo $userDetail['email'] ?></p>
                                             </div>
                                         </div>
-                                        <div class="media-body" style="margin-top: 10px;">
-                                            <h6><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h6>
-                                            <p class="text-secondary">
+                                        <div class="media-body" style="margin-top: 4px;">
+                                            <h5><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
+                                            <p style="margin-bottom: 20px;">
                                                 <?php echo $item['description'] ?>
                                             </p>
 
@@ -165,7 +167,7 @@ layouts('headerForum', $data);
 
                                         <div>
 
-                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>$userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <a href="<?php echo _WEB_HOST; ?>/?module=home&action=deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </div>
                                     </div>
@@ -284,7 +286,7 @@ layouts('headerForum', $data);
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>
 

@@ -5,7 +5,7 @@ if (!defined('_CODE')) {
 }
 
 $data = [
-    'titlePage' => 'Home'
+    'titlePage' => 'User management'
 ];
 // if(checkAdmin()) {
 //     reDirect('?module=users&action=list');
