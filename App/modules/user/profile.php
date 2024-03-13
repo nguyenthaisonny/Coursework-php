@@ -69,7 +69,7 @@ if (isPost()) {
     // if (isset($_FILES['profileImage'])) {
     //     $image = $_FILES['profileImage']['name'];
     // }
-    $target_dir = './templates/img/';
+    $target_dir = './templates/img/imgProfile/';
     $profileImage = $target_dir.$_FILES["profileImage"]["name"];
     move_uploaded_file($_FILES["profileImage"]["tmp_name"], $profileImage);
     //validat image
@@ -147,7 +147,7 @@ if (!empty($userDetail)) {
                 <div class="card-header">Profile Picture</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-                    <img class="img-account-profile rounded-circle mb-2" src= <?php echo !empty(getOldValue($old, 'profileImage')) ? getOldValue($old, 'profileImage') : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758" ;?> alt="">
+                    <img class="img-account-profile rounded-circle mb-2" src= <?php echo !empty(getOldValue($old, 'profileImage')) ? getOldValue($old, 'profileImage') : "./templates/img/imgProfile/avatar1.png" ;?> alt="">
                     
 
                     <!-- Profile info-->

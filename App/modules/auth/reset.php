@@ -6,7 +6,7 @@ if (!defined('_CODE')) {
 
 
 $token = filter()['token'];
-
+echo getSession('loginToken');
 if (!empty($token)) {
     $tokenQuery = getRaw("SELECT id, fullname, email FROM users WHERE forgotToken='$token'");
     if (!empty($tokenQuery)) {
@@ -31,7 +31,7 @@ if (!empty($token)) {
                     $errors['password_confirm']['match'] = 'Invalid password confirm!';
                 }
             }
-            if(empty($errors)) {
+            if (empty($errors)) {
                 $passwordHash = password_hash($filterAll['password'], PASSWORD_DEFAULT);
                 $dataUpdate = [
                     'password' => $passwordHash,
@@ -39,10 +39,22 @@ if (!empty($token)) {
                     'update_at' => date('Y-m-d H:i:s')
                 ];
                 $updateStatus = update('users', $dataUpdate, "id='$userId'");
-
-            }else {
+                if ($updateStatus) {
+                    if (!empty(getSession('loginToken'))) {
+                        $token = getSession('loginToken');
+                        delete('tokenlogin', "token='$token'");
+                        removeSession('loginToken');
+                    }
+                    reDirect('?module=auth&action=login');
+                    setFlashData('smg_type', 'Success!');
+                    setFlashData('smg', 'Plesase check your data again !');
+                } else {
+                    setFlashData('smg', 'System got errors! Plesase try again.');
+                    setFlashData('smg_type', 'danger');
+                }
+            } else {
                 setFlashData('errors', $errors);
-                
+
                 setFlashData('smg', 'Plesase check your data again !');
                 setFlashData('smg_type', 'danger');
             }
@@ -68,23 +80,23 @@ if (!empty($token)) {
                         <label for="">Password</label>
                         <input name="password" type="password" class="form-control" placeholder="Enter your password" value=<?php  ?>>
                         <?php
-                            echo formErr('password', '<span class="error" >', '</span>', $errors);
+                        echo formErr('password', '<span class="error" >', '</span>', $errors);
 
                         ?>
                     </div>
 
-                    <div class="form-group mg-form" >
+                    <div class="form-group mg-form">
                         <label for="">Confirmed password</label>
                         <input name="password_confirm" type="password" class="form-control" placeholder="Confirm your password" value=<?php  ?>>
                         <?php
-                             echo formErr('password_confirm', '<span class="error" >', '</span>', $errors);
+                        echo formErr('password_confirm', '<span class="error" >', '</span>', $errors);
 
                         ?>
                     </div>
                     <input type="hidden" name='token' value=<?php echo $token; ?>>
-                    
-                    
-                    <button type="submit"  class="mg-btn primary large">
+
+
+                    <button type="submit" class="mg-btn primary large">
                         Submit
                     </button>
 

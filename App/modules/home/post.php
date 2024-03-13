@@ -79,7 +79,7 @@ if (!empty($listQuestion)) {
     // print_r($old);
     // echo '</prev>';
 }
-layouts('headerForum', $data);
+layouts('headerPost', $data);
 ?>
 
 
@@ -110,7 +110,7 @@ layouts('headerForum', $data);
                                     <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
                                         <div class="simplebar-content" style="padding: 16px;">
                                             <nav class="nav nav-pills nav-gap-y-1 flex-column">
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon active">All Threads</a>
+                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon active">All Questions</a>
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular this week</a>
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular all time</a>
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Solved</a>
@@ -167,43 +167,43 @@ layouts('headerForum', $data);
 
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
-                    ?>
-                            <div class="card mb-2" style="position: relative;">
+                    ?>  
+                            <div class="container posts-content" style="position: relative;">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                <div class="media mb-3">
+                                                    <img src="<?php echo $userDetail['profileImage'] ?>" class="d-block ui-w-40 rounded-circle" alt="">
+                                                    <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
+                                                        <?php echo $userDetail['fullname'] ?>
+                                                        <div class="text-muted small">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
+                                                    </div>
+                                                </div>
+                                                <div style="position: absolute; right: 14px; top: 13px;">
 
-
-                                <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
-                                    <div class="media forum-item">
-                                        <div style="display: flex;align-items: flex-start;">
-
-                                            <a href="" data-toggle="collapse" data-target=".forum-content"><img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
-                                            <div style="padding-left: 6px;">
-
-                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                <p style=" margin: 2px 0; font-size: 10px; font-weight: 300;line-height: 14px;">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></p>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                </div>
+                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
+                                                <p>
+                                                    <?php echo $item['content'] ?>
+                                                </p>
+                                                <?php echo $item['questionImage'] ? '<a href="javascript:void(0)" class="ui-rect ui-bg-cover" style="background-image: url('.$item['questionImage'].');"></a>' :  null?>
+                                                
                                             </div>
-
-                                        </div>
-                                        <div style="position: absolute; right: 8px; top: 8px;">
-
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
-                                        </div>
-                                        <div class="media-body" style="margin-top: 4px;">
-                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
-                                            <p style="margin-bottom: 20px;">
-                                                <?php echo $item['content'] ?>
-                                            </p>
-
-                                            <div>
-
-                                                <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> 19</span>
-                                                <span><i class="far fa-comment ml-2"></i> 3</span>
+                                            <div class="card-footer">
+                                                <a href="javascript:void(0)" class="d-inline-block text-muted">
+                                                    <strong>123</strong> <small class="align-middle">Likes</small>
+                                                </a>
+                                                <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
+                                                    <strong>12</strong> <small class="align-middle">Comments</small>
+                                                </a>
+                                                <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
+                                                    <small class="align-middle">Repost</small>
+                                                </a>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="text-muted small text-center align-self-center" style="display: flex; flex-direction: column; justify-content: space-between">
-
-
                                     </div>
 
                                 </div>
