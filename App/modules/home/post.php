@@ -158,7 +158,7 @@ layouts('headerForum', $data);
 
                 <!-- list questions -->
                 <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse">
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm mb-3 has-icon " data-target=".forum-content"><i class="fa fa-arrow-left mr-2"></i>Back</a>
+                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm mb-3 has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <?php
                     if (!empty($listQuestion)) :
                         $count = 0;
@@ -168,39 +168,44 @@ layouts('headerForum', $data);
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
                     ?>
-                            <div class="card mb-2 " style="position: relative;">
-                                <div class="card-body">
+                            <div class="card mb-2" style="position: relative;">
+
+
+                                <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
-                                        <div style="display:flex; align-items: center; align-items: flex-start;">
+                                        <div style="display: flex;align-items: flex-start;">
 
-                                            <a href="javascript:void(0)" class="card-link">
-                                                <img src="<?php echo $userDetail['profileImage'] ?>" class="rounded-circle" width="50" alt="User" />
+                                            <a href="" data-toggle="collapse" data-target=".forum-content"><img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                            <div style="padding-left: 6px;">
 
-                                            </a>
-                                            <div style="margin-left: 8px;">
-                                                <h6 style="margin: 0;padding: 0;"><a href="#" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                <p style="margin: 0; font-size: 14px; font-weight: 300; line-height: 14px;"><?php echo $userDetail['email'] ?></p>
+                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
+                                                <p style=" margin: 2px 0; font-size: 10px; font-weight: 300;line-height: 14px;">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></p>
                                             </div>
+
                                         </div>
-                                        <small class="text-muted ml-2" style="font-size: 16px; font-weight:300; position: absolute; top: 10px; right: 16px;"> Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></small>
-                                        <div class="media-body ml-3" style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div style="margin-top: 0; margin-bottom: 16px; margin-top: 4px;">
-                                                <h5 style="margin: 0;" class="mt-1"><?php echo $item['title']; ?></h5>
-                                                <p style="margin: 0; "><?php echo $item['content']; ?></p>
-                                            </div>
-                                            <div style="margin-bottom: 16px;">
+                                        <div style="position: absolute; right: 8px; top: 8px;">
 
-
-                                                <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
-
-                                            </div>
+                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </div>
-                                        <div class="text-muted small text-center">
-                                            <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> 19</span>
-                                            <span><i class="far fa-comment ml-2"></i> 3</span>
+                                        <div class="media-body" style="margin-top: 4px;">
+                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
+                                            <p style="margin-bottom: 20px;">
+                                                <?php echo $item['content'] ?>
+                                            </p>
+
+                                            <div>
+
+                                                <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> 19</span>
+                                                <span><i class="far fa-comment ml-2"></i> 3</span>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="text-muted small text-center align-self-center" style="display: flex; flex-direction: column; justify-content: space-between">
+
+
+                                    </div>
+
                                 </div>
                             </div>
                         <?php
@@ -208,8 +213,8 @@ layouts('headerForum', $data);
                     else :
                         ?>
                         <tr>
-                            <td colspan="7">
-                                <div class="alert alert-danger text-center">None of Post</div>
+                            <td>
+                                <div class="alert alert-danger text-center">None of question</div>
                             </td>
                         </tr>
                     <?php

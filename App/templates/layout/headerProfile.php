@@ -66,7 +66,7 @@ if (getSession('loginToken')) {
             <img src=<?php echo !empty($profileImage) ? $profileImage : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758";; ?> alt="mdo" width="32" height="32" class="rounded-circle">
           </a>
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-
+            <?php echo checkAdminNotSignOut() ?  "<li><a class='dropdown-item' href='?module=admin&action=list'>User managment</a></li>" : null;?>
             <li><a class="dropdown-item" href="#">Settings</a></li>
             <li><a class="dropdown-item" href="?module=user&action=profile&id=<?php echo $userId ?>">Profile</a></li>
             <li>

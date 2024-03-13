@@ -26,14 +26,14 @@ if(!empty($filterAll['postId'] && !empty($filterAll['userIdDelete']))) {
             $deleteStatus = delete('posts', "id='$postId'");
             if ($deleteStatus) {
     
-                setFlashData('smg', 'Delete post successfully!'.$loginToken );
+                setFlashData('smg', 'Delete post successfully!');
                 setFlashData('smg_type', 'success');
             } else {
                 setFlashData('smg', 'System faces errors! Please try again.');
                 setFlashData('smg_type', 'danger');
             }
         } else {
-            setFlashData('smg', 'Error! Can not delete post of another user.'.$loginToken);
+            setFlashData('smg', 'Error! Can not delete post of another user.');
             setFlashData('smg_type', 'danger');
         }
     }

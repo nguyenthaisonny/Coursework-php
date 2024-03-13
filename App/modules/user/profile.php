@@ -183,7 +183,7 @@ if (!empty($userDetail)) {
                             <!-- Form Row-->
                             <!-- Form Group (first name)-->
                             <div class="col-md-6">
-                                <label class="small mb-1">Email Address</label>
+                                <label class="small mb-1">Email</label>
                                 <input name="email" class="form-control" type="email"  placeholder="Enter your email"  value=<?php echo  getOldValue($old, 'email') ?>>
                                 <?php
                                 echo formErr('email', '<span class="error" >', '</span>', $errors);

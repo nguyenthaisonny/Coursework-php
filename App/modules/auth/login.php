@@ -84,7 +84,7 @@ layouts('header', $data);
         </form>
         <button class="mg-btn large rounded">
 
-            <a href="?module=auth&action=register">Sign up</a>
+            <a href="?module=auth&action=register" >Sign up</a>
         </button>
 
 
