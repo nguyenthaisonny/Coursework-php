@@ -203,7 +203,7 @@ if (!empty($userDetail)) {
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Upload avatar (JPG or PNG no larger than 5 MB)</label>
 
-                            <input name="profileImage" class="form-control" id="inputUsername" type="file" placeholder="Enter your username">
+                            <input name="profileImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile">
                             <?php
 
                             echo formErr('profileImage', '<span class="error" >', '</span>', $errors);

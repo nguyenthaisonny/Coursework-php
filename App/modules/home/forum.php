@@ -58,7 +58,7 @@ layouts('headerForum', $data);
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
                     <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;" data-toggle="modal" data-target="#newPostModel">
-                        Upload <i class="fa-solid fa-plus"></i>
+                        New post <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
                 <!-- /Inner sidebar header -->

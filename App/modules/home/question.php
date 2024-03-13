@@ -31,7 +31,7 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
 
 if (isPost()) {
     $filterAll = filter();
-    if (!empty($filterAll['title']) || !empty($filterAll['content'])) {
+    if (!empty($filterAll['title']) && !empty($filterAll['content']) && !empty($filterAll['content']) ) {
         if (getSession('loginToken')) {
 
             $loginToken = getSession('loginToken');
@@ -163,6 +163,46 @@ layouts('headerPost', $data);
                 <!-- list questions -->
                 <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse">
                     <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm mb-3 has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
+                    <div class="container posts-content" style="position: relative;">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                <div class="media mb-3">
+                                                    <img src="<?php echo $userDetail['profileImage'] ?>" class="d-block ui-w-40 rounded-circle" alt="">
+                                                    <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
+                                                        <?php echo $userDetail['fullname'] ?>
+                                                        <div class="text-muted small">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
+                                                    </div>
+                                                </div>
+                                                <div style="position: absolute; right: 14px; top: 13px;">
+
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                </div>
+                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&questionId=<?php echo $item['id'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
+                                                <p>
+                                                    <?php echo $item['content'] ?>
+                                                </p>
+                                                <?php echo $item['questionImage'] ? '<a href="javascript:void(0)" class="ui-rect ui-bg-cover" style="background-image: url(' . $item['questionImage'] . ');"></a>' :  null ?>
+
+                                            </div>
+                                            <div class="card-footer">
+                                                <a href="javascript:void(0)" class="d-inline-block text-muted">
+                                                    <strong>123</strong> <small class="align-middle">Likes</small>
+                                                </a>
+                                                <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
+                                                    <strong>12</strong> <small class="align-middle">Comments</small>
+                                                </a>
+                                                <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
+                                                    <small class="align-middle">Repost</small>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                     <?php
                     if (!empty($listQuestion)) :
                         $count = 0;
@@ -186,7 +226,7 @@ layouts('headerPost', $data);
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
 
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
                                                 <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&questionId=<?php echo $item['id'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>

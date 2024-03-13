@@ -10,7 +10,19 @@ $data = [
 if (!checkLogin()) {
     reDirect('?module=auth&action=login');
 }
-
+$filterAll = filter();
+if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
+    $postId = $filterAll['postId'];
+    $userIdEdit = $filterAll['userIdEdit'];
+    setFlashData('userIdEdit', $userIdEdit);
+    setFlashData('postId', $postId);
+    // check whether exist in database
+    //if exist => get info
+    //if not exist => navigat to list page
+    $postDetail = getRaw("SELECT postName, description FROM posts WHERE id = '$postId'");
+    setFlashData('postDetail', $postDetail);
+   
+}
 
 
 if (isPost()) {
@@ -54,6 +66,17 @@ $listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
 
 $smg = getFlashData('smg');
 $smgType = getFlashData('smg_type');
+$postId = getFlashData('postId');
+$userIdEdit = getFlashData('userIdEdit');
+$postDetail = getFlashData('postDetail');
+// print_r($postDetail);
+if (!empty($postDetail)) {
+    $old = $postDetail;
+
+    // echo '<prev>';
+    // print_r($old);
+    // echo '</prev>';
+}
 
 layouts('headerEditPost', $data);
 ?>
@@ -280,19 +303,19 @@ layouts('headerEditPost', $data);
                     <div class="modal-body">
                         <form method="post">
                             <div class="form-group">
-                                <label class="col-form-label">Title:</label>
-                                <input name="postName" type="text" class="form-control">
+                                <label class="col-form-label">Title</label>
+                                <input name="postName" type="text" class="form-control" value=<?php echo  getOldValue($old, 'postName') ?>>
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Description</label>
-                                <input name="description" type="text" class="form-control">
+                                <input name="description" type="text" class="form-control" value=<?php echo  getOldValue($old, 'description') ?>>
                             </div>
                             
 
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn small rounded">
-                                <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum">back</a>
+                                <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum">Back</a>
                             </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>

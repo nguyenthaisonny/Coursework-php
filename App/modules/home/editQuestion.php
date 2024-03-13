@@ -14,7 +14,8 @@ if (!checkLogin()) {
 $filterAll = filter();
 
 
-if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
+if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
+    $questionId = $filterAll['questionId'];
     $userIdEdit = $filterAll['userIdEdit'];
     $postId = $filterAll['postId'];
     setFlashData('userIdEdit', $userIdEdit);
@@ -22,6 +23,8 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
     // check whether exist in database
     //if exist => get info
     //if not exist => navigat to list page
+    $questionDetail = getRaw("SELECT title, content, questionImage FROM questions WHERE id = '$questionId'");
+    setFlashData('questionDetail', $questionDetail);
     $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
     if (!empty($listQuestion)) {
         //exist
@@ -31,37 +34,64 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
 
 if (isPost()) {
     $filterAll = filter();
-    if (!empty($filterAll['title']) || !empty($filterAll['content'])) {
+    if (!empty($filterAll['title']) || !empty($filterAll['content']) ) {
         if (getSession('loginToken')) {
 
             $loginToken = getSession('loginToken');
             $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userId = $queyToken['userId'];
+            $userIdLogin = $queyToken['userId'];
             $userIdEdit = $filterAll['userIdEdit'];
             $postId = $filterAll['postId'];
+            $questionId = $_GET['questionId'];
             //handle Image
-            $target_dir = './templates/img/imgQuestion/';
-            $questionImage = $target_dir .$_FILES["questionImage"]["name"];
-            move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
-            $dataInsert = [
-
-                'title' => $filterAll['title'],
-                'content' => $filterAll['content'],
-                'update_at' => date('Y:m:d H:i:s'),
-                'postId' => $filterAll['postId'],
-                'userId' => $userId,
-                'questionImage' => $questionImage
-
-            ];
-            $insertStatus = insert('questions', $dataInsert);
-            if ($insertStatus) {
-
-                setFlashData('smg', 'A new question was just uploaded!'. $_FILES["questionImage"]["name"]);
-                setFlashData('smg_type', 'success');
+            if(!empty($_FILES["questionImage"]['name'])) {
+                
+                $target_dir = './templates/img/imgQuestion/';
+                $questionImage = $target_dir .$_FILES["questionImage"]["name"];
+                move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
+           
+                $dataUpdate = [
+    
+                    'title' => $filterAll['title'],
+                    'content' => $filterAll['content'],
+                    'update_at' => date('Y:m:d H:i:s'),
+                    'postId' => $filterAll['postId'],
+                    
+                    'questionImage' => $questionImage
+    
+                ];
             } else {
-                setFlashData('smg', 'System faces errors! Please try again.');
+                $questionId = $_GET['questionId'];
+                $oldImage = getRaw("SELECT questionImage FROM questions WHERE id='$questionId'")['questionImage'];
+                $dataUpdate = [
+    
+                    'title' => $filterAll['title'],
+                    'content' => $filterAll['content'],
+                    'update_at' => date('Y:m:d H:i:s'),
+                    'postId' => $filterAll['postId'],
+                    'questionImage' => $oldImage
+                    
+    
+                ];
+            }
+            if (($userIdLogin == $userIdEdit ) || checkAdminNotSignOut()) {
+
+                $updateStatus = update('questions', $dataUpdate, "id= $questionId");
+                if ($updateStatus) {
+
+                    setFlashData('smg', 'This post was just updated');
+                    setFlashData('smg_type', 'success');
+                } else {
+                    setFlashData('smg', 'System faces errors! Please try again.');
+                    setFlashData('smg_type', 'danger');
+                }
+            } else {
+                setFlashData('smg', 'Error! Can not edit question of another user.');
                 setFlashData('smg_type', 'danger');
             }
+            
+           
+            
             reDirect("?module=home&action=post&postId=" . $postId . "&userIdEdit=" . $userIdEdit);
         }
     }
@@ -70,20 +100,19 @@ $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
 $smgType = getFlashData(('smg_type'));
-$old = getFlashData('old');
-$ok = getFlashData('ok');
-$no = getFlashData('no');
+
 $listQuestion = getFlashData('listQuestion');
+$questionDetail = getFlashData('questionDetail');
 $postId = getFlashData('postId');
 $userIdEdit = getFlashData('userIdEdit');
-if (!empty($listQuestion)) {
-    $old = $listQuestion;
+if (!empty($questionDetail)) {
+    $old = $questionDetail;
 
     // echo '<prev>';
     // print_r($old);
     // echo '</prev>';
 }
-layouts('headerPost', $data);
+layouts('headereditQuestion', $data);
 ?>
 
 
@@ -160,9 +189,7 @@ layouts('headerPost', $data);
                 ?>
 
 
-                <!-- list questions -->
-                <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse">
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm mb-3 has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
+                
                     <?php
                     if (!empty($listQuestion)) :
                         $count = 0;
@@ -186,7 +213,7 @@ layouts('headerPost', $data);
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
 
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestion&questionId=<?php echo $item['id'] ?>postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
                                                 <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&questionId=<?php echo $item['id'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
@@ -236,26 +263,26 @@ layouts('headerPost', $data);
         </div>
 
         <!-- New Question Modal -->
-        <div class="modal fade" id="newQuestionModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="EditQuestionModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">New question</h5>
+                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit question</h5>
 
                     </div>
                     <div class="modal-body">
                         <form method="post" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label class="col-form-label">Title:</label>
-                                <input name="title" type="text" class="form-control">
+                                <label class="col-form-label" >Title:</label>
+                                <input name="title" type="text" class="form-control" value=<?php echo  getOldValue($old, 'title') ?>>
                             </div>
                             <div class="form-group">
-                                <label class="col-form-label">Content</label>
-                                <input name="content" type="text" class="form-control">
+                                <label class="col-form-label" >Content</label>
+                                <input name="content" type="text" class="form-control" value=<?php echo  getOldValue($old, 'content') ?>>
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Image</label>
-                                <input name="questionImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile">
+                                <input name="questionImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile" value=<?php echo  getOldValue($old, 'questionImage') ?>>
 
                             </div>
 
@@ -264,7 +291,9 @@ layouts('headerPost', $data);
                             <input type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
-                            <button type="button" class="mg-btn  rounded " data-dismiss="modal">Close</button>
+                            <button type="button" class="mg-btn  rounded small" >
+                               <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $_GET['postId'] ?>&userIdEdit=<?php echo $_GET['userIdEdit'] ?>">Back</a>
+                            </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>
                     </div>
@@ -275,13 +304,8 @@ layouts('headerPost', $data);
     </div>
 </div>
 <script>
-    var myCollapse = document.getElementById('postCollapse')
-    var bsCollapse = new bootstrap.Collapse(myCollapse, {
-
-
-
-
-    })
+    var myModal = new bootstrap.Modal(document.getElementById('EditQuestionModel'), {})
+    myModal.show()
 </script>
 
 <?php
