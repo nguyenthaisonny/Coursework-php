@@ -147,7 +147,7 @@ if (!empty($userDetail)) {
                 <div class="card-header">Profile Picture</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-                    <img class="img-account-profile rounded-circle mb-2" src= <?php echo !empty(getOldValue($old, 'profileImage')) ? getOldValue($old, 'profileImage') : "./templates/img/imgProfile/avatar1.png" ;?> alt="">
+                    <img  width="160" height="160" class="rounded-circle"  src= <?php echo !empty(getOldValue($old, 'profileImage')) ? getOldValue($old, 'profileImage') : "./templates/img/imgProfile/avatar1.png" ;?> alt="">
                     
 
                     <!-- Profile info-->

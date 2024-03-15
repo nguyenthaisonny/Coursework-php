@@ -24,7 +24,7 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
     //if exist => get info
     //if not exist => navigat to list page
     $questionDetail = getRaw("SELECT title, content, questionImage FROM questions WHERE id = '$questionId'");
-    
+
     setFlashData('questionDetail', $questionDetail);
     $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
     if (!empty($listQuestion)) {
@@ -35,51 +35,51 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
 
 if (isPost()) {
     $filterAll = filter();
-    if (!empty($filterAll['title']) || !empty($filterAll['content']) ) {
+    if (!empty($filterAll['title']) || !empty($filterAll['content'])) {
         if (getSession('loginToken')) {
 
             $loginToken = getSession('loginToken');
-            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userIdLogin = $queyToken['userId'];
+            $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+            $userIdLogin = $queryToken['userId'];
             $userIdEdit = $filterAll['userIdEdit'];
             $postId = $filterAll['postId'];
             $questionId = $_GET['questionId'];
-            //handle Image
-            if(!empty($_FILES["questionImage"]['name'])) {
-                
-                $target_dir = './templates/img/imgQuestion/';
-                $questionImage = $target_dir .$_FILES["questionImage"]["name"];
-                move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
-           
-                $dataUpdate = [
-    
-                    'title' => $filterAll['title'],
-                    'content' => $filterAll['content'],
-                    'update_at' => date('Y:m:d H:i:s'),
-                    'postId' => $filterAll['postId'],
-                    
-                    'questionImage' => $questionImage
-    
-                ];
-            } else {
-                $questionId = $_GET['questionId'];
-                $oldImage = getRaw("SELECT questionImage FROM questions WHERE id='$questionId'")['questionImage'];
-                $dataUpdate = [
-    
-                    'title' => $filterAll['title'],
-                    'content' => $filterAll['content'],
-                    'update_at' => date('Y:m:d H:i:s'),
-                    'postId' => $filterAll['postId'],
-                    'questionImage' => $oldImage
-                    
-    
-                ];
-            }
-            if (($userIdLogin == $userIdEdit ) || checkAdminNotSignOut()) {
+            if ($userIdLogin == $userIdEdit || checkAdminNotSignOut()) {
 
+                if (!empty($_FILES["questionImage"]['name'])) {
+                    //handle Image
+    
+                    $target_dir = './templates/img/imgQuestion/';
+                    $questionImage = $target_dir . $_FILES["questionImage"]["name"];
+                    move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
+    
+                    $dataUpdate = [
+    
+                        'title' => $filterAll['title'],
+                        'content' => $filterAll['content'],
+                        'update_at' => date('Y:m:d H:i:s'),
+                        'postId' => $filterAll['postId'],
+    
+                        'questionImage' => $questionImage
+    
+                    ];
+                } else {
+    
+                    $oldImage = getRaw("SELECT questionImage FROM questions WHERE id='$questionId'")['questionImage'];
+                    $dataUpdate = [
+    
+                        'title' => $filterAll['title'],
+                        'content' => $filterAll['content'],
+                        'update_at' => date('Y:m:d H:i:s'),
+                        'postId' => $filterAll['postId'],
+                        'questionImage' => $oldImage
+    
+    
+                    ];
+                }
                 $updateStatus = update('questions', $dataUpdate, "id= $questionId");
                 if ($updateStatus) {
-
+    
                     setFlashData('smg', 'This post was just updated');
                     setFlashData('smg_type', 'success');
                 } else {
@@ -87,16 +87,19 @@ if (isPost()) {
                     setFlashData('smg_type', 'danger');
                 }
             } else {
-                setFlashData('smg', 'Error! Can not edit question of another user.');
+                setFlashData('smg', 'Can not edit questions of another user!');
                 setFlashData('smg_type', 'danger');
             }
-            
            
-            
+
+            }
+
+
+
             reDirect("?module=home&action=post&postId=" . $postId . "&userIdEdit=" . $userIdEdit);
         }
     }
-}
+
 $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
@@ -109,9 +112,9 @@ $userIdEdit = getFlashData('userIdEdit');
 if (!empty($questionDetail)) {
     $old = $questionDetail;
     // print_r($old);
-    
+
 }
-layouts('headereditQuestion', $data);
+layouts('headerEditQuestion', $data);
 ?>
 
 
@@ -171,7 +174,7 @@ layouts('headereditQuestion', $data);
             <div class="inner-main">
                 <!-- Inner main header -->
                 <div class="inner-main-header">
-                    <a class="nav-link nav-icon rounded-circle nav-link-faded mr-3 d-md-none" href="#" data-toggle="inner-sidebar"><i class="material-icons">arrow_forward_ios</i></a>
+
                     <select class="custom-select custom-select-sm w-auto mr-1">
                         <option selected="">Latest</option>
                         <option value="1">Popular</option>
@@ -181,6 +184,7 @@ layouts('headereditQuestion', $data);
                     </select>
 
                 </div>
+
                 <?php
                 if (!empty($smg)) {
                     getSmg($smg, $smgType);
@@ -188,49 +192,59 @@ layouts('headereditQuestion', $data);
                 ?>
 
 
-                
+
+                <!-- list questions -->
+                <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content d-block">
+                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm mb-3 has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <?php
                     if (!empty($listQuestion)) :
                         $count = 0;
+                        $userIdPost = getSession('userIdPost');
                         foreach ($listQuestion as $item) :
                             $userId = $item['userId'];
 
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
+
                     ?>
                             <div class="container posts-content" style="position: relative;">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="card mb-4">
                                             <div class="card-body">
-                                                <div class="media mb-3">
+                                                <div style="margin-bottom: 6px;">
                                                     <img src="<?php echo $userDetail['profileImage'] ?>" class="d-block ui-w-40 rounded-circle" alt="">
                                                     <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
-                                                        <?php echo $userDetail['fullname'] ?>
-                                                        <div class="text-muted small">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
+                                                        <h6 style="margin: 0 ;padding: 0; font-size: 16px">
+
+                                                            <?php echo $userDetail['fullname'] ?>
+                                                        </h6>
+                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $item['update_at'] == 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
 
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestion&questionId=<?php echo $item['id'] ?>postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
-                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&questionId=<?php echo $item['id'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
+                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
                                                 <p>
                                                     <?php echo $item['content'] ?>
                                                 </p>
                                                 <?php echo $item['questionImage'] ? '<a href="javascript:void(0)" class="ui-rect ui-bg-cover" style="background-image: url(' . $item['questionImage'] . ');"></a>' :  null ?>
 
                                             </div>
-                                            <div class="card-footer">
+                                            <div class="card-footer" style="display: flex; justify-content: space-evenly;">
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted">
-                                                    <strong>123</strong> <small class="align-middle">Likes</small>
+                                                    <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 20px;"></i>
+
+                                                </a>
+                                                <a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+
+                                                    <i class="fa-regular fa-comment icon-hover" style="font-size: 20px;"></i>
                                                 </a>
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                                    <strong>12</strong> <small class="align-middle">Comments</small>
-                                                </a>
-                                                <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                                    <small class="align-middle">Repost</small>
+                                                    <i class="fa-solid fa-share icon-hover" style="font-size: 20px;"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -239,6 +253,7 @@ layouts('headereditQuestion', $data);
                                 </div>
                             </div>
                         <?php
+
                         endforeach;
                     else :
                         ?>
@@ -253,57 +268,58 @@ layouts('headereditQuestion', $data);
                     ?>
 
                 </div>
-                <!-- /Forum Detail -->
-                
-
-                <!-- /Inner main body -->
             </div>
-            <!-- /Inner main -->
+            <!-- /Forum Detail -->
+
+
+            <!-- /Inner main body -->
         </div>
+        <!-- /Inner main -->
+    </div>
 
-        <!-- New Question Modal -->
-        <div class="modal fade" id="EditQuestionModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit question</h5>
+    <!-- New Question Modal -->
+    <div class="modal fade" id="EditQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit question</h5>
 
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label class="col-form-label" >Title:</label>
-                                <input name="title" type="text" class="form-control" value="<?php echo  getOldValue($old, 'title') ?>">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label" >Content</label>
-                                <input name="content" type="text" class="form-control" value="<?php echo  getOldValue($old, 'content') ?>">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Image</label>
-                                <input name="questionImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile" value=<?php echo  getOldValue($old, 'questionImage') ?>>
+                </div>
+                <div class="modal-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-form-label">Title:</label>
+                            <input name="title" type="text" class="form-control" value="<?php echo  getOldValue($old, 'title') ?>">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Content</label>
+                            <input name="content" type="text" class="form-control" value="<?php echo  getOldValue($old, 'content') ?>">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Image</label>
+                            <input name="questionImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile" value=<?php echo  getOldValue($old, 'questionImage') ?>>
 
-                            </div>
+                        </div>
 
-                            <input type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
+                        <input type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
 
-                            <input type="hidden" name='postId' value="<?php echo $postId; ?>">
-                            <div class="modal-footer">
-                            </div>
-                            <button type="button" class="mg-btn  rounded small" >
-                               <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $_GET['postId'] ?>&userIdEdit=<?php echo $_GET['userIdEdit'] ?>">Back</a>
-                            </button>
-                            <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
-                        </form>
-                    </div>
+                        <input type="hidden" name='postId' value="<?php echo $postId; ?>">
+                        <div class="modal-footer">
+                        </div>
+                        <button type="button" class="mg-btn  rounded small">
+                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $_GET['postId'] ?>&userIdEdit=<?php echo $_GET['userIdEdit'] ?>">Back</a>
+                        </button>
+                        <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
+                    </form>
                 </div>
             </div>
         </div>
-
     </div>
+
+</div>
 </div>
 <script>
-    var myModal = new bootstrap.Modal(document.getElementById('EditQuestionModel'), {})
+    var myModal = new bootstrap.Modal(document.getElementById('EditQuestionModal'), {})
     myModal.show()
 </script>
 

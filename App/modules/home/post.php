@@ -43,19 +43,33 @@ if (isPost()) {
             $userIdEdit = $filterAll['userIdEdit'];
             $postId = $filterAll['postId'];
             //handle Image
-            $target_dir = './templates/img/imgQuestion/';
-            $questionImage = $target_dir . $_FILES["questionImage"]["name"];
-            move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
-            $dataInsert = [
+            if(!empty($_FILES["questionImage"]['name'])) {
 
-                'title' => $filterAll['title'],
-                'content' => $filterAll['content'],
-                'update_at' => date('Y:m:d H:i:s'),
-                'postId' => $filterAll['postId'],
-                'userId' => $userId,
-                'questionImage' => $questionImage
-
-            ];
+                $target_dir = './templates/img/imgQuestion/';
+                $questionImage = $target_dir . $_FILES["questionImage"]["name"];
+                move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
+                $dataInsert = [
+    
+                    'title' => $filterAll['title'],
+                    'content' => $filterAll['content'],
+                    'update_at' => date('Y:m:d H:i:s'),
+                    'postId' => $filterAll['postId'],
+                    'userId' => $userId,
+                    'questionImage' => $questionImage
+    
+                ];
+            } else {
+                $dataInsert = [
+    
+                    'title' => $filterAll['title'],
+                    'content' => $filterAll['content'],
+                    'update_at' => date('Y:m:d H:i:s'),
+                    'postId' => $filterAll['postId'],
+                    'userId' => $userId,
+                    'questionImage' => null
+    
+                ];
+            }
             $insertStatus = insert('questions', $dataInsert);
             if ($insertStatus) {
 
@@ -146,7 +160,7 @@ layouts('headerPost', $data);
             <div class="inner-main">
                 <!-- Inner main header -->
                 <div class="inner-main-header">
-                    <a class="nav-link nav-icon rounded-circle nav-link-faded mr-3 d-md-none" href="#" data-toggle="inner-sidebar"><i class="material-icons">arrow_forward_ios</i></a>
+                    
                     <select class="custom-select custom-select-sm w-auto mr-1">
                         <option selected="">Latest</option>
                         <option value="1">Popular</option>
@@ -182,14 +196,14 @@ layouts('headerPost', $data);
                                     <div class="col-lg-12">
                                         <div class="card mb-4">
                                             <div class="card-body">
-                                                <div class="media mb-3">
+                                                <div style="margin-bottom: 6px;">
                                                     <img src="<?php echo $userDetail['profileImage'] ?>" class="d-block ui-w-40 rounded-circle" alt="">
                                                     <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
                                                         <h6 style="margin: 0 ;padding: 0; font-size: 16px">
 
                                                             <?php echo $userDetail['fullname'] ?>
                                                         </h6>
-                                                        <div class="text-muted small">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
+                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $item['update_at'] == 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">

@@ -49,57 +49,69 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
 
 if (isPost()) {
     $filterAll = filter();
-    if (!empty($filterAll['replyContent']) || !empty($filterAll['contentImage'])) {
+    if (!empty($filterAll['title']) || !empty($filterAll['content'])) {
         if (getSession('loginToken')) {
-
+            $userIdPost = $_GET['userIdPost'];
             $loginToken = getSession('loginToken');
-            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userIdLogin = $queyToken['userId'];
+            $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+            $userIdLogin = $queryToken['userId'];
             $userIdEdit = $filterAll['userIdEdit'];
             $postId = $filterAll['postId'];
             $questionId = $_GET['questionId'];
-            $userIdPost = $_GET['userIdPost'];
+            if ($userIdLogin == $userIdEdit || checkAdminNotSignOut()) {
 
-            //handle Image
-            
-            if(!empty($_FILES["replyImage"]['name'])) {
-                
-                $target_dir = './templates/img/imgReply/';
-                $replyImage = $target_dir . $_FILES["replyImage"]["name"];
-                move_uploaded_file($_FILES["replyImage"]["tmp_name"], $replyImage);
-                $dataInsert = [
-    
-                    'replyContent' => $filterAll['replyContent'],
-                    'update_at' => date('Y:m:d H:i:s'),
-                    'questionId' => $questionId,
-                    'userId' => $userIdLogin,
-                    'replyImage' => $replyImage
-    
-                ];
-            } else {
-                $dataInsert = [
-    
-                    'replyContent' => $filterAll['replyContent'],
-                    'update_at' => date('Y:m:d H:i:s'),
-                    'questionId' => $questionId,
-                    'userId' => $userIdLogin,
-                    'replyImage' => null
-    
-                ];
-            }
-            $insertStatus = insert('replies', $dataInsert);
-            if ($insertStatus) {
+                if (!empty($_FILES["questionImage"]['name'])) {
+                    //handle Image
 
-                setFlashData('smg', 'A new reply was just uploaded!');
-                setFlashData('smg_type', 'success');
+                    $target_dir = './templates/img/imgQuestion/';
+                    $questionImage = $target_dir . $_FILES["questionImage"]["name"];
+                    move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
+
+                    $dataUpdate = [
+
+                        'title' => $filterAll['title'],
+                        'content' => $filterAll['content'],
+                        'update_at' => date('Y:m:d H:i:s'),
+                        'postId' => $filterAll['postId'],
+
+                        'questionImage' => $questionImage
+
+                    ];
+                } else {
+
+                    $oldImage = getRaw("SELECT questionImage FROM questions WHERE id='$questionId'")['questionImage'];
+                    $dataUpdate = [
+
+                        'title' => $filterAll['title'],
+                        'content' => $filterAll['content'],
+                        'update_at' => date('Y:m:d H:i:s'),
+                        'postId' => $filterAll['postId'],
+                        'questionImage' => $oldImage
+
+
+                    ];
+                }
+                $updateStatus = update('questions', $dataUpdate, "id= $questionId");
+                if ($updateStatus) {
+
+                    setFlashData('smg', 'This post was just updated');
+                    setFlashData('smg_type', 'success');
+                } else {
+                    setFlashData('smg', 'System faces errors! Please try again.');
+                    setFlashData('smg_type', 'danger');
+                }
             } else {
-                setFlashData('smg', 'System faces errors! Please try again.');
+                setFlashData('smg', 'Can not edit questions of another user!');
                 setFlashData('smg_type', 'danger');
             }
-            reDirect("?module=home&action=question&questionId=" . $questionId . "&postId=" . $postId . "&userIdEdit=" . $userIdEdit . "&userIdPost=" . $userIdPost);
         }
+
+
+
+        reDirect("?module=home&action=question&questionId=" . $questionId . "&postId=" . $postId . "&userIdEdit=" . $userIdEdit . "&userIdPost=" . $userIdPost);
     }
 }
+
 $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
@@ -113,14 +125,14 @@ $listReply = getFlashData(('listReply'));
 $userIdPost = getFlashData('userIdPost');
 $postId = getFlashData('postId');
 $userIdEdit = getFlashData('userIdEdit');
-if (!empty($listReply)) {
-    $old = $listReply;
+if (!empty($questionDetail)) {
+    $old = $questionDetail;
 }
 layouts('headerPost', $data);
 ?>
 
 
-
+<div id="overlay"></div>
 <div class="container">
     <div class="main-body p-0">
         <div class="inner-wrapper">
@@ -214,8 +226,8 @@ layouts('headerPost', $data);
                                         </div>
                                         <div style="position: absolute; right: 14px; top: 13px;">
 
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>&userIdPost=<?php echo $userIdPost ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestionInReplyPage&postId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </div>
                                         <h5 style="margin: 0;"><a href="" class="text-body"><?php echo $questionDetail['title'] ?></a></h5>
                                         <p>
@@ -229,7 +241,7 @@ layouts('headerPost', $data);
                                             <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 20px;"></i>
 
                                         </a>
-                                        <a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&postId=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+                                        <a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
 
                                             <i class="fa-regular fa-comment icon-hover" style="font-size: 20px;"></i>
                                         </a>
@@ -257,7 +269,7 @@ layouts('headerPost', $data);
                                         <div class="card mb-4">
                                             <div class="card-body">
                                                 <div class="media mb-3">
-                                                    <h6 style="margin: 0; position: absolute; right: 49.5%;top: 14px; font-weight: 300;">Reply</h6>
+                                                    <h6 style="margin: 0; position: absolute; right: 50%;top: 14px; font-weight: 300;">Reply</h6>
                                                     <img src="<?php echo $userDetail['profileImage'] ?>" class="d-block ui-w-40 rounded-circle" alt="">
 
                                                     <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
@@ -270,7 +282,7 @@ layouts('headerPost', $data);
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
 
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
 
@@ -323,27 +335,28 @@ layouts('headerPost', $data);
             <!-- /Inner main -->
         </div>
 
-        <!-- New Question Modal -->
-        <div class="modal fade" id="newReply" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Edit Question Modal -->
+       
+        <div class="modal fade" id="EditQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">New reply</h5>
+                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit question</h5>
 
                     </div>
                     <div class="modal-body">
                         <form method="post" enctype="multipart/form-data">
-                            <!-- <div class="form-group">
-                                <label class="col-form-label">Title</label>
-                                <input name="title" type="text" class="form-control">
-                            </div> -->
+                            <div class="form-group">
+                                <label class="col-form-label">Title:</label>
+                                <input name="title" type="text" class="form-control" value="<?php echo  getOldValue($old, 'title') ?>">
+                            </div>
                             <div class="form-group">
                                 <label class="col-form-label">Content</label>
-                                <input name="replyContent" type="text" class="form-control">
+                                <input name="content" type="text" class="form-control" value="<?php echo  getOldValue($old, 'content') ?>">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Image</label>
-                                <input name="replyImage" class="form-control" id="inputUsername" type="file" >
+                                <input name="questionImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile" value=<?php echo  getOldValue($old, 'questionImage') ?>>
 
                             </div>
 
@@ -352,7 +365,10 @@ layouts('headerPost', $data);
                             <input type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
-                            <button type="button" class="mg-btn  rounded " data-dismiss="modal">Close</button>
+                            <button type="button" class="mg-btn  rounded small">
+                                <a href="?module=home&action=question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">Back</a>
+
+                            </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>
                     </div>
@@ -370,6 +386,10 @@ layouts('headerPost', $data);
 
 
     })
+</script>
+<script>
+    var myModal = new bootstrap.Modal(document.getElementById('EditQuestionModal'), {})
+    myModal.show()
 </script>
 
 <?php

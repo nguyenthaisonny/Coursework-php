@@ -141,11 +141,11 @@ layouts('headerForum', $data);
                                     <div class="media forum-item">
                                         <div style="display: flex;align-items: flex-start;">
 
-                                            <a href="" data-toggle="collapse" data-target=".forum-content"><img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                            <a href="" data-toggle="collapse" data-target=".forum-content"><img  src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                             <div style="padding-left: 6px;">
 
                                                 <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                <p style=" margin: 2px 0; font-size: 10px; font-weight: 300;line-height: 14px;">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></p>
+                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></p>
                                             </div>
 
                                         </div>

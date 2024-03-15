@@ -92,7 +92,7 @@ layouts('headerEditPost', $data);
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
                     <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;" data-toggle="modal" data-target="#newPostModel">
-                        Upload <i class="fa-solid fa-plus"></i>
+                        New post <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
                 <!-- /Inner sidebar header -->
@@ -148,6 +148,11 @@ layouts('headerEditPost', $data);
                     </select>
 
                 </div>
+                <?php
+                if (!empty($smg)) {
+                    getSmg($smg, $smgType);
+                }
+                ?>
                 <!-- /Inner main header -->
 
                 <!-- Inner main body -->
@@ -159,45 +164,50 @@ layouts('headerEditPost', $data);
                         $count = 0;
                         foreach ($listPost as $item) :
                             $userId = $item['userId'];
+
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
                     ?>
-                            <div class="card mb-2">
+                            <div class="card mb-2" style="position: relative;">
 
-
+                                
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
-                                        <div style="display: flex;align-items: center;">
+                                        <div style="display: flex;align-items: flex-start; margin-bottom: 6px;">
 
-                                            <a href="#" data-toggle="collapse" data-target=".forum-content"><img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                            <a href="" data-toggle="collapse" data-target=".forum-content"><img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                             <div style="padding-left: 6px;">
-                                                <div style="display: flex; align-items: center; justify-content: space-between;">
-                                                    <h6 style="margin: 0;padding: 0"><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                    <p style="margin: 0; font-size: 14px; padding-top: 4px; margin-left: 6px; font-weight: 300;"><?php echo $item['create_at']; ?></p>
-                                                </div>
-                                                <p style="margin: 0"><?php echo $userDetail['email'] ?></p>
+
+                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
+                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></p>
                                             </div>
+
                                         </div>
-                                        <div class="media-body" style="margin-top: 10px;">
-                                            <h6><a href="#" data-toggle="collapse" data-target=".forum-content" class="text-body"><?php echo $item['postName'] ?></a></h6>
-                                            <p class="text-secondary">
+                                        <div style="position: absolute; right: 8px; top: 8px;">
+
+                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                        </div>
+                                        <div class="media-body" style="margin-top: 4px;">
+                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
+                                            <p style="margin-bottom: 20px;">
                                                 <?php echo $item['description'] ?>
                                             </p>
 
-                                            <div>
+                                        </div>
+                                        <div >
 
-                                                <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> 19</span>
-                                                <span><i class="far fa-comment ml-2"></i> 3</span>
-                                            </div>
+                                            <span class="d-none d-sm-inline-block" style="font-size: 20px;"><i class="far fa-eye icon-hover"></i> 19</span>
+                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="d-inline-block text-muted">
+                                                <i class="fa-solid fa-door-open icon-hover"  style="font-size: 20px;"></i>
+
+                                            </a>
+                                            
                                         </div>
                                     </div>
                                     <div class="text-muted small text-center align-self-center" style="display: flex; flex-direction: column; justify-content: space-between">
 
-                                        <div>
 
-                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a href="<?php echo _WEB_HOST; ?>/?module=admin&action=delete&id=<?php echo $item['id'] ?>" onclick="return confirm('Delete this row?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
-                                        </div>
                                     </div>
 
                                 </div>
@@ -207,7 +217,7 @@ layouts('headerEditPost', $data);
                     else :
                         ?>
                         <tr>
-                            <td colspan="7">
+                            <td>
                                 <div class="alert alert-danger text-center">None of Post</div>
                             </td>
                         </tr>
