@@ -304,11 +304,11 @@ layouts('headerEditPost', $data);
                         <form method="post">
                             <div class="form-group">
                                 <label class="col-form-label">Title</label>
-                                <input name="postName" type="text" class="form-control" value=<?php echo  getOldValue($old, 'postName') ?>>
+                                <input name="postName" type="text" class="form-control" value="<?php echo  getOldValue($old, 'postName') ?>">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Description</label>
-                                <input name="description" type="text" class="form-control" value=<?php echo  getOldValue($old, 'description') ?>>
+                                <input name="description" type="text" class="form-control" value="<?php echo  getOldValue($old, 'description') ?>">
                             </div>
                             
 

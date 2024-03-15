@@ -141,6 +141,14 @@ button:hover a {
   margin-left: 1rem;
   margin-right: 1rem;
 }
+.icon-hover:hover{
+
+  color: rgb(104, 85, 224);
+  
+}
+  
+
+
 #overlay {
   position: fixed; /* Sit on top of the page content */
   display: block; /* Hidden by default */

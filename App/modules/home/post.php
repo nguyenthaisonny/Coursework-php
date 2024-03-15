@@ -11,21 +11,24 @@ if (!checkLogin()) {
     reDirect('?module=auth&action=login');
 }
 // echo $result;
-$filterAll = filter();
+if (isGet()) {
+
+    $filterAll = filter();
 
 
-if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
-    $userIdEdit = $filterAll['userIdEdit'];
-    $postId = $filterAll['postId'];
-    setFlashData('userIdEdit', $userIdEdit);
-    setFlashData('postId', $postId);
-    // check whether exist in database
-    //if exist => get info
-    //if not exist => navigat to list page
-    $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
-    if (!empty($listQuestion)) {
-        //exist
-        setFlashData('listQuestion', $listQuestion);
+    if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
+        $userIdEdit = $filterAll['userIdEdit'];
+        $postId = $filterAll['postId'];
+        setSession('userIdPost', $userIdEdit);
+        setFlashData('postId', $postId);
+        // check whether exist in database
+        //if exist => get info
+        //if not exist => navigat to list page
+        $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
+        if (!empty($listQuestion)) {
+            //exist
+            setFlashData('listQuestion', $listQuestion);
+        }
     }
 }
 
@@ -41,7 +44,7 @@ if (isPost()) {
             $postId = $filterAll['postId'];
             //handle Image
             $target_dir = './templates/img/imgQuestion/';
-            $questionImage = $target_dir .$_FILES["questionImage"]["name"];
+            $questionImage = $target_dir . $_FILES["questionImage"]["name"];
             move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
             $dataInsert = [
 
@@ -56,7 +59,7 @@ if (isPost()) {
             $insertStatus = insert('questions', $dataInsert);
             if ($insertStatus) {
 
-                setFlashData('smg', 'A new question was just uploaded!'. $_FILES["questionImage"]["name"]);
+                setFlashData('smg', 'A new question was just uploaded!' . $_FILES["questionImage"]["name"]);
                 setFlashData('smg_type', 'success');
             } else {
                 setFlashData('smg', 'System faces errors! Please try again.');
@@ -75,7 +78,7 @@ $ok = getFlashData('ok');
 $no = getFlashData('no');
 $listQuestion = getFlashData('listQuestion');
 $postId = getFlashData('postId');
-$userIdEdit = getFlashData('userIdEdit');
+
 if (!empty($listQuestion)) {
     $old = $listQuestion;
 
@@ -166,11 +169,13 @@ layouts('headerPost', $data);
                     <?php
                     if (!empty($listQuestion)) :
                         $count = 0;
+                        $userIdPost = getSession('userIdPost');
                         foreach ($listQuestion as $item) :
                             $userId = $item['userId'];
 
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
+
                     ?>
                             <div class="container posts-content" style="position: relative;">
                                 <div class="row">
@@ -180,31 +185,36 @@ layouts('headerPost', $data);
                                                 <div class="media mb-3">
                                                     <img src="<?php echo $userDetail['profileImage'] ?>" class="d-block ui-w-40 rounded-circle" alt="">
                                                     <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
-                                                        <?php echo $userDetail['fullname'] ?>
+                                                        <h6 style="margin: 0 ;padding: 0; font-size: 16px">
+
+                                                            <?php echo $userDetail['fullname'] ?>
+                                                        </h6>
                                                         <div class="text-muted small">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
 
                                                     <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
-                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&questionId=<?php echo $item['id'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
+                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
                                                 <p>
                                                     <?php echo $item['content'] ?>
                                                 </p>
                                                 <?php echo $item['questionImage'] ? '<a href="javascript:void(0)" class="ui-rect ui-bg-cover" style="background-image: url(' . $item['questionImage'] . ');"></a>' :  null ?>
 
                                             </div>
-                                            <div class="card-footer">
+                                            <div class="card-footer" style="display: flex; justify-content: space-evenly;">
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted">
-                                                    <strong>123</strong> <small class="align-middle">Likes</small>
+                                                    <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 20px;"></i>
+
+                                                </a>
+                                                <a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+
+                                                    <i class="fa-regular fa-comment icon-hover" style="font-size: 20px;"></i>
                                                 </a>
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                                    <strong>12</strong> <small class="align-middle">Comments</small>
-                                                </a>
-                                                <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                                    <small class="align-middle">Repost</small>
+                                                    <i class="fa-solid fa-share icon-hover" style="font-size: 20px;"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -213,6 +223,7 @@ layouts('headerPost', $data);
                                 </div>
                             </div>
                         <?php
+                        
                         endforeach;
                     else :
                         ?>
@@ -228,7 +239,7 @@ layouts('headerPost', $data);
 
                 </div>
                 <!-- /Forum Detail -->
-                
+
 
                 <!-- /Inner main body -->
             </div>

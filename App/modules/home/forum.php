@@ -136,7 +136,7 @@ layouts('headerForum', $data);
                     ?>
                             <div class="card mb-2" style="position: relative;">
 
-
+                                
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
                                         <div style="display: flex;align-items: flex-start;">
@@ -160,11 +160,15 @@ layouts('headerForum', $data);
                                                 <?php echo $item['description'] ?>
                                             </p>
 
-                                            <div>
+                                        </div>
+                                        <div >
 
-                                                <span class="d-none d-sm-inline-block"><i class="far fa-eye"></i> 19</span>
-                                                <span><i class="far fa-comment ml-2"></i> 3</span>
-                                            </div>
+                                            <span class="d-none d-sm-inline-block" style="font-size: 20px;"><i class="far fa-eye icon-hover"></i> 19</span>
+                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="d-inline-block text-muted">
+                                                <i class="fa-solid fa-door-open icon-hover"  style="font-size: 20px;"></i>
+
+                                            </a>
+                                            
                                         </div>
                                     </div>
                                     <div class="text-muted small text-center align-self-center" style="display: flex; flex-direction: column; justify-content: space-between">

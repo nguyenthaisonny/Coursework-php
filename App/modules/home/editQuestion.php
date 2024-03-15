@@ -24,6 +24,7 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
     //if exist => get info
     //if not exist => navigat to list page
     $questionDetail = getRaw("SELECT title, content, questionImage FROM questions WHERE id = '$questionId'");
+    
     setFlashData('questionDetail', $questionDetail);
     $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
     if (!empty($listQuestion)) {
@@ -107,10 +108,8 @@ $postId = getFlashData('postId');
 $userIdEdit = getFlashData('userIdEdit');
 if (!empty($questionDetail)) {
     $old = $questionDetail;
-
-    // echo '<prev>';
     // print_r($old);
-    // echo '</prev>';
+    
 }
 layouts('headereditQuestion', $data);
 ?>
@@ -274,11 +273,11 @@ layouts('headereditQuestion', $data);
                         <form method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label class="col-form-label" >Title:</label>
-                                <input name="title" type="text" class="form-control" value=<?php echo  getOldValue($old, 'title') ?>>
+                                <input name="title" type="text" class="form-control" value="<?php echo  getOldValue($old, 'title') ?>">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label" >Content</label>
-                                <input name="content" type="text" class="form-control" value=<?php echo  getOldValue($old, 'content') ?>>
+                                <input name="content" type="text" class="form-control" value="<?php echo  getOldValue($old, 'content') ?>">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Image</label>
