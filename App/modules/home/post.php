@@ -105,7 +105,7 @@ layouts('headerPost', $data);
 
 
 
-<div class="container">
+<div class="container" style=" margin-bottom: 100px">
     <div class="main-body p-0">
         <div class="inner-wrapper">
             <!-- Inner sidebar -->
@@ -178,7 +178,8 @@ layouts('headerPost', $data);
 
 
                 <!-- list questions -->
-                <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse">
+                <div  class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
+                    <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
                     <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <?php
                     if (!empty($listQuestion)) :
@@ -193,6 +194,7 @@ layouts('headerPost', $data);
 
                     ?>
                             <div class="container posts-content" style="position: relative;">
+                            
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="card mb-4">
@@ -200,7 +202,7 @@ layouts('headerPost', $data);
                                                 <div style="margin-bottom: 6px;">
                                                     <a href="?module=user&action=profileView&userId=<?php echo $userId ?>">
 
-                                                        <img  src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50">
+                                                        <img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50">
                                                     </a>
                                                     <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                         <h6 style="margin: 0 ;padding: 0; font-size: 16px">
@@ -234,8 +236,8 @@ layouts('headerPost', $data);
 
                                                 </a>
                                                 <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
-                                                    <?php echo $countReply == 0 ? null : '<div style="position: absolute; top: -7; right: 0;" class="sub">'. $countReply .'</div>';?>
-                                                    
+                                                    <?php echo $countReply == 0 ? null : '<div style="position: absolute; top: -7; right: 0;" class="sub">' . $countReply . '</div>'; ?>
+
                                                     <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
                                                 </a>
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
@@ -311,14 +313,47 @@ layouts('headerPost', $data);
     </div>
 </div>
 <script>
-    var myCollapse = document.getElementById('postCollapse')
-    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+   
+    // Get the button:
+    let mybutton = document.getElementById("myBtn");
+    let listQuestion = document.getElementById("listQuestion");
+    console.log(listQuestion)
+    // When the user scrolls down 20px from the top of the document, show the button
+    listQuestion.onscroll = function() {
+        scrollFunction()
+    };
+    mybutton.onclick = function() {
+        topFunction()
+    };
+    window.onscroll = function() {
+        handleScrollWindow()
+    }
 
+    function scrollFunction() {
+        console.log(document.body.scrollTop);
+        if (listQuestion.scrollTop > 100 && window.scrollY < 300) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
 
+    function handleScrollWindow() {
+        if (window.scrollY > 120) {
+            mybutton.style.display = "none";
+        } else {
+            mybutton.style.display = "block";
 
-
-    })
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        listQuestion.scrollTop = 0; // For Safari
+        listQuestion.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
 </script>
+
+
 
 <?php
 layouts('footerIn')

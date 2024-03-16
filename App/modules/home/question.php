@@ -123,7 +123,7 @@ layouts('headerPost', $data);
 
 
 
-<div class="container">
+<div class="container"  style=" margin-bottom: 100px">
     <div class="main-body p-0">
         <div class="inner-wrapper">
             <!-- Inner sidebar -->
@@ -193,10 +193,11 @@ layouts('headerPost', $data);
                     getSmg($smg, $smgType);
                 }
                 ?>
+                <button  id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
 
 
                 <!-- Questions -->
-                <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse">
+                <div  class="inner-main-body p-2 p-sm-3 forum-content collapse show" id='listReply'>
                     <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdPost; ?>" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <div class="container posts-content" style="position: relative;">
                         <div class="row">
@@ -377,15 +378,48 @@ layouts('headerPost', $data);
 
     </div>
 </div>
+
 <script>
-    var myCollapse = document.getElementById('postCollapse')
-    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+   
+   // Get the button:
+   let mybutton = document.getElementById("myBtn");
+   let listQuestion = document.getElementById("listReply");
+   console.log(listQuestion)
+   // When the user scrolls down 20px from the top of the document, show the button
+   listQuestion.onscroll = function() {
+       scrollFunction()
+   };
+   mybutton.onclick = function() {
+       topFunction()
+   };
+   window.onscroll = function() {
+       handleScrollWindow()
+   }
 
+   function scrollFunction() {
+       console.log(document.body.scrollTop);
+       if (listQuestion.scrollTop > 100 && window.scrollY < 300) {
+           mybutton.style.display = "block";
+       } else {
+           mybutton.style.display = "none";
+       }
+   }
 
+   function handleScrollWindow() {
+       if (window.scrollY > 100) {
+           mybutton.style.display = "none";
+       } else {
+           mybutton.style.display = "block";
 
-
-    })
+       }
+   }
+   // When the user clicks on the button, scroll to the top of the document
+   function topFunction() {
+       listQuestion.scrollTop = 0; // For Safari
+       listQuestion.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+   }
 </script>
+
 
 <?php
 layouts('footerIn')
