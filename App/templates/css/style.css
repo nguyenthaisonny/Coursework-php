@@ -142,9 +142,29 @@ button:hover a {
   margin-right: 1rem;
 }
 .icon-hover:hover{
-
+  
   color: rgb(104, 85, 224);
   
+}
+.icon-hover.active {
+  color: rgb(104, 85, 224);
+
+}
+.sub {
+  color: rgb(255, 255, 255);
+    font-family: "IBM Plex Sans", TikTokFont, Arial, Tahoma, PingFangSC, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    left: 16px;
+    position: absolute;
+    top: -7px;
+    min-width: 20px;
+    border-radius: 10px;
+    height: 20px;
+    background: rgb(254, 44, 85);
+    text-align: center;
+    padding: 0px;
 }
   
 

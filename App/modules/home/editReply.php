@@ -205,19 +205,23 @@ layouts('headerPost', $data);
 
                 <!-- Questions -->
                 <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content ">
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdPost; ?>" class="btn btn-light btn-sm mb-3 has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
+                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdPost; ?>" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <div class="container posts-content" style="position: relative;">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card mb-4">
                                     <div class="card-body">
-                                        <div class="media mb-3">
+                                        <div style="margin-bottom: 6px;">
                                             <h6 style="margin: 0; position: absolute; right: 48%;top: 14px; font-weight: 300;">Question</h6>
-                                            <img src="<?php echo $userEditDetail['profileImage'] ?>" class="d-block ui-w-40 rounded-circle" alt="">
-                                            <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
+                                            <a href="?module=user&action=profileView&userId=<?php echo $userIdEdit ?>">
+                                                <img src="<?php echo $userEditDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50">
+                                            </a>
+                                            <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                 <h6 style="margin: 0 ;padding: 0; font-size: 16px">
+                                                    <a style="color: black;" href="?module=user&action=profileView&userId=<?php echo $userIdEdit ?>">
 
-                                                    <?php echo $userEditDetail['fullname'] ?>
+                                                        <?php echo $userEditDetail['fullname'] ?>
+                                                    </a>
                                                 </h6>
                                                 <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $questionDetail['update_at'] != 'NULL' ? $questionDetail['create_at'] : $questionDetail['update_at']; ?></div>
                                             </div>
@@ -231,7 +235,10 @@ layouts('headerPost', $data);
                                         <p>
                                             <?php echo $questionDetail['content'] ?>
                                         </p>
-                                        <?php echo $questionDetail['questionImage'] ? '<a href="javascript:void(0)" class="ui-rect ui-bg-cover" style="background-image: url(' . $questionDetail['questionImage'] . ');"></a>' :  null ?>
+                                        <div class="text-center">
+
+                                            <?php echo !empty($questionDetail['questionImage']) ? '<img src=' . $questionDetail['questionImage'] . ' class="img-fluid " alt="Responsive image" >' :  null ?>
+                                        </div>
 
                                     </div>
                                     <div class="card-footer" style="display: flex; justify-content: space-evenly;">
@@ -288,8 +295,10 @@ layouts('headerPost', $data);
                                                 <p>
                                                     <?php echo $item['replyContent'] ?>
                                                 </p>
-                                                <?php echo !empty($item['replyImage']) ? '<a href="javascript:void(0)" class="ui-rect ui-bg-cover" style="background-image: url(' . $item['replyImage'] . ');"></a>' :  null ?>
+                                                <div class="text-center">
 
+                                                    <?php echo !empty($item['replyImage']) ? '<img src=' . $item['replyImage'] . ' class="img-fluid " alt="Responsive image" >' :  null ?>
+                                                </div>
 
 
                                             </div>

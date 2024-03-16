@@ -48,38 +48,38 @@ if (isPost()) {
 
                 if (!empty($_FILES["questionImage"]['name'])) {
                     //handle Image
-    
+
                     $target_dir = './templates/img/imgQuestion/';
                     $questionImage = $target_dir . $_FILES["questionImage"]["name"];
                     move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
-    
+
                     $dataUpdate = [
-    
+
                         'title' => $filterAll['title'],
                         'content' => $filterAll['content'],
                         'update_at' => date('Y:m:d H:i:s'),
                         'postId' => $filterAll['postId'],
-    
+
                         'questionImage' => $questionImage
-    
+
                     ];
                 } else {
-    
+
                     $oldImage = getRaw("SELECT questionImage FROM questions WHERE id='$questionId'")['questionImage'];
                     $dataUpdate = [
-    
+
                         'title' => $filterAll['title'],
                         'content' => $filterAll['content'],
                         'update_at' => date('Y:m:d H:i:s'),
                         'postId' => $filterAll['postId'],
                         'questionImage' => $oldImage
-    
-    
+
+
                     ];
                 }
                 $updateStatus = update('questions', $dataUpdate, "id= $questionId");
                 if ($updateStatus) {
-    
+
                     setFlashData('smg', 'This post was just updated');
                     setFlashData('smg_type', 'success');
                 } else {
@@ -90,15 +90,13 @@ if (isPost()) {
                 setFlashData('smg', 'Can not edit questions of another user!');
                 setFlashData('smg_type', 'danger');
             }
-           
-
-            }
-
-
-
-            reDirect("?module=home&action=post&postId=" . $postId . "&userIdEdit=" . $userIdEdit);
         }
+
+
+
+        reDirect("?module=home&action=post&postId=" . $postId . "&userIdEdit=" . $userIdEdit);
     }
+}
 
 $errors = getFlashData('errors');
 // print_r($errors);
@@ -195,14 +193,15 @@ layouts('headerEditQuestion', $data);
 
                 <!-- list questions -->
                 <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content d-block">
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm mb-3 has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
+                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <?php
                     if (!empty($listQuestion)) :
                         $count = 0;
                         $userIdPost = getSession('userIdPost');
                         foreach ($listQuestion as $item) :
                             $userId = $item['userId'];
-
+                            $questionId = $item['id'];
+                            $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
 
@@ -213,11 +212,16 @@ layouts('headerEditQuestion', $data);
                                         <div class="card mb-4">
                                             <div class="card-body">
                                                 <div style="margin-bottom: 6px;">
-                                                    <img src="<?php echo $userDetail['profileImage'] ?>" class="d-block ui-w-40 rounded-circle" alt="">
-                                                    <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
-                                                        <h6 style="margin: 0 ;padding: 0; font-size: 16px">
+                                                    <a href="?module=user&action=profileView&userId=<?php echo $userId ?>">
 
-                                                            <?php echo $userDetail['fullname'] ?>
+                                                        <img  src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50">
+                                                    </a>
+                                                    <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
+                                                        <h6 style="margin: 0 ;padding: 0; font-size: 16px">
+                                                            <a style="color: black;" href="?module=user&action=profileView&userId=<?php echo $userId ?>">
+
+                                                                <?php echo $userDetail['fullname'] ?>
+                                                            </a>
                                                         </h6>
                                                         <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $item['update_at'] == 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
                                                     </div>
@@ -231,20 +235,24 @@ layouts('headerEditQuestion', $data);
                                                 <p>
                                                     <?php echo $item['content'] ?>
                                                 </p>
-                                                <?php echo $item['questionImage'] ? '<a href="javascript:void(0)" class="ui-rect ui-bg-cover" style="background-image: url(' . $item['questionImage'] . ');"></a>' :  null ?>
+                                                <div class="text-center">
+
+                                                    <?php echo !empty($item['questionImage']) ? '<img src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
+                                                </div>
+
 
                                             </div>
                                             <div class="card-footer" style="display: flex; justify-content: space-evenly;">
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted">
-                                                    <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 20px;"></i>
+                                                    <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                                 </a>
-                                                <a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
-
-                                                    <i class="fa-regular fa-comment icon-hover" style="font-size: 20px;"></i>
+                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+                                                    <div style="position: absolute; top: -7; right: 0;" class="sub"><?php echo $countReply?></div>
+                                                    <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
                                                 </a>
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                                    <i class="fa-solid fa-share icon-hover" style="font-size: 20px;"></i>
+                                                    <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
                                                 </a>
                                             </div>
                                         </div>
