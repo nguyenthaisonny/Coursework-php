@@ -51,7 +51,7 @@ if (getSession('loginToken')) {
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="?module=home&action=forum" class=" px-2 nav-item">Forum</a></li>
-          <li><a href="?module=user&action=post" class=" px-2 nav-item">Post</a></li>
+          <li><a href="?module=home&action=contact" class=" px-2 nav-item">Contact</a></li>
           <li><a href="#" class=" px-2 nav-item">Customers</a></li>
           <li><a href="#" class=" px-2 nav-item">Products</a></li>
         </ul>
@@ -59,8 +59,9 @@ if (getSession('loginToken')) {
         <button class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 mg-btn primary" style="margin-top: 0;">
           Hi <?php echo $userName ?> ^^
         </button>
-
-
+        
+        <a class='col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3' style='font-size: 24px; padding: 0 6px;' href='?module=admin&action=list'><i class="fa-regular fa-message"></i></a>
+        
 
         <div class="menu-item dropdown text-end">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">

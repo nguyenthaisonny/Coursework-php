@@ -11,11 +11,14 @@ if(!$isAdmin) {
 $filterAll = filter();
 if (!empty($filterAll['id'])) {
     $userId = $filterAll['id'];
+    $postQuery = getRaw("SELECT id FROM posts WHERE userId = $userId");
+    $postId = $postQuery['id'];
     $userDetail = countRow("SELECT * FROM users WHERE id=$userId");
     if ($userDetail > 0) {
         $deleteToken = delete('tokenlogin', "userId=$userId");
         if ($deleteToken) {
             $deleteUser = delete('users', "id=$userId");
+            $deletePost = delete('posts', "id=$postId");
             if ($deleteUser) {
                 setFlashData('smg', 'Delete success');
                 setFlashData('smg_type', 'success');

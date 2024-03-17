@@ -32,13 +32,15 @@ if (getSession('loginToken')) {
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   
   <link rel="stylesheet" href="<?php echo _WEB_HOST_TEMPLATES ?>/css/style.css?ver=<?php echo rand(); ?>">
+  <link rel="stylesheet" href="<?php echo _WEB_HOST_TEMPLATES ?>/css/contact.css">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 
 </head>
 
 <body>
-  <header class="p-3 mb-3 border-bottom">
+  <header class="p-3 mb-3 border-bottom" style="margin-bottom: 0 !important;">
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a href="" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
