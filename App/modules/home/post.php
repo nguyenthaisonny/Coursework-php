@@ -179,7 +179,7 @@ layouts('headerPost', $data);
 
                 <!-- list questions -->
                 <div  class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
-                    <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button id="myBtn" title="Go to top" style="border-radius: 50%; right: 168px"><i class="fa-solid fa-arrow-up"></i></button>
                     <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <?php
                     if (!empty($listQuestion)) :
@@ -211,7 +211,7 @@ layouts('headerPost', $data);
                                                                 <?php echo $userDetail['fullname'] ?>
                                                             </a>
                                                         </h6>
-                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $item['update_at'] == 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
+                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">

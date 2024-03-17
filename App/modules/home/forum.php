@@ -150,7 +150,8 @@ layouts('headerForum', $data);
                                             <div style="padding-left: 6px;">
 
                                                 <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a  href="?module=user&action=profileView&userId=<?php echo $userId?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></p>
+                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference( $item['update_at']); ?></p>
+                                                
                                             </div>
 
                                         </div>

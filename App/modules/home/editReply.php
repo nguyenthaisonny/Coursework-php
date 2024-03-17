@@ -223,7 +223,8 @@ layouts('headerPost', $data);
                                                         <?php echo $userEditDetail['fullname'] ?>
                                                     </a>
                                                 </h6>
-                                                <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $questionDetail['update_at'] != 'NULL' ? $questionDetail['create_at'] : $questionDetail['update_at']; ?></div>
+                                                <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
+                                               
                                             </div>
                                         </div>
                                         <div style="position: absolute; right: 14px; top: 13px;">
@@ -283,7 +284,8 @@ layouts('headerPost', $data);
 
                                                             <?php echo $userDetail['fullname'] ?>
                                                         </h6>
-                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $item['update_at'] != 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
+                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">

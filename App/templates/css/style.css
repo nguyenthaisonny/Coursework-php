@@ -203,7 +203,7 @@ html *::-webkit-scrollbar-track {
   border-radius: 10px; /* Rounded corners */
   font-size: 10px; /* Increase font size */
   color: rgb(104, 85, 224);
-  background-color: rgba(255, 255, 255, 1);
+  background-color: transparent;
   border: 1px solid rgba(104, 85, 224, 1);
 }
 

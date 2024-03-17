@@ -223,7 +223,8 @@ layouts('headerEditQuestion', $data);
                                                                 <?php echo $userDetail['fullname'] ?>
                                                             </a>
                                                         </h6>
-                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;">Latest: <?php echo $item['update_at'] == 'NULL' ? $item['create_at'] : $item['update_at']; ?></div>
+                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+                                                        
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">

@@ -239,16 +239,35 @@ function checkAdminNotSignOut() {
     }
     return $checkAdmin;
 }
-//handle convert file image to URL
-function srcData($image)
-{
-
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-
-    // reads your image's data and convert it to base64
-    $data = base64_encode($image);
-
-    // Create the image's SRC:  "data:{mime};base64,{data};"
-    return 'data: ' . finfo_buffer($finfo, $image) . ';base64,' . $data;
-
+function formatTimeDifference($inputDate) {
+    // Convert input date to a DateTime object
+    $inputDateTime = new DateTime($inputDate);
+    
+    // Get current date and time
+    $currentDateTime = new DateTime();
+    
+    // Check if input date is in the same year
+    if ($inputDateTime->format('Y') === $currentDateTime->format('Y')) {
+        // Calculate the time difference
+        $interval = $inputDateTime->diff($currentDateTime);
+        
+        // Check the time difference
+        if ($interval->y > 0) {
+            return $interval->y . " year(s) ago";
+        } elseif ($interval->m > 0) {
+            return $interval->m . " month(s) ago";
+        } elseif ($interval->d > 0) {
+            return $interval->d . " day(s) ago";
+        } elseif ($interval->h > 0) {
+            return $interval->h . " hour(s) ago";
+        } elseif ($interval->i > 0) {
+            return $interval->i . " minute(s) ago";
+        } else {
+            return "Just now";
+        }
+    } else {
+        // If not in the same year
+        return $inputDateTime->format('Y');
+    }
 }
+
