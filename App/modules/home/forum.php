@@ -251,7 +251,7 @@ window.onscroll = function() {handleScrollWindow()}
 
 function scrollFunction() {
     console.log(document.body.scrollTop);
-  if (listPost.scrollTop > 20 && window.scrollY < 120) {
+  if (listPost.scrollTop > 20 && window.scrollY < 100) {
     mybutton.style.display = "block";
   } 
   else {
@@ -259,11 +259,11 @@ function scrollFunction() {
   }
 }
 function handleScrollWindow() {
-    if(window.scrollY>100) {
+    if(listPost.scrollTop > 20 && window.scrollY>100) {
         mybutton.style.display = "none";
-    } else {
-    mybutton.style.display = "block";
-
+    } else if (listPost.scrollTop > 20 && window.scrollY<100){
+        mybutton.style.display = "block";
+        
     }
 }
 // When the user clicks on the button, scroll to the top of the document

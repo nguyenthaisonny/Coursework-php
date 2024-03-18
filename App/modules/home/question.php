@@ -110,6 +110,7 @@ $no = getFlashData('no');
 $questionDetail = getFlashData('questionDetail');
 $questionId = $questionDetail['id'];
 $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
+$countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
 $userEditDetail = getFlashData('userEditDetail');
 $listReply = getFlashData(('listReply'));
 $userIdPost = getFlashData('userIdPost');
@@ -123,7 +124,7 @@ layouts('headerPost', $data);
 
 
 
-<div class="container"  style=" margin-bottom: 100px">
+<div class="container" style=" margin-bottom: 100px">
     <div class="main-body p-0">
         <div class="inner-wrapper">
             <!-- Inner sidebar -->
@@ -193,11 +194,11 @@ layouts('headerPost', $data);
                     getSmg($smg, $smgType);
                 }
                 ?>
-                <button  id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
+                <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
 
 
                 <!-- Questions -->
-                <div  class="inner-main-body p-2 p-sm-3 forum-content collapse show" id='listReply'>
+                <div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id='listReply'>
                     <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdPost; ?>" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <div class="container posts-content" style="position: relative;">
                         <div class="row">
@@ -224,6 +225,10 @@ layouts('headerPost', $data);
                                             <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>&userIdPost=<?php echo $userIdPost ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </div>
+                                        <div style="position: absolute; right: 12px; bottom: 28px;">
+                                            <?php echo $countReply == 0 ? null : '<p style="font-size: 14px, font-weight: 100;">' . $countReply . ' comments</p>'; ?>
+
+                                        </div>
                                         <h5 style="margin: 0;"><a href="" class="text-body"><?php echo $questionDetail['title'] ?></a></h5>
                                         <p>
                                             <?php echo $questionDetail['content'] ?>
@@ -239,7 +244,7 @@ layouts('headerPost', $data);
 
                                         </a>
                                         <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&postId=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
-                                            
+
                                             <i class="fa-regular fa-comment icon-hover active" style="font-size: 26px;"></i>
                                         </a>
                                         <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
@@ -380,44 +385,42 @@ layouts('headerPost', $data);
 </div>
 
 <script>
-   
-   // Get the button:
-   let mybutton = document.getElementById("myBtn");
-   let listQuestion = document.getElementById("listReply");
-   console.log(listQuestion)
-   // When the user scrolls down 20px from the top of the document, show the button
-   listQuestion.onscroll = function() {
-       scrollFunction()
-   };
-   mybutton.onclick = function() {
-       topFunction()
-   };
-   window.onscroll = function() {
-       handleScrollWindow()
-   }
+    // Get the button:
+    let mybutton = document.getElementById("myBtn");
+    let listReply = document.getElementById("listReply");
+    console.log(listReply)
+    // When the user scrolls down 20px from the top of the document, show the button
+    listReply.onscroll = function() {
+        scrollFunction()
+    };
+    mybutton.onclick = function() {
+        topFunction()
+    };
+    window.onscroll = function() {
+        handleScrollWindow()
+    }
 
-   function scrollFunction() {
-       console.log(document.body.scrollTop);
-       if (listQuestion.scrollTop > 100 && window.scrollY < 300) {
-           mybutton.style.display = "block";
-       } else {
-           mybutton.style.display = "none";
-       }
-   }
-
-   function handleScrollWindow() {
-       if (window.scrollY > 100) {
-           mybutton.style.display = "none";
-       } else {
-           mybutton.style.display = "block";
-
-       }
-   }
-   // When the user clicks on the button, scroll to the top of the document
-   function topFunction() {
-       listQuestion.scrollTop = 0; // For Safari
-       listQuestion.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-   }
+    function scrollFunction() {
+        console.log(document.body.scrollTop);
+        if (listReply.scrollTop > 100 && window.scrollY < 300) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+    function handleScrollWindow() {
+    if(listReply.scrollTop > 20 && window.scrollY>100) {
+        mybutton.style.display = "none";
+    } else if (listReply.scrollTop > 20 && window.scrollY<100){
+        mybutton.style.display = "block";
+        
+    }
+}
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        listReply.scrollTop = 0; // For Safari
+        listReply.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
 </script>
 
 
