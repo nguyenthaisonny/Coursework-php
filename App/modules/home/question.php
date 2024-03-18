@@ -359,7 +359,7 @@ layouts('headerPost', $data);
                                 <input name="title" type="text" class="form-control">
                             </div> -->
                             <div class="form-group">
-                                <label class="col-form-label">Content</label>
+                                <label class="col-form-label" required="required">Content</label>
                                 <input name="replyContent" type="text" class="form-control">
                             </div>
                             <div class="form-group">

@@ -55,7 +55,7 @@ layouts('headerForum', $data);
             <!-- Inner sidebar -->
             <div class="inner-sidebar">
                 <!-- Inner sidebar header -->
-                <div class="inner-sidebar-header justify-content-center" >
+                <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
                     <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;" data-toggle="modal" data-target="#newPostModel">
                         New post <i class="fa-solid fa-plus"></i>
@@ -104,7 +104,7 @@ layouts('headerForum', $data);
             <div class="inner-main">
                 <!-- Inner main header -->
                 <div class="inner-main-header">
-                    
+
                     <select class="custom-select custom-select-sm w-auto mr-1">
                         <option selected="">Latest</option>
                         <option value="1">Popular</option>
@@ -124,9 +124,9 @@ layouts('headerForum', $data);
                 <!-- Inner main body -->
 
                 <!-- Forum List -->
-                <div class="inner-main-body p-2 p-sm-3 collapse forum-content show" id='listPost'>
-                <button  id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
-                
+                <ul class="inner-main-body p-2 p-sm-3 collapse forum-content show" id='listPost'>
+                    <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
+
                     <?php
                     if (!empty($listPost)) :
                         $count = 0;
@@ -139,19 +139,20 @@ layouts('headerForum', $data);
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
                     ?>
+
                             <div class="card mb-2" style="position: relative;">
 
-                                
+
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
                                         <div style="display: flex;align-items: flex-start;">
 
-                                            <a href="?module=user&action=profileView&userId=<?php echo $userId?>"  ><img  src="<?php echo $userDetail['profileImage'] ? $userDetail['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758";?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                            <a href="?module=user&action=profileView&userId=<?php echo $userId ?>"><img src="<?php echo $userDetail['profileImage'] ? $userDetail['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                             <div style="padding-left: 6px;">
 
-                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a  href="?module=user&action=profileView&userId=<?php echo $userId?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference( $item['update_at']); ?></p>
-                                                
+                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a href="?module=user&action=profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
+                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['update_at']); ?></p>
+
                                             </div>
 
                                         </div>
@@ -167,23 +168,22 @@ layouts('headerForum', $data);
                                             </p>
 
                                         </div>
-                                        <div >
+                                        <div>
 
                                             <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="d-inline-block text-muted">
-                                                <i class="fa-solid fa-door-open icon-hover"  style="font-size: 20px;"></i>
+                                                <i class="fa-solid fa-door-open icon-hover" style="font-size: 20px;"></i>
 
                                             </a>
-                                            <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;"><?php echo $questionCount?> questions</span>
-                                            
+                                            <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;"><?php echo $questionCount ?> questions</span>
+
                                         </div>
                                     </div>
-                                    <div class="text-muted small text-center align-self-center" style="display: flex; flex-direction: column; justify-content: space-between">
-
-
-                                    </div>
+                                    
 
                                 </div>
-                            </div>
+
+                        </div>
+
                         <?php
                         endforeach;
                     else :
@@ -197,12 +197,12 @@ layouts('headerForum', $data);
 
                     endif;
                     ?>
-                    
-                </div>
+
+                </ul>
                 <!-- /Forum List -->
 
                 <!-- Forum Detail -->
-               
+
                 <!-- /Forum Detail -->
 
                 <!-- /Inner main body -->
@@ -222,11 +222,11 @@ layouts('headerForum', $data);
                         <form method="post">
                             <div class="form-group">
                                 <label class="col-form-label">Title:</label>
-                                <input name="postName" type="text" class="form-control">
+                                <input name="postName" type="text" class="form-control " required="required">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Description</label>
-                                <input name="description" type="text" class="form-control">
+                                <input name="description" type="text" class="form-control" required="required">
                             </div>
                             <div class="modal-footer">
                             </div>
@@ -242,35 +242,41 @@ layouts('headerForum', $data);
 </div>
 <script>
     // Get the button:
-let mybutton = document.getElementById("myBtn");
-let listPost = document.getElementById("listPost");
-// When the user scrolls down 20px from the top of the document, show the button
-listPost.onscroll = function() {scrollFunction()};
-mybutton.onclick = function() {topFunction()};
-window.onscroll = function() {handleScrollWindow()}
-
-function scrollFunction() {
-    console.log(document.body.scrollTop);
-  if (listPost.scrollTop > 20 && window.scrollY < 100) {
-    mybutton.style.display = "block";
-  } 
-  else {
-    mybutton.style.display = "none";
-  }
-}
-function handleScrollWindow() {
-    if(listPost.scrollTop > 20 && window.scrollY>100) {
-        mybutton.style.display = "none";
-    } else if (listPost.scrollTop > 20 && window.scrollY<100){
-        mybutton.style.display = "block";
-        
+    let mybutton = document.getElementById("myBtn");
+    let listPost = document.getElementById("listPost");
+    // When the user scrolls down 20px from the top of the document, show the button
+    listPost.onscroll = function() {
+        scrollFunction()
+    };
+    mybutton.onclick = function() {
+        topFunction()
+    };
+    window.onscroll = function() {
+        handleScrollWindow()
     }
-}
-// When the user clicks on the button, scroll to the top of the document
-function topFunction() {
-  listPost.scrollTop = 0; // For Safari
-  listPost.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-}
+
+    function scrollFunction() {
+        console.log(document.body.scrollTop);
+        if (listPost.scrollTop > 20 && window.scrollY < 100) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    function handleScrollWindow() {
+        if (listPost.scrollTop > 20 && window.scrollY > 100) {
+            mybutton.style.display = "none";
+        } else if (listPost.scrollTop > 20 && window.scrollY < 100) {
+            mybutton.style.display = "block";
+
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        listPost.scrollTop = 0; // For Safari
+        listPost.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
 </script>
 
 <?php

@@ -83,10 +83,10 @@ if (isPost()) {
             setFlashData('smg_type', 'success');
             // send mail verify
             $subject = $filterAll['fullname'] . ' [verify your account!] ';
-            $content = 'Hi ' . $filterAll['fullname'] . '</br>';
-            $content .= ' .PLease click this link below to active your account! ' . '</br>';
-            $content .= $linkActive . '</br>';
-            $content .= ' Thanks';
+            $content = 'Hi ' . $filterAll['fullname'] . '<br>';
+            $content .= 'PLease click this link below to active your account! ' . '<br>';
+            $content .= $linkActive . '<br>';
+            $content .= 'Thanks for your contribution <span>❤</span>';
 
             $sendMail = sendMail($filterAll['email'], $subject, $content);
             if ($sendMail) {

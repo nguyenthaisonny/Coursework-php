@@ -362,11 +362,11 @@ layouts('headerPost', $data);
                         <form method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label class="col-form-label">Title:</label>
-                                <input name="title" type="text" class="form-control" value="<?php echo  getOldValue($old, 'title') ?>">
+                                <input name="title" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'title') ?>">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Content</label>
-                                <input name="content" type="text" class="form-control" value="<?php echo  getOldValue($old, 'content') ?>">
+                                <input name="content" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'content') ?>">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Image</label>

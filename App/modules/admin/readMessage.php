@@ -36,7 +36,7 @@ layouts('headerReadMessage', $data);
 <div class="container bootdey">
     <div class="email-app mb-4">
         <nav>
-            <a href="page-inbox-compose.html" class="btn btn-danger btn-block">New Email</a>
+            <a href="?module=admin&action=newEmail" class="btn mg-btn primary">New Email</a>
             <ul class="nav">
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">4</span></a>
@@ -101,12 +101,12 @@ layouts('headerReadMessage', $data);
                     </div>
                 </div>
                 <div class="btn-group float-right">
-                    <button type="button" class="btn btn-light">
+                    <a type="button" class="btn btn-light">
                         <span class="fa fa-chevron-left"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
+                    </a>
+                    <a type="button" class="btn btn-light">
                         <span class="fa fa-chevron-right"></span>
-                    </button>
+                    </a>
                 </div>
             </div>
             <?php
@@ -127,19 +127,21 @@ layouts('headerReadMessage', $data);
                         $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                         $count++;
                 ?>
-                        <li class="message <?php echo $item['readStatus'] == 0 ? 'unread' : null; ?>">
+                        <li style="position: relative;" class="message <?php echo $item['readStatus'] == 0 ? 'unread' : null; ?>">
                             <a href="?module=admin&action=replyMessage&messageId=<?php echo $item['id']; ?>">
 
                                 <div class="header">
                                     <span class="from" style="font-size: 18px; line-height: 16px;"><i style="margin-right: 6px; font-weight:300; font-size: 16px;" class="fa fa-square-o"></i><?php echo $item['fullnameMessage']; ?></span>
                                     <span class="date">
                                         <span class="fa fa-paper-clip"></span><?php echo formatTimeDifference($item['create_at']); ?></span>
+
                                 </div>
+                                <a style="position: absolute; top: 44%; right: 14px; color: #fff;" href="?module=admin&action=deleteMessage&messageId=<?php echo $item['id']; ?>" onclick="return confirm('Delete this message?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                 <div class="title">
                                     <i style="margin-right: 6px; font-weight:100;" class="fa fa-star-o"></i> <?php echo $item['messageSubject']; ?>
                                 </div>
                                 <div class="description">
-                                    <?php echo $item['messageContent']; ?>
+                                    <?php echo strlen($item['messageContent']) < 50 ? $item['messageContent'] :  substr($item['messageContent'], 0, 50) . "..."; ?>
                                 </div>
                             </a>
                         </li>
@@ -149,7 +151,7 @@ layouts('headerReadMessage', $data);
                     ?>
                     <tr>
                         <td>
-                            <div class="alert alert-danger text-center">None of Post</div>
+                            <div class="alert alert-danger text-center">None of message</div>
                         </td>
                     </tr>
                 <?php
