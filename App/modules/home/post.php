@@ -202,7 +202,7 @@ layouts('headerPost', $data);
                                                 <div style="margin-bottom: 6px;">
                                                     <a href="?module=user&action=profileView&userId=<?php echo $userId ?>">
 
-                                                        <img src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50">
+                                                        <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
                                                     </a>
                                                     <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                         <h6 style="margin: 0 ;padding: 0; font-size: 16px">
@@ -229,7 +229,7 @@ layouts('headerPost', $data);
                                                 </p>
                                                 <div class="text-center">
 
-                                                    <?php echo !empty($item['questionImage']) ? '<img src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
+                                                    <?php echo !empty($item['questionImage']) ? '<img style="padding-bottom: 10px" src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
                                                 </div>
 
 
