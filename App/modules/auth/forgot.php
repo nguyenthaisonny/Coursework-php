@@ -24,7 +24,7 @@ if ($_POST) {
             $updateStatus = update('users', $dataUpdate, "id = $userId");
             if($updateStatus) {
                 //create link reset password
-                $linkReset = _WEB_HOST.'?module=auth&action=reset'.'&token='.$forgotToken;
+                $linkReset = _WEB_HOST.'?module=auth&page=reset'.'&token='.$forgotToken;
                 // send mail for user
                 $subject = 'Request to recover your password';
                 $content = 'Hi '. $fullname. '</br>';
@@ -55,7 +55,7 @@ if ($_POST) {
         setFlashData('smg_type', 'danger');
     
     }
-    // reDirect('?module=auth&action=reset');
+    // reDirect('?module=auth&page=reset');
 }   
 
 $smg = getFlashData('smg');
@@ -88,12 +88,12 @@ $smgType = getFlashData('smg_type');
 
             <button class="mg-btn large rounded" >
     
-                 <a href="?module=auth&action=login" >Sign in</a>
+                 <a href="?module=auth&page=login" >Sign in</a>
             </button>
             
             <button class="mg-btn large rounded" >
     
-                <a href="?module=auth&action=register" >Sign up</a>
+                <a href="?module=auth&page=register" >Sign up</a>
             </button>
         
     </div>

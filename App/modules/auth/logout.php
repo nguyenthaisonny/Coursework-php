@@ -6,5 +6,5 @@ if(checkLogin()) {
     $token = getSession('loginToken');
     delete('tokenlogin', "token='$token'");
     removeSession('loginToken');
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }

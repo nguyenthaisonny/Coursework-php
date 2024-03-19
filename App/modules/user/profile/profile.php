@@ -9,7 +9,7 @@ $data = [
 
 
 if (!checkLogin()) {
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }
 
 // echo $result;
@@ -27,7 +27,7 @@ if (!empty($filterAll['id'])) {
         //exist
         setFlashData('user_detail', $userDetail);
     } else {
-        reDirect('?module=home&action=forum');
+        reDirect('?module=home&page=forum/forum');
     }
 }
 if (isPost()) {
@@ -131,7 +131,7 @@ if (isPost()) {
         setFlashData('smg', 'Plesase check your data again !');
         setFlashData('smg_type', 'danger');
     }
-    reDirect('?module=user&action=profile&id=' . $userId);
+    reDirect('?module=user&page=profile/profile&id=' . $userId);
 }
 
 

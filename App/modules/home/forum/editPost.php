@@ -3,53 +3,86 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $data = [
-    'titlePage' => 'Forum'
+    'titlePage' => 'Home'
 ];
 
 
 if (!checkLogin()) {
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }
+$filterAll = filter();
+if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
+    $postId = $filterAll['postId'];
+    $userIdEdit = $filterAll['userIdEdit'];
+    setFlashData('userIdEdit', $userIdEdit);
+    setFlashData('postId', $postId);
+    // check whether exist in database
+    //if exist => get info
+    //if not exist => navigat to list page
+    $postDetail = getRaw("SELECT postName, description FROM posts WHERE id = '$postId'");
+    setFlashData('postDetail', $postDetail);
+}
+
 
 if (isPost()) {
     $filterAll = filter();
 
     if (!empty($filterAll['postName']) || !empty($filterAll['description'])) {
         if (getSession('loginToken')) {
-
+            $postId = $_GET['postId'];
             $loginToken = getSession('loginToken');
-            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userId = $queyToken['userId'];
-            $dataInsert = [
+            $queryToken = getRaw("SELECT userId, id FROM tokenlogin WHERE token = '$loginToken'");
+            $userIdLogin = $queryToken['userId'];
+            $userIdEdit = $_GET['userIdEdit'];
+
+            $dataUpdate = [
                 'postName' => $filterAll['postName'],
                 'description' => $filterAll['description'],
                 'update_at' => date('Y:m:d H:i:s'),
-                'userId' => $userId
-            ];
-            $insertStatus = insert('posts', $dataInsert);
-            if ($insertStatus) {
 
-                setFlashData('smg', 'A new Post was just uploaded!');
-                setFlashData('smg_type', 'success');
+            ];
+            if (($userIdLogin == $userIdEdit) || checkAdminNotSignOut()) {
+
+                $updateStatus = update('posts', $dataUpdate, "id='$postId'");
+                if ($updateStatus) {
+
+                    setFlashData('smg', 'This post was just updated');
+                    setFlashData('smg_type', 'success');
+                } else {
+                    setFlashData('smg', 'System faces errors! Please try again.');
+                    setFlashData('smg_type', 'danger');
+                }
             } else {
-                setFlashData('smg', 'System faces errors! Please try again.');
+                setFlashData('smg', 'Error! Can not edit post of another user.');
                 setFlashData('smg_type', 'danger');
             }
         }
-        reDirect('?module=home&action=forum');
+        reDirect('?module=home&page=forum/forum');
     }
 }
 $listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
 
+
 $smg = getFlashData('smg');
 $smgType = getFlashData('smg_type');
+$postId = getFlashData('postId');
+$userIdEdit = getFlashData('userIdEdit');
+$postDetail = getFlashData('postDetail');
+// print_r($postDetail);
+if (!empty($postDetail)) {
+    $old = $postDetail;
 
-layouts('headerForum', $data);
+    // echo '<prev>';
+    // print_r($old);
+    // echo '</prev>';
+}
+
+layouts('headerEditPost', $data);
 ?>
 
 
 
-<div class="container" style=" margin-bottom: 100px">
+<div class="container">
     <div class="main-body p-0">
         <div class="inner-wrapper">
             <!-- Inner sidebar -->
@@ -57,8 +90,8 @@ layouts('headerForum', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button href="?module=home&action=addPost" type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                    <a href="?module=home&action=addPost" style="padding: 0 50px;">
+                    <button  type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                    <a href="?module=home&page=forum/addPost" style="padding: 0 50px;">
 
                         New post <i class="fa-solid fa-plus"></i>
                     </a>
@@ -106,8 +139,8 @@ layouts('headerForum', $data);
             <!-- Inner main -->
             <div class="inner-main">
                 <!-- Inner main header -->
-                <div class="inner-main-header" style="position: relative;">
-
+                <div class="inner-main-header">
+                    <a class="nav-link nav-icon rounded-circle nav-link-faded mr-3 d-md-none" href="#" data-toggle="inner-sidebar"><i class="material-icons">arrow_forward_ios</i></a>
                     <select class="custom-select custom-select-sm w-auto mr-1">
                         <option selected="">Latest</option>
                         <option value="1">Popular</option>
@@ -115,11 +148,9 @@ layouts('headerForum', $data);
                         <option value="3">Unsolved</option>
                         <option value="3">No Replies Yet</option>
                     </select>
-                    <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&action=deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 36px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
+                    <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 36px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
                     <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
                     </a>' : null; ?>
-                   
-
                 </div>
                 <?php
                 if (!empty($smg)) {
@@ -129,47 +160,43 @@ layouts('headerForum', $data);
                 <!-- /Inner main header -->
 
                 <!-- Inner main body -->
-
+                
                 <!-- Forum List -->
-                <ul class="inner-main-body p-2 p-sm-3 collapse forum-content show" id='listPost'>
+                <div id='listPost' class="inner-main-body p-2 p-sm-3 collapse forum-content show">
                     <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
-
                     <?php
                     if (!empty($listPost)) :
                         $count = 0;
                         foreach ($listPost as $item) :
                             $userId = $item['userId'];
                             $postId = $item['id'];
-
                             $questionCount = countRow("SELECT id FROM questions WHERE postId = '$postId'");
-
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                             $count++;
                     ?>
-
                             <div class="card mb-2" style="position: relative;">
 
 
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
                                         <div style="display: flex;align-items: flex-start;">
+                                            <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>"><img src="<?php echo $userDetail['profileImage'] ? $userDetail['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
 
-                                            <a href="?module=user&action=profileView&userId=<?php echo $userId ?>"><img src="<?php echo $userDetail['profileImage'] ? $userDetail['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                             <div style="padding-left: 6px;">
 
-                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a href="?module=user&action=profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['update_at']); ?></p>
+                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
+                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></p>
 
                                             </div>
 
                                         </div>
                                         <div style="position: absolute; right: 13px; top: 13px;">
 
-                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </div>
                                         <div class="media-body" style="margin-top: 4px;">
-                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
+                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
                                             <p style="margin-bottom: 20px;">
                                                 <?php echo $item['description'] ?>
                                             </p>
@@ -177,7 +204,7 @@ layouts('headerForum', $data);
                                         </div>
                                         <div>
 
-                                            <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="d-inline-block text-muted">
+                                            <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="d-inline-block text-muted">
                                                 <i class="fa-solid fa-door-open icon-hover" style="font-size: 20px;"></i>
 
                                             </a>
@@ -185,12 +212,13 @@ layouts('headerForum', $data);
 
                                         </div>
                                     </div>
+                                    <div class="text-muted small text-center align-self-center" style="display: flex; flex-direction: column; justify-content: space-between">
 
+
+                                    </div>
 
                                 </div>
-
                             </div>
-
                         <?php
                         endforeach;
                     else :
@@ -204,11 +232,10 @@ layouts('headerForum', $data);
 
                     endif;
                     ?>
-
-                </ul>
+                    
+                </div>
                 <!-- /Forum List -->
 
-                <!-- Forum Detail -->
 
                 <!-- /Forum Detail -->
 
@@ -217,27 +244,32 @@ layouts('headerForum', $data);
             <!-- /Inner main -->
         </div>
 
-        <!-- New Thread Modal -->
-        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        
+        <!-- Edit Thread Modal -->
+        <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">New Post</h5>
+                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit Post</h5>
 
                     </div>
                     <div class="modal-body">
                         <form method="post">
                             <div class="form-group">
-                                <label class="col-form-label">Title:</label>
-                                <input name="postName" type="text" class="form-control " required="required">
+                                <label class="col-form-label">Title</label>
+                                <input name="postName" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'postName') ?>">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Description</label>
-                                <input name="description" type="text" class="form-control" required="required">
+                                <input name="description" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'description') ?>">
                             </div>
+
+
                             <div class="modal-footer">
                             </div>
-                            <button type="button" class="mg-btn  rounded " data-dismiss="modal">Close</button>
+                            <button type="button" class="mg-btn small rounded">
+                                <a href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum">Back</a>
+                            </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>
                     </div>
@@ -245,10 +277,12 @@ layouts('headerForum', $data);
             </div>
         </div>
 
+
     </div>
 </div>
+
 <script>
-    var myModal = new bootstrap.Modal(document.getElementById('addModal'), {})
+    var myModal = new bootstrap.Modal(document.getElementById('editmodal'), {})
     myModal.show()
 </script>
 <script>
@@ -297,7 +331,6 @@ layouts('headerForum', $data);
         listPost.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
 </script>
-
 <?php
 layouts('footerIn')
 ?>

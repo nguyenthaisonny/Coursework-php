@@ -8,39 +8,38 @@ $data = [
 
 
 if (!checkLogin()) {
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }
 
 $filterAll = filter();
 
 if (getSession('loginToken')) {
-    
-    $userIdReply = $_GET['userIdReply'];
-    $replyId = $_GET['replyId'];
     $postId = $_GET['postId'];
+    $userIdDelete = $_GET['userIdDelete'];
     $questionId = $_GET['questionId'];
-    $loginToken = getSession('loginToken');
     $queryUserIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'");
+    $userIdPost = $queryUserIdPost['userId'];
+    $loginToken = getSession('loginToken');
     $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
     $userIdLogin = $queryToken['userId'];
-    $userIdPost = $queryUserIdPost['userId'];
+    echo $userIdDelete;
     
-    if ($userIdLogin == $userIdReply || checkAdminNotSignOut()) {
+    if ($userIdLogin == $userIdDelete || checkAdminNotSignOut()) {
 
-        $deleteStatus = delete('replies', "id='$replyId'");
+        $deleteStatus = delete('questions', "id='$questionId'");
         if ($deleteStatus) {
 
-            setFlashData('smg', 'Delete reply successfully!');
+            setFlashData('smg', 'Delete question successfully!');
             setFlashData('smg_type', 'success');
         } else {
             setFlashData('smg', 'System faces errors! Please try again.');
             setFlashData('smg_type', 'danger');
         }
     } else {
-        setFlashData('smg', 'Error! Can not delete reply of another user.');
+        setFlashData('smg', 'Error! Can not delete question of another user.');
         setFlashData('smg_type', 'danger');
     }
-    reDirect("?module=home&action=question&questionId=".$questionId."&postId=".$postId."&userIdEdit=".$userIdLogin."&userIdPost=".$userIdPost);
+    reDirect("?module=home&page=question/post&postId=".$postId."&userIdEdit=".$userIdPost);
 }
 
 

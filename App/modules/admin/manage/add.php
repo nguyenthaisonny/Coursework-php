@@ -11,7 +11,7 @@ $data = [
 
 $isAdmin = checkAdmin();
 if (!$isAdmin) {
-    reDirect('?module=home&action=forum');
+    reDirect('?module=home&page=forum/forum');
 }
 // filter data from form
 if (isPost()) {
@@ -81,14 +81,14 @@ if (isPost()) {
         ];
         $insertStatus = insert('users', $dataInsert);
         if ($insertStatus) {
-            $linkActive = _WEB_HOST . '/?module=auth&action=active&token=' . $activeToken;
+            $linkActive = _WEB_HOST . '/?module=auth&page=active&token=' . $activeToken;
             setFlashData('smg', 'Success! A new user was just added');
             setFlashData('smg_type', 'success');
-            reDirect('?module=admin&action=list');
+            reDirect('?module=admin&page=manage/list');
         } else {
             setFlashData('smg', 'System faces errors! Please try again.');
             setFlashData('smg_type', 'danger');
-            reDirect('?module=admin&action=add');
+            reDirect('?module=admin&page=manage/add');
         }
     } else {
         setFlashData('errors', $errors);
@@ -96,7 +96,7 @@ if (isPost()) {
         setFlashData('smg', 'Plesase check your data again !');
         setFlashData('smg_type', 'danger');
 
-        reDirect('?module=admin&action=add');
+        reDirect('?module=admin&page=manage/add');
     }
 }
 
@@ -175,7 +175,7 @@ $old = getFlashData('old');
 
                 <button class="mg-btn medium rounded">
 
-                    <a href="?module=admin&action=list">Back</a>
+                    <a href="?module=admin&page=manage/list">Back</a>
                 </button>
                 <button type="submit" class="mg-btn medium primary">Submit</button>
             </div>

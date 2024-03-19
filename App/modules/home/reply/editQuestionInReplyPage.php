@@ -8,7 +8,7 @@ $data = [
 
 
 if (!checkLogin()) {
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }
 // echo $result;
 $filterAll = filter();
@@ -108,7 +108,7 @@ if (isPost()) {
 
 
 
-        reDirect("?module=home&action=question&questionId=" . $questionId . "&postId=" . $postId . "&userIdEdit=" . $userIdEdit . "&userIdPost=" . $userIdPost);
+        reDirect("?module=home&page=reply/question&questionId=" . $questionId . "&postId=" . $postId . "&userIdEdit=" . $userIdEdit . "&userIdPost=" . $userIdPost);
     }
 }
 
@@ -122,6 +122,8 @@ $no = getFlashData('no');
 $questionDetail = getFlashData('questionDetail');
 $questionId = $questionDetail['id'];
 $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
+$userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
+
 $userEditDetail = getFlashData('userEditDetail');
 $listReply = getFlashData(('listReply'));
 $userIdPost = getFlashData('userIdPost');
@@ -209,7 +211,7 @@ layouts('headerPost', $data);
 
                 <!-- Questions -->
                 <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse">
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdPost; ?>" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
+                    <a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdPost; ?>" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <div class="container posts-content" style="position: relative;">
                         <div class="row">
                             <div class="col-lg-12">
@@ -217,25 +219,28 @@ layouts('headerPost', $data);
                                     <div class="card-body">
                                         <div style="margin-bottom: 6px;">
                                             <h6 style="margin: 0; position: absolute; right: 48%;top: 14px; font-weight: 300;">Question</h6>
-                                            <a href="?module=user&action=profileView&userId=<?php echo $userIdEdit ?>">
-                                            <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
+                                            <a href="?module=user&page=profile/profileView&userId=<?php echo $userIdEdit ?>">
+                                            <img src="<?php echo !empty($userPostDetail['profileImage']) ? $userPostDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
 
                                             </a>
                                             <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                 <h6 style="margin: 0 ;padding: 0; font-size: 16px">
-                                                    <a style="color: black;" href="?module=user&action=profileView&userId=<?php echo $userIdEdit ?>">
+                                                    <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userIdEdit ?>">
 
                                                         <?php echo $userEditDetail['fullname'] ?>
                                                     </a>
                                                 </h6>
                                                 <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
-
                                             </div>
                                         </div>
                                         <div style="position: absolute; right: 14px; top: 13px;">
 
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestionInReplyPage&postId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>&userIdPost=<?php echo $userIdPost ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                        </div>
+                                        <div style="position: absolute; right: 12px; bottom: 28px;">
+                                            <?php echo $countReply == 0 ? null : '<p style="font-size: 14px, font-weight: 100;">' . $countReply . ' comments</p>'; ?>
+
                                         </div>
                                         <h5 style="margin: 0;"><a href="" class="text-body"><?php echo $questionDetail['title'] ?></a></h5>
                                         <p>
@@ -243,19 +248,17 @@ layouts('headerPost', $data);
                                         </p>
                                         <div class="text-center">
 
-                                            <?php echo !empty($questionDetail['questionImage']) ? '<img  src=' . $questionDetail['questionImage'] . ' class="img-fluid " alt="Responsive image" >' :  null ?>
+                                            <?php echo !empty($questionDetail['questionImage']) ? '<img style="padding-bottom: 10px" src=' . $questionDetail['questionImage'] . ' class="img-fluid " alt="Responsive image" >' :  null ?>
                                         </div>
-
-
                                     </div>
                                     <div class="card-footer" style="display: flex; justify-content: space-evenly;">
                                         <a href="javascript:void(0)" class="d-inline-block text-muted">
                                             <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                         </a>
-                                        <a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+                                        <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&postId=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
 
-                                            <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
+                                            <i class="fa-regular fa-comment icon-hover active" style="font-size: 26px;"></i>
                                         </a>
                                         <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
                                             <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
@@ -277,27 +280,33 @@ layouts('headerPost', $data);
                     ?>
                             <div class="container posts-content" style="position: relative;">
                                 <div class="row">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-2">
+
+                                    </div>
+                                    <div class="col-lg-8">
                                         <div class="card mb-4">
                                             <div class="card-body">
                                                 <div class="media mb-3">
-                                                    <h6 style="margin: 0; position: absolute; right: 50%;top: 14px; font-weight: 300;">Reply</h6>
+                                                    <h6 style="margin: 0; position: absolute; right: 49.5%;top: 14px; font-weight: 300;">Reply</h6>
+                                                    <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+
                                                     <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle" >
 
+                                                    </a>
 
                                                     <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
                                                         <h6 style="margin: 0 ;padding: 0; font-size: 16px">
-
-                                                            <?php echo $userDetail['fullname'] ?>
+                                                            <a style="color:black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+                                                                <?php echo $userDetail['fullname'] ?>
+                                                            </a>
                                                         </h6>
                                                         <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
-
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
 
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
 
                                                 <p>
@@ -305,8 +314,9 @@ layouts('headerPost', $data);
                                                 </p>
                                                 <div class="text-center">
 
-                                                    <?php echo !empty($item['replyImage']) ? '<img src=' . $item['replyImage'] . ' class="img-fluid " alt="Responsive image" >' :  null ?>
+                                                    <?php echo !empty($item['replyImage']) ? '<img src=' . $item['replyImage'] . ' class="img-fluid " alt="Responsive image" width: "200" height: "200" >'  :  null ?>
                                                 </div>
+
 
 
                                             </div>
@@ -315,10 +325,7 @@ layouts('headerPost', $data);
                                                     <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                                 </a>
-                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
-                                                    <div style="position: absolute; top: -7; right: 0;" class="sub"><?php echo $countReply ?></div>
-                                                    <i class="fa-regular fa-comment icon-hover active" style="font-size: 26px;"></i>
-                                                </a>
+                                                <div></div>
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
                                                     <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
                                                 </a>
@@ -382,7 +389,7 @@ layouts('headerPost', $data);
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn  rounded small">
-                                <a href="?module=home&action=question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">Back</a>
+                                <a href="?module=home&page=reply/question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">Back</a>
 
                             </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>

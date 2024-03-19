@@ -7,7 +7,7 @@ $data = [
 ];
 
 if (checkLogin()) {
-    reDirect('?module=home&action=forum');
+    reDirect('?module=home&page=forum/forum');
 }
 if ($_POST) {
     $filterAll = filter();
@@ -32,22 +32,22 @@ if ($_POST) {
                     // insert success
                     setSession('loginToken', $tokenLogin);
 
-                    reDirect('?module=home&action=forum');
+                    reDirect('?module=home&page=forum/forum');
                 } else {
                     setFlashData('smg', 'Cannot sign in, please try again!');
                     setFlashData('smg_type', 'danger');
-                    reDirect('?module=auth&action=login');
+                    reDirect('?module=auth&page=login');
                 }
             } else {
                 setFlashData('smg', 'Password is not correct! Please type again !');
                 setFlashData('smg_type', 'danger');
-                reDirect('?module=auth&action=login');
+                reDirect('?module=auth&page=login');
             }
         }
     } else {
         setFlashData('smg', 'Please type email and password');
         setFlashData('smg_type', 'danger');
-        reDirect('?module=auth&action=login');
+        reDirect('?module=auth&page=login');
     }
 }
 
@@ -84,13 +84,13 @@ layouts('header', $data);
         </form>
         <button class="mg-btn large rounded">
 
-            <a href="?module=auth&action=register" >Sign up</a>
+            <a href="?module=auth&page=register" >Sign up</a>
         </button>
 
 
         <hr>
         <p class="text-center">
-            <a href="?module=auth&action=forgot">Forgot password?</a>
+            <a href="?module=auth&page=forgot">Forgot password?</a>
         </p>
     </div>
 </div>

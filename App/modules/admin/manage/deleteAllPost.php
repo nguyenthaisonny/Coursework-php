@@ -4,7 +4,7 @@ if (!defined('_CODE')) {
 }
 $isAdmin = checkAdmin();
 if(!$isAdmin) {
-    reDirect('?module=home&action=forum');
+    reDirect('?module=home&page=forum/forum');
 }
 //check whether id exist
 // delete login token -> delete user
@@ -16,4 +16,4 @@ if($deleteStatus) {
     setFlashData('smg', 'System faced errors!');
     setFlashData('smg_type', 'danger');
 }
-reDirect('?module=home&action=forum');
+reDirect('?module=home&page=forum/forum');

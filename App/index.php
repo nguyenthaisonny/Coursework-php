@@ -18,6 +18,7 @@ require_once('./includes/session.php');
 
 $module = _MODULE;
 $action = _ACTION;
+$page = _PAGE;
 if (!empty($_GET['module'])) {
 
     if (is_string($_GET['module'])) {
@@ -31,9 +32,15 @@ if (!empty($_GET['action'])) {
         $action = trim($_GET['action']);
     }
 }
+if (!empty($_GET['page'])) {
+
+    if (is_string($_GET['page'])) {
+        $page = trim($_GET['page']);
+    }
+}
 
 
-$path = 'modules/' . $module . '/' . $action . '.php';
+$path = 'modules/' . $module . '/'. $page. '.php';
 if (file_exists($path)) {
 
     require_once($path);

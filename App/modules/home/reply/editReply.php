@@ -8,18 +8,18 @@ $data = [
 
 
 if (!checkLogin()) {
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }
 // echo $result;
 $filterAll = filter();
 
 
-if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($filterAll['questionId']) && !empty($filterAll['userIdPost'])) {
+if (!empty($filterAll['userIdEdit']) && !empty($filterAll['replyId']) && !empty($filterAll['postId']) && !empty($filterAll['questionId']) && !empty($filterAll['userIdPost'])) {
     $userIdEdit = $filterAll['userIdEdit'];
     $postId = $filterAll['postId'];
     $questionId = $filterAll['questionId'];
     $userIdPost  = $filterAll['userIdPost'];
-
+    $replyId = $filterAll['replyId'];
     setFlashData('userIdPost', $userIdPost);
     setFlashData('userIdEdit', $userIdEdit);
     setFlashData('postId', $postId);
@@ -53,78 +53,86 @@ if (isPost()) {
         if (getSession('loginToken')) {
 
             $loginToken = getSession('loginToken');
-            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userIdLogin = $queyToken['userId'];
+            $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+            $userIdLogin = $queryToken['userId'];
             $userIdEdit = $filterAll['userIdEdit'];
             $postId = $filterAll['postId'];
             $questionId = $_GET['questionId'];
             $userIdPost = $_GET['userIdPost'];
+            $replyId = $_GET['replyId'];
+            if ($userIdLogin == $userIdEdit  || checkAdminNotSignOut()) {
+                if (!empty($_FILES["replyImage"]['name'])) {
+                    //handle Image
 
-            //handle Image
+                    $target_dir = './templates/img/imgReply/';
+                    $replyImage = $target_dir . $_FILES["replyImage"]["name"];
+                    move_uploaded_file($_FILES["replyImage"]["tmp_name"], $replyImage);
+                    $dataUpdate = [
 
-            if (!empty($_FILES["replyImage"]['name'])) {
+                        'replyContent' => $filterAll['replyContent'],
+                        'update_at' => date('Y:m:d H:i:s'),
+                        'questionId' => $questionId,
+                        'userId' => $userIdLogin,
+                        'replyImage' => $replyImage
 
-                $target_dir = './templates/img/imgReply/';
-                $replyImage = $target_dir . $_FILES["replyImage"]["name"];
-                move_uploaded_file($_FILES["replyImage"]["tmp_name"], $replyImage);
-                $dataInsert = [
+                    ];
+                } else {
+                    $oldImage = getRaw("SELECT replyImage FROM replies WHERE id = '$replyId'");
 
-                    'replyContent' => $filterAll['replyContent'],
-                    'update_at' => date('Y:m:d H:i:s'),
-                    'questionId' => $questionId,
-                    'userId' => $userIdLogin,
-                    'replyImage' => $replyImage
+                    $dataUpdate = [
 
-                ];
+                        'replyContent' => $filterAll['replyContent'],
+                        'update_at' => date('Y:m:d H:i:s'),
+                        'questionId' => $questionId,
+                        'userId' => $userIdLogin,
+                        'replyImage' => $oldImage['replyImage']
+
+                    ];
+                }
+                $condition = "id='$replyId'";
+                $insertStatus = update('replies', $dataUpdate, $condition);
+                if ($insertStatus) {
+
+                    setFlashData('smg', 'A new reply was just uploaded!');
+                    setFlashData('smg_type', 'success');
+                } else {
+                    setFlashData('smg', 'System faces errors! Please try again.');
+                    setFlashData('smg_type', 'danger');
+                }
             } else {
-                $dataInsert = [
-
-                    'replyContent' => $filterAll['replyContent'],
-                    'update_at' => date('Y:m:d H:i:s'),
-                    'questionId' => $questionId,
-                    'userId' => $userIdLogin,
-                    'replyImage' => null
-
-                ];
-            }
-            $insertStatus = insert('replies', $dataInsert);
-            if ($insertStatus) {
-
-                setFlashData('smg', 'A new reply was just uploaded!');
-                setFlashData('smg_type', 'success');
-            } else {
-                setFlashData('smg', 'System faces errors! Please try again.');
+                setFlashData('smg', 'Can not edit reply of another user!');
                 setFlashData('smg_type', 'danger');
             }
-            reDirect("?module=home&action=question&questionId=" . $questionId . "&postId=" . $postId . "&userIdEdit=" . $userIdEdit . "&userIdPost=" . $userIdPost);
+            $condition = "id='$replyId'";
+
+            reDirect("?module=home&page=reply/question&questionId=" . $questionId . "&postId=" . $postId . "&userIdEdit=" . $userIdEdit . "&userIdPost=" . $userIdPost);
         }
     }
 }
+$replyDetail = getRaw("SELECT replyContent FROM replies WHERE id='$replyId'");
 $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
 $smgType = getFlashData(('smg_type'));
 $old = getFlashData('old');
-$ok = getFlashData('ok');
-$no = getFlashData('no');
+
+$countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
+
 $questionDetail = getFlashData('questionDetail');
-$questionId = $questionDetail['id'];
-$countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
-$countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
 $userEditDetail = getFlashData('userEditDetail');
-$listReply = getFlashData(('listReply'));
+$userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
 $userIdPost = getFlashData('userIdPost');
 $postId = getFlashData('postId');
 $userIdEdit = getFlashData('userIdEdit');
-if (!empty($listReply)) {
-    $old = $listReply;
+if (!empty($replyDetail)) {
+    $old = $replyDetail;
 }
 layouts('headerPost', $data);
 ?>
 
+<div id="overlay"></div>
 
-
-<div class="container" style=" margin-bottom: 100px">
+<div class="container">
     <div class="main-body p-0">
         <div class="inner-wrapper">
             <!-- Inner sidebar -->
@@ -194,12 +202,11 @@ layouts('headerPost', $data);
                     getSmg($smg, $smgType);
                 }
                 ?>
-                <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
 
 
                 <!-- Questions -->
-                <div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id='listReply'>
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdPost; ?>" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
+                <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content ">
+                    <a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdPost; ?>" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <div class="container posts-content" style="position: relative;">
                         <div class="row">
                             <div class="col-lg-12">
@@ -207,13 +214,13 @@ layouts('headerPost', $data);
                                     <div class="card-body">
                                         <div style="margin-bottom: 6px;">
                                             <h6 style="margin: 0; position: absolute; right: 48%;top: 14px; font-weight: 300;">Question</h6>
-                                            <a href="?module=user&action=profileView&userId=<?php echo $userIdEdit ?>">
-                                            <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
+                                            <a href="?module=user&page=profile/profileView&userId=<?php echo $userIdEdit ?>">
+                                            <img src="<?php echo !empty($userPostDetail['profileImage']) ? $userPostDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
 
                                             </a>
                                             <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                 <h6 style="margin: 0 ;padding: 0; font-size: 16px">
-                                                    <a style="color: black;" href="?module=user&action=profileView&userId=<?php echo $userIdEdit ?>">
+                                                    <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userIdEdit ?>">
 
                                                         <?php echo $userEditDetail['fullname'] ?>
                                                     </a>
@@ -223,8 +230,8 @@ layouts('headerPost', $data);
                                         </div>
                                         <div style="position: absolute; right: 14px; top: 13px;">
 
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>&userIdPost=<?php echo $userIdPost ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>&userIdPost=<?php echo $userIdPost ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </div>
                                         <div style="position: absolute; right: 12px; bottom: 28px;">
                                             <?php echo $countReply == 0 ? null : '<p style="font-size: 14px, font-weight: 100;">' . $countReply . ' comments</p>'; ?>
@@ -244,7 +251,7 @@ layouts('headerPost', $data);
                                             <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                         </a>
-                                        <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&postId=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+                                        <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&postId=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
 
                                             <i class="fa-regular fa-comment icon-hover active" style="font-size: 26px;"></i>
                                         </a>
@@ -276,7 +283,7 @@ layouts('headerPost', $data);
                                             <div class="card-body">
                                                 <div class="media mb-3">
                                                     <h6 style="margin: 0; position: absolute; right: 49.5%;top: 14px; font-weight: 300;">Reply</h6>
-                                                    <a href="?module=user&action=profileView&userId=<?php echo $userId ?>">
+                                                    <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
                                                     <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle" >
 
@@ -284,7 +291,7 @@ layouts('headerPost', $data);
 
                                                     <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
                                                         <h6 style="margin: 0 ;padding: 0; font-size: 16px">
-                                                            <a style="color:black;" href="?module=user&action=profileView&userId=<?php echo $userId ?>">
+                                                            <a style="color:black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
                                                                 <?php echo $userDetail['fullname'] ?>
                                                             </a>
                                                         </h6>
@@ -293,8 +300,8 @@ layouts('headerPost', $data);
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
 
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
 
                                                 <p>
@@ -346,12 +353,12 @@ layouts('headerPost', $data);
             <!-- /Inner main -->
         </div>
 
-        <!-- New Question Modal -->
-        <div class="modal fade" id="newReply" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- New reply -->
+        <div class="modal fade" id="editReplyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">New reply</h5>
+                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit reply</h5>
 
                     </div>
                     <div class="modal-body">
@@ -361,12 +368,12 @@ layouts('headerPost', $data);
                                 <input name="title" type="text" class="form-control">
                             </div> -->
                             <div class="form-group">
-                                <label class="col-form-label" required="required">Content</label>
-                                <input name="replyContent" type="text" class="form-control">
+                                <label class="col-form-label ">Content</label>
+                                <input name="replyContent" type="text" class="form-control" value="<?php echo getOldValue($old, 'replyContent'); ?>">
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label">Image</label>
-                                <input name="replyImage" class="form-control" id="inputUsername" type="file">
+                                <input name="replyImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile">
 
                             </div>
 
@@ -375,7 +382,10 @@ layouts('headerPost', $data);
                             <input type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
-                            <button type="button" class="mg-btn  rounded " data-dismiss="modal">Close</button>
+                            <button type="button" class="mg-btn  rounded small">
+                                <a href="?module=home&page=reply/question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">Back</a>
+
+                            </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>
                     </div>
@@ -385,46 +395,10 @@ layouts('headerPost', $data);
 
     </div>
 </div>
-
 <script>
-    // Get the button:
-    let mybutton = document.getElementById("myBtn");
-    let listReply = document.getElementById("listReply");
-    console.log(listReply)
-    // When the user scrolls down 20px from the top of the document, show the button
-    listReply.onscroll = function() {
-        scrollFunction()
-    };
-    mybutton.onclick = function() {
-        topFunction()
-    };
-    window.onscroll = function() {
-        handleScrollWindow()
-    }
-
-    function scrollFunction() {
-        console.log(document.body.scrollTop);
-        if (listReply.scrollTop > 100 && window.scrollY < 300) {
-            mybutton.style.display = "block";
-        } else {
-            mybutton.style.display = "none";
-        }
-    }
-    function handleScrollWindow() {
-    if(listReply.scrollTop > 20 && window.scrollY>100) {
-        mybutton.style.display = "none";
-    } else if (listReply.scrollTop > 20 && window.scrollY<100){
-        mybutton.style.display = "block";
-        
-    }
-}
-    // When the user clicks on the button, scroll to the top of the document
-    function topFunction() {
-        listReply.scrollTop = 0; // For Safari
-        listReply.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
+    var myModal = new bootstrap.Modal(document.getElementById('editReplyModal'), {})
+    myModal.show()
 </script>
-
 
 <?php
 layouts('footerIn')

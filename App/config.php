@@ -2,6 +2,7 @@
 
 const _MODULE = 'home';
 const _ACTION = 'forum';
+const _PAGE = 'forum';
 const _CODE = true;
 //DB data
 const _HOST = 'localhost';

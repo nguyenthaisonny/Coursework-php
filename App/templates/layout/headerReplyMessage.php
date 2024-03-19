@@ -51,8 +51,8 @@ $unRead = countRow("SELECT id FROM messages WHERE readStatus=0");
 
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="?module=home&action=forum" class=" px-2 nav-item">Forum</a></li>
-          <li><a href="?module=home&action=contact" class=" px-2 nav-item">Contact</a></li>
+          <li><a href="?module=home&page=forum/forum" class=" px-2 nav-item">Forum</a></li>
+          <li><a href="?module=home&page=contact/contact" class=" px-2 nav-item">Contact</a></li>
           <li><a href="#" class=" px-2 nav-item">Customers</a></li>
           <li><a href="#" class=" px-2 nav-item">Products</a></li>
         </ul>
@@ -62,7 +62,7 @@ $unRead = countRow("SELECT id FROM messages WHERE readStatus=0");
         </button>
         
         <?php
-         echo checkAdminNotSignOut() ? "<a style='position: relative; margin-left: 10px;' class='col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3' href='?module=admin&action=readMessage'>".
+         echo checkAdminNotSignOut() ? "<a style='position: relative; margin-left: 10px;' class='col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3' href='?module=admin&page=message/readMessage'>".
          '<div style="position: absolute; top: -7; right: 0;" class="sub">' . $unRead . '</div>'.
          '<i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
          </a>'
@@ -76,13 +76,13 @@ $unRead = countRow("SELECT id FROM messages WHERE readStatus=0");
           </a>
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
 
-            <?php echo checkAdminNotSignOut() ?  "<li><a class='dropdown-item' href='?module=admin&action=list'>User managment</a></li>" : null;?>
-            <li><a class="dropdown-item" href="?module=user&action=profile&id=<?php echo $userId ?>">Profile setting</a></li>
-            <li><a class="dropdown-item" href="?module=auth&action=change">Change password</a></li>
+            <?php echo checkAdminNotSignOut() ?  "<li><a class='dropdown-item' href='?module=admin&page=manage/list'>User managment</a></li>" : null;?>
+            <li><a class="dropdown-item" href="?module=user&page=profile/profile&id=<?php echo $userId ?>">Profile setting</a></li>
+            <li><a class="dropdown-item" href="?module=auth&page=change">Change password</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="?module=auth&action=logout">Sign out</a></li>
+            <li><a class="dropdown-item" href="?module=auth&page=logout">Sign out</a></li>
           </ul>
         </div>
       </div>

@@ -8,7 +8,7 @@ $data = [
 
 
 if (!checkLogin()) {
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }
 
 $filterAll = filter();
@@ -37,7 +37,7 @@ if(!empty($filterAll['postId'] && !empty($filterAll['userIdDelete']))) {
             setFlashData('smg_type', 'danger');
         }
     }
-    reDirect('?module=home&action=forum');
+    reDirect('?module=home&page=forum/forum');
 }
 
 

@@ -8,7 +8,7 @@ $data = [
 
 
 if (!checkLogin()) {
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }
 
 $filterAll = filter();
@@ -39,7 +39,8 @@ if (getSession('loginToken')) {
         setFlashData('smg', 'Error! Can not delete question of another user.');
         setFlashData('smg_type', 'danger');
     }
-    reDirect("?module=home&action=post&postId=".$postId."&userIdEdit=".$userIdPost);
+    reDirect("?module=home&page=question/post&postId=" . $postId . "&userIdEdit=" . $userIdPost);
+
 }
 
 

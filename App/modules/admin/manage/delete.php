@@ -4,7 +4,7 @@ if (!defined('_CODE')) {
 }
 $isAdmin = checkAdmin();
 if(!$isAdmin) {
-    reDirect('?module=home&action=forum');
+    reDirect('?module=home&page=forum/forum');
 }
 //check whether id exist
 // delete login token -> delete user
@@ -35,4 +35,4 @@ if (!empty($filterAll['id'])) {
     setFlashData('smg', 'Link does not exist');
     setFlashData('smg_type', 'danger');
 }
-reDirect('?module=admin&action=list');
+reDirect('?module=admin&page=manage/list');

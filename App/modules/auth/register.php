@@ -78,7 +78,7 @@ if (isPost()) {
         ];
         $insertStatus = insert('users', $dataInsert);
         if ($insertStatus) {
-            $linkActive = _WEB_HOST . '/?module=auth&action=active&token=' . $activeToken;
+            $linkActive = _WEB_HOST . '/?module=auth&page=active&token=' . $activeToken;
             setFlashData('smg', 'Sign up success!');
             setFlashData('smg_type', 'success');
             // send mail verify
@@ -92,7 +92,7 @@ if (isPost()) {
             if ($sendMail) {
                 setFlashData('smg', 'Sign up success! Please check your email to active your account ^^');
                 setFlashData('smg_type', 'success');
-                reDirect('?module=auth&action=login');
+                reDirect('?module=auth&page=login');
             } else {
                 setFlashData('smg', 'Opps, The system get some errors :(( Please try again! ');
                 setFlashData('smg_type', 'danger');
@@ -110,7 +110,7 @@ if (isPost()) {
         setFlashData('smg', 'Plesase check your data again !');
         setFlashData('smg_type', 'danger');
 
-        reDirect('?module=auth&action=register');
+        reDirect('?module=auth&page=register');
     }
 }
 
@@ -177,7 +177,7 @@ $old = getFlashData('old');
             <hr>
 
             <p class="text-center">
-                <a href="?module=auth&action=login">I already had an account  <span>❤</span> </a>
+                <a href="?module=auth&page=login">I already had an account  <span>❤</span> </a>
             </p>
         </form>
     </div>

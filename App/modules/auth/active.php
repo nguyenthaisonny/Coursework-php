@@ -18,7 +18,7 @@ if(!empty($token)) {
         if($updateStatus) {
             setFlashData('smg', 'Password changed! You can sign in now!');
             setFlashData('smg_type', 'success');
-            reDirect('?module=auth&action=login');
+            reDirect('?module=auth&page=login');
         }
         else {
             setFlashData('smg', 'Failed to active ! Please try again!');

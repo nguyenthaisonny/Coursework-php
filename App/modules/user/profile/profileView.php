@@ -14,7 +14,7 @@ if (isGet()) {
 }
 
 if (!checkLogin()) {
-  reDirect('?module=auth&action=login');
+  reDirect('?module=auth&page=login');
 }
 layouts('headerProfileView', $data)
 ?>

@@ -8,7 +8,7 @@ $data = [
 ];
 $isAdmin = checkAdmin();
 if (!$isAdmin) {
-    reDirect('?module=home&action=forum');
+    reDirect('?module=home&page=forum/forum');
 }
 // $result = countRow('SELECT * FROM users');
 // echo $result;
@@ -24,7 +24,7 @@ if (!empty($filterAll['id'])) {
         //exist
         setFlashData('user_detail', $userDetail);
     } else {
-        reDirect('?module=admins&action=list');
+        reDirect('?module=admins&page=manage/list');
     }
 }
 if (isPost()) {
@@ -97,7 +97,7 @@ if (isPost()) {
         $condition = "id = $userId";
         $updateStatus = update('users', $dataUpdate, $condition);
         if ($updateStatus) {
-            $linkActive = _WEB_HOST . '/?module=auth&action=active&token=' . $activeToken;
+            $linkActive = _WEB_HOST . '/?module=auth&page=active&token=' . $activeToken;
             setFlashData('smg', 'Edit user success!');
             setFlashData('smg_type', 'success');
         } else {
@@ -110,7 +110,7 @@ if (isPost()) {
         setFlashData('smg', 'Plesase check your data again !');
         setFlashData('smg_type', 'danger');
     }
-    reDirect('?module=admin&action=edit&id=' . $userId);
+    reDirect('?module=admin&page=manage/edit&id=' . $userId);
 }
 
 layouts('header', $data);
@@ -193,7 +193,7 @@ if (!empty($userDetail)) {
             <input type="hidden" name="id" value=<?php echo $userId; ?>>
             <div style="display: flex; justify-content: space-between;">
                 <button class="mg-btn medium rounded">
-                    <a href="?module=admin&action=list">Back</a>
+                    <a href="?module=admin&page=manage/list">Back</a>
 
                 </button>
 

@@ -6,7 +6,7 @@ if (!defined('_CODE')) {
 
 
 $token = filter()['token'];
-echo getSession('loginToken');
+
 if (!empty($token)) {
     $tokenQuery = getRaw("SELECT id, fullname, email FROM users WHERE forgotToken='$token'");
     if (!empty($tokenQuery)) {
@@ -45,7 +45,7 @@ if (!empty($token)) {
                         delete('tokenlogin', "token='$token'");
                         removeSession('loginToken');
                     }
-                    reDirect('?module=auth&action=login');
+                    reDirect('?module=auth&page=login');
                     setFlashData('smg_type', 'Success!');
                     setFlashData('smg', 'Plesase check your data again !');
                 } else {

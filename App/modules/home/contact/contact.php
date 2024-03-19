@@ -8,7 +8,7 @@ $data = [
 ];
 
 if (!checkLogin()) {
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }
 $loginToken = getSession('loginToken');
 $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");

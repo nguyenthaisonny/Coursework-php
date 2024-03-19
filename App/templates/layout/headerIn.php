@@ -50,8 +50,8 @@ $unRead = countRow("SELECT id FROM messages WHERE readStatus=0");
 
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="?module=home&action=forum" class=" px-2 nav-item">Forum</a></li>
-          <li><a href="?module=home&action=contact" class=" px-2 nav-item">Contact</a></li>
+          <li><a href="?module=home&page=forum/forum" class=" px-2 nav-item">Forum</a></li>
+          <li><a href="?module=home&page=contact/contact" class=" px-2 nav-item">Contact</a></li>
           <li><a href="#" class=" px-2 nav-item">Customers</a></li>
           <li><a href="#" class=" px-2 nav-item">Products</a></li>
         </ul>
@@ -69,11 +69,11 @@ $unRead = countRow("SELECT id FROM messages WHERE readStatus=0");
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
 
             <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="?module=user&action=profile&id=<?php echo $userId ?>">Profile</a></li>
+            <li><a class="dropdown-item" href="?module=user&page=profile/profile&id=<?php echo $userId ?>">Profile</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="?module=auth&action=logout#">Sign out</a></li>
+            <li><a class="dropdown-item" href="?module=auth&page=logout">Sign out</a></li>
           </ul>
         </div>
       </div>

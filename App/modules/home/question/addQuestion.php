@@ -8,7 +8,7 @@ $data = [
 
 
 if (!checkLogin()) {
-    reDirect('?module=auth&action=login');
+    reDirect('?module=auth&page=login');
 }
 // echo $result;
 if (isGet()) {
@@ -79,11 +79,10 @@ if (isPost()) {
                 setFlashData('smg', 'System faces errors! Please try again.');
                 setFlashData('smg_type', 'danger');
             }
-            reDirect("?module=home&action=post&postId=" . $postId . "&userIdEdit=" . $userIdEdit);
+            reDirect("?module=home&page=question/post&postId=" . $postId . "&userIdEdit=" . $userIdEdit);
         }
     }
 }
-
 $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
@@ -115,12 +114,11 @@ layouts('headerPost', $data);
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
                     <button class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a href="?module=home&action=addQuestion&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit ?>" style="padding: 0 39px;">
+                        <a href="?module=home&page=question/addQuestion&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit ?>" style="padding: 0 39px;">
 
                             New question <i class="fa-solid fa-plus"></i>
                         </a>
                     </button>
-
                 </div>
                 <!-- /Inner sidebar header -->
 
@@ -185,7 +183,7 @@ layouts('headerPost', $data);
                 <!-- list questions -->
                 <div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
                     <button id="myBtn" title="Go to top" style="border-radius: 50%; right: 168px"><i class="fa-solid fa-arrow-up"></i></button>
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
+                    <a href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <?php
                     if (!empty($listQuestion)) :
                         $count = 0;
@@ -205,13 +203,13 @@ layouts('headerPost', $data);
                                         <div class="card mb-4">
                                             <div class="card-body">
                                                 <div style="margin-bottom: 6px;">
-                                                    <a href="?module=user&action=profileView&userId=<?php echo $userId ?>">
+                                                    <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
                                                         <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
                                                     </a>
                                                     <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                         <h6 style="margin: 0 ;padding: 0; font-size: 16px">
-                                                            <a style="color: black;" href="?module=user&action=profileView&userId=<?php echo $userId ?>">
+                                                            <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
                                                                 <?php echo $userDetail['fullname'] ?>
                                                             </a>
@@ -221,14 +219,14 @@ layouts('headerPost', $data);
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
 
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
                                                 <div style="position: absolute; right: 12px; bottom: 28px;">
                                                     <?php echo $countReply == 0 ? null : '<p style="font-size: 14px, font-weight: 100;">' . $countReply . ' comments</p>'; ?>
 
                                                 </div>
-                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
+                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
                                                 <p>
                                                     <?php echo $item['content'] ?>
                                                 </p>
@@ -244,7 +242,7 @@ layouts('headerPost', $data);
                                                     <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                                 </a>
-                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
 
                                                     <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
                                                 </a>
@@ -282,7 +280,7 @@ layouts('headerPost', $data);
         </div>
 
         <!-- New Question Modal -->
-        <div class="modal fade" id="newQuestionModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -310,7 +308,9 @@ layouts('headerPost', $data);
                             <input type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
-                            <button type="button" class="mg-btn  rounded " data-dismiss="modal">Close</button>
+                            <button type="button" class="mg-btn  rounded small">
+                                <a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $_GET['postId'] ?>&userIdEdit=<?php echo $_GET['userIdEdit'] ?>">Back</a>
+                            </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>
                     </div>
@@ -320,6 +320,10 @@ layouts('headerPost', $data);
 
     </div>
 </div>
+<script>
+    var myModal = new bootstrap.Modal(document.getElementById('addModal'), {})
+    myModal.show()
+</script>
 <script>
     // Get the button:
     let mybutton = document.getElementById("myBtn");
