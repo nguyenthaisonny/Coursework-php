@@ -11,34 +11,7 @@ if (!checkLogin()) {
     reDirect('?module=auth&action=login');
 }
 
-if (isPost()) {
-    $filterAll = filter();
 
-    if (!empty($filterAll['postName']) || !empty($filterAll['description'])) {
-        if (getSession('loginToken')) {
-
-            $loginToken = getSession('loginToken');
-            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userId = $queyToken['userId'];
-            $dataInsert = [
-                'postName' => $filterAll['postName'],
-                'description' => $filterAll['description'],
-                'update_at' => date('Y:m:d H:i:s'),
-                'userId' => $userId
-            ];
-            $insertStatus = insert('posts', $dataInsert);
-            if ($insertStatus) {
-
-                setFlashData('smg', 'A new Post was just uploaded!');
-                setFlashData('smg_type', 'success');
-            } else {
-                setFlashData('smg', 'System faces errors! Please try again.');
-                setFlashData('smg_type', 'danger');
-            }
-        }
-        reDirect('?module=home&action=forum');
-    }
-}
 $listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
 
 $smg = getFlashData('smg');
@@ -57,8 +30,11 @@ layouts('headerForum', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;" data-toggle="modal" data-target="#newPostModel">
+                    <button href="?module=home&action=addPost" type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                    <a href="?module=home&action=addPost" style="padding: 0 50px;">
+
                         New post <i class="fa-solid fa-plus"></i>
+                    </a>
                     </button>
                 </div>
                 <!-- /Inner sidebar header -->
@@ -115,7 +91,7 @@ layouts('headerForum', $data);
                     <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&action=deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 36px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
                     <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
                     </a>' : null; ?>
-                   
+
 
                 </div>
                 <?php
@@ -214,33 +190,7 @@ layouts('headerForum', $data);
             <!-- /Inner main -->
         </div>
 
-        <!-- New Thread Modal -->
-        <div class="modal fade" id="newPostModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">New Post</h5>
-
-                    </div>
-                    <div class="modal-body">
-                        <form method="post">
-                            <div class="form-group">
-                                <label class="col-form-label">Title:</label>
-                                <input name="postName" type="text" class="form-control " required="required">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Description</label>
-                                <input name="description" type="text" class="form-control" required="required">
-                            </div>
-                            <div class="modal-footer">
-                            </div>
-                            <button type="button" class="mg-btn  rounded " data-dismiss="modal">Close</button>
-                            <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
     </div>
 </div>
