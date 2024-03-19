@@ -134,7 +134,7 @@ layouts('headerPost', $data);
 ?>
 
 
-<div id="overlay"></div>
+
 <div class="container">
     <div class="main-body p-0">
         <div class="inner-wrapper">
@@ -250,15 +250,15 @@ layouts('headerPost', $data);
                                     </div>
                                     <div class="card-footer" style="display: flex; justify-content: space-evenly;">
                                         <a href="javascript:void(0)" class="d-inline-block text-muted">
-                                            <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 20px;"></i>
+                                            <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                         </a>
                                         <a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
 
-                                            <i class="fa-regular fa-comment icon-hover" style="font-size: 20px;"></i>
+                                            <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
                                         </a>
                                         <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                            <i class="fa-solid fa-share icon-hover" style="font-size: 20px;"></i>
+                                            <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
                                         </a>
                                     </div>
                                 </div>

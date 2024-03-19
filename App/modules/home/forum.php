@@ -103,7 +103,7 @@ layouts('headerForum', $data);
             <!-- Inner main -->
             <div class="inner-main">
                 <!-- Inner main header -->
-                <div class="inner-main-header">
+                <div class="inner-main-header" style="position: relative;">
 
                     <select class="custom-select custom-select-sm w-auto mr-1">
                         <option selected="">Latest</option>
@@ -112,6 +112,10 @@ layouts('headerForum', $data);
                         <option value="3">Unsolved</option>
                         <option value="3">No Replies Yet</option>
                     </select>
+                    <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&action=deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 36px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
+                    <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
+                    </a>' : null; ?>
+                   
 
                 </div>
                 <?php
@@ -178,11 +182,11 @@ layouts('headerForum', $data);
 
                                         </div>
                                     </div>
-                                    
+
 
                                 </div>
 
-                        </div>
+                            </div>
 
                         <?php
                         endforeach;
@@ -241,7 +245,15 @@ layouts('headerForum', $data);
     </div>
 </div>
 <script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    let deleteAll = document.getElementById("deleteAll");
+    deleteAll.onclick = function() {
+        return confirm("Delete all")
+    }
     // Get the button:
+
     let mybutton = document.getElementById("myBtn");
     let listPost = document.getElementById("listPost");
     // When the user scrolls down 20px from the top of the document, show the button

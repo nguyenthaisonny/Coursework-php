@@ -8,6 +8,7 @@ body{
     height: calc(100vh - 3.5rem);
     transition: transform 0.3s;
 }
+
 @media (min-width: 992px) {
     .sticky-navbar .inner-wrapper {
         height: calc(100vh - 3.5rem - 48px);
@@ -59,6 +60,7 @@ body{
 .inner-main-header {
     background-color: #fff;
 }
+
 .inner-main-footer,
 .inner-sidebar-footer {
     border-top: 1px solid #cbd5e0;

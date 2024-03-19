@@ -145,7 +145,9 @@ layouts('headerEditPost', $data);
                         <option value="3">Unsolved</option>
                         <option value="3">No Replies Yet</option>
                     </select>
-
+                    <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&action=deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 36px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
+                    <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
+                    </a>' : null; ?>
                 </div>
                 <?php
                 if (!empty($smg)) {
@@ -170,16 +172,16 @@ layouts('headerEditPost', $data);
                     ?>
                             <div class="card mb-2" style="position: relative;">
 
-                                
+
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
                                         <div style="display: flex;align-items: flex-start;">
+                                            <a href="?module=user&action=profileView&userId=<?php echo $userId ?>"><img src="<?php echo $userDetail['profileImage'] ? $userDetail['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
 
-                                            <a href="?module=user&action=profileView&userId=<?php echo $userId?>"  ><img  src="<?php echo $userDetail['profileImage'] ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                             <div style="padding-left: 6px;">
 
-                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a  href="?module=user&action=profileView&userId=<?php echo $userId?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference( $item['update_at']); ?></p>
+                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a href="?module=user&action=profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
+                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></p>
 
                                             </div>
 
@@ -196,14 +198,14 @@ layouts('headerEditPost', $data);
                                             </p>
 
                                         </div>
-                                        <div >
+                                        <div>
 
                                             <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="d-inline-block text-muted">
-                                                <i class="fa-solid fa-door-open icon-hover"  style="font-size: 20px;"></i>
+                                                <i class="fa-solid fa-door-open icon-hover" style="font-size: 20px;"></i>
 
                                             </a>
-                                            <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;"><?php echo $questionCount?> questions</span>
-                                            
+                                            <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;"><?php echo $questionCount ?> questions</span>
+
                                         </div>
                                     </div>
                                     <div class="text-muted small text-center align-self-center" style="display: flex; flex-direction: column; justify-content: space-between">
@@ -226,21 +228,11 @@ layouts('headerEditPost', $data);
 
                     endif;
                     ?>
-                    <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
-                        <li class="page-item disabled">
-                            <span class="page-link has-icon"><i class="material-icons">chevron_left</i></span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="javascript:void(0)">1</a></li>
-                        <li class="page-item active"><span class="page-link">2</span></li>
-                        <li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link has-icon" href="javascript:void(0)"><i class="material-icons">chevron_right</i></a>
-                        </li>
-                    </ul>
+                    
                 </div>
                 <!-- /Forum List -->
 
-               
+
                 <!-- /Forum Detail -->
 
                 <!-- /Inner main body -->

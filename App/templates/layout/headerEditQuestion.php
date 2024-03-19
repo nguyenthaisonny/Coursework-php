@@ -42,7 +42,7 @@ $unRead = countRow("SELECT id FROM messages WHERE readStatus=0");
 </head>
 
 <body>
-<div id="overlay"></div>
+
 
   <header class="p-3 mb-3 border-bottom">
     <div class="container">
