@@ -83,6 +83,7 @@ if (isPost()) {
         }
     }
 }
+
 $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
@@ -113,9 +114,13 @@ layouts('headerPost', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;" data-toggle="modal" data-target="#newQuestionModel">
-                        New question <i class="fa-solid fa-plus"></i>
+                    <button class="mg-btn medium rounded " style="margin: 0 25%;">
+                        <a href="?module=home&action=addQuestion&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit ?>" style="padding: 0 39px;">
+
+                            New question <i class="fa-solid fa-plus"></i>
+                        </a>
                     </button>
+
                 </div>
                 <!-- /Inner sidebar header -->
 
@@ -178,7 +183,7 @@ layouts('headerPost', $data);
 
 
                 <!-- list questions -->
-                <div  class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
+                <div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
                     <button id="myBtn" title="Go to top" style="border-radius: 50%; right: 168px"><i class="fa-solid fa-arrow-up"></i></button>
                     <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <?php
@@ -194,7 +199,7 @@ layouts('headerPost', $data);
 
                     ?>
                             <div class="container posts-content" style="position: relative;">
-                            
+
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="card mb-4">
@@ -220,7 +225,7 @@ layouts('headerPost', $data);
                                                     <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
                                                 <div style="position: absolute; right: 12px; bottom: 28px;">
-                                                <?php echo $countReply == 0 ? null : '<p style="font-size: 14px, font-weight: 100;">' . $countReply . ' comments</p>'; ?>
+                                                    <?php echo $countReply == 0 ? null : '<p style="font-size: 14px, font-weight: 100;">' . $countReply . ' comments</p>'; ?>
 
                                                 </div>
                                                 <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
@@ -240,7 +245,7 @@ layouts('headerPost', $data);
 
                                                 </a>
                                                 <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
-                                                    
+
                                                     <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
                                                 </a>
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
@@ -316,7 +321,6 @@ layouts('headerPost', $data);
     </div>
 </div>
 <script>
-   
     // Get the button:
     let mybutton = document.getElementById("myBtn");
     let listQuestion = document.getElementById("listQuestion");
@@ -342,13 +346,13 @@ layouts('headerPost', $data);
     }
 
     function handleScrollWindow() {
-    if(listQuestion.scrollTop > 20 && window.scrollY>100) {
-        mybutton.style.display = "none";
-    } else if (listQuestion.scrollTop > 20 && window.scrollY<100){
-        mybutton.style.display = "block";
-        
+        if (listQuestion.scrollTop > 20 && window.scrollY > 100) {
+            mybutton.style.display = "none";
+        } else if (listQuestion.scrollTop > 20 && window.scrollY < 100) {
+            mybutton.style.display = "block";
+
+        }
     }
-}
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
         listQuestion.scrollTop = 0; // For Safari

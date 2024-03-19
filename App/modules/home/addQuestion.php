@@ -11,25 +11,24 @@ if (!checkLogin()) {
     reDirect('?module=auth&action=login');
 }
 // echo $result;
-$filterAll = filter();
+if (isGet()) {
+
+    $filterAll = filter();
 
 
-if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
-    $questionId = $filterAll['questionId'];
-    $userIdEdit = $filterAll['userIdEdit'];
-    $postId = $filterAll['postId'];
-    setFlashData('userIdEdit', $userIdEdit);
-    setFlashData('postId', $postId);
-    // check whether exist in database
-    //if exist => get info
-    //if not exist => navigat to list page
-    $questionDetail = getRaw("SELECT title, content, questionImage FROM questions WHERE id = '$questionId'");
-
-    setFlashData('questionDetail', $questionDetail);
-    $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
-    if (!empty($listQuestion)) {
-        //exist
-        setFlashData('listQuestion', $listQuestion);
+    if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
+        $userIdEdit = $filterAll['userIdEdit'];
+        $postId = $filterAll['postId'];
+        setSession('userIdPost', $userIdEdit);
+        setFlashData('postId', $postId);
+        // check whether exist in database
+        //if exist => get info
+        //if not exist => navigat to list page
+        $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
+        if (!empty($listQuestion)) {
+            //exist
+            setFlashData('listQuestion', $listQuestion);
+        }
     }
 }
 
@@ -39,85 +38,74 @@ if (isPost()) {
         if (getSession('loginToken')) {
 
             $loginToken = getSession('loginToken');
-            $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userIdLogin = $queryToken['userId'];
+            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+            $userId = $queyToken['userId'];
             $userIdEdit = $filterAll['userIdEdit'];
             $postId = $filterAll['postId'];
-            $questionId = $_GET['questionId'];
-            if ($userIdLogin == $userIdEdit || checkAdminNotSignOut()) {
+            //handle Image
+            if (!empty($_FILES["questionImage"]['name'])) {
 
-                if (!empty($_FILES["questionImage"]['name'])) {
-                    //handle Image
+                $target_dir = './templates/img/imgQuestion/';
+                $questionImage = $target_dir . $_FILES["questionImage"]["name"];
+                move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
+                $dataInsert = [
 
-                    $target_dir = './templates/img/imgQuestion/';
-                    $questionImage = $target_dir . $_FILES["questionImage"]["name"];
-                    move_uploaded_file($_FILES["questionImage"]["tmp_name"], $questionImage);
+                    'title' => $filterAll['title'],
+                    'content' => $filterAll['content'],
+                    'update_at' => date('Y:m:d H:i:s'),
+                    'postId' => $filterAll['postId'],
+                    'userId' => $userId,
+                    'questionImage' => $questionImage
 
-                    $dataUpdate = [
-
-                        'title' => $filterAll['title'],
-                        'content' => $filterAll['content'],
-                        'update_at' => date('Y:m:d H:i:s'),
-                        'postId' => $filterAll['postId'],
-
-                        'questionImage' => $questionImage
-
-                    ];
-                } else {
-
-                    $oldImage = getRaw("SELECT questionImage FROM questions WHERE id='$questionId'")['questionImage'];
-                    $dataUpdate = [
-
-                        'title' => $filterAll['title'],
-                        'content' => $filterAll['content'],
-                        'update_at' => date('Y:m:d H:i:s'),
-                        'postId' => $filterAll['postId'],
-                        'questionImage' => $oldImage
-
-
-                    ];
-                }
-                $updateStatus = update('questions', $dataUpdate, "id= $questionId");
-                if ($updateStatus) {
-
-                    setFlashData('smg', 'This post was just updated');
-                    setFlashData('smg_type', 'success');
-                } else {
-                    setFlashData('smg', 'System faces errors! Please try again.');
-                    setFlashData('smg_type', 'danger');
-                }
+                ];
             } else {
-                setFlashData('smg', 'Can not edit questions of another user!');
+                $dataInsert = [
+
+                    'title' => $filterAll['title'],
+                    'content' => $filterAll['content'],
+                    'update_at' => date('Y:m:d H:i:s'),
+                    'postId' => $filterAll['postId'],
+                    'userId' => $userId,
+                    'questionImage' => null
+
+                ];
+            }
+            $insertStatus = insert('questions', $dataInsert);
+            if ($insertStatus) {
+
+                setFlashData('smg', 'A new question was just uploaded!' . $_FILES["questionImage"]["name"]);
+                setFlashData('smg_type', 'success');
+            } else {
+                setFlashData('smg', 'System faces errors! Please try again.');
                 setFlashData('smg_type', 'danger');
             }
+            reDirect("?module=home&action=post&postId=" . $postId . "&userIdEdit=" . $userIdEdit);
         }
-
-
-
-        reDirect("?module=home&action=post&postId=" . $postId . "&userIdEdit=" . $userIdEdit);
     }
 }
-
 $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
 $smgType = getFlashData(('smg_type'));
-
+$old = getFlashData('old');
+$ok = getFlashData('ok');
+$no = getFlashData('no');
 $listQuestion = getFlashData('listQuestion');
-$questionDetail = getFlashData('questionDetail');
 $postId = getFlashData('postId');
-$userIdEdit = getFlashData('userIdEdit');
-if (!empty($questionDetail)) {
-    $old = $questionDetail;
-    // print_r($old);
 
+if (!empty($listQuestion)) {
+    $old = $listQuestion;
+
+    // echo '<prev>';
+    // print_r($old);
+    // echo '</prev>';
 }
-layouts('headerEditQuestion', $data);
+layouts('headerPost', $data);
 ?>
 
 
 
-<div class="container">
+<div class="container" style=" margin-bottom: 100px">
     <div class="main-body p-0">
         <div class="inner-wrapper">
             <!-- Inner sidebar -->
@@ -185,7 +173,6 @@ layouts('headerEditQuestion', $data);
                     </select>
 
                 </div>
-
                 <?php
                 if (!empty($smg)) {
                     getSmg($smg, $smgType);
@@ -193,11 +180,9 @@ layouts('headerEditQuestion', $data);
                 ?>
 
 
-
                 <!-- list questions -->
-                <div id='listQuestion' class="inner-main-body p-2 p-sm-3 forum-content d-block">
-                <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
-
+                <div  class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
+                    <button id="myBtn" title="Go to top" style="border-radius: 50%; right: 168px"><i class="fa-solid fa-arrow-up"></i></button>
                     <a href="<?php echo _WEB_HOST; ?>/?module=home&action=forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <?php
                     if (!empty($listQuestion)) :
@@ -212,6 +197,7 @@ layouts('headerEditQuestion', $data);
 
                     ?>
                             <div class="container posts-content" style="position: relative;">
+                            
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="card mb-4">
@@ -219,8 +205,7 @@ layouts('headerEditQuestion', $data);
                                                 <div style="margin-bottom: 6px;">
                                                     <a href="?module=user&action=profileView&userId=<?php echo $userId ?>">
 
-                                                    <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
-
+                                                        <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
                                                     </a>
                                                     <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                         <h6 style="margin: 0 ;padding: 0; font-size: 16px">
@@ -230,7 +215,6 @@ layouts('headerEditQuestion', $data);
                                                             </a>
                                                         </h6>
                                                         <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
-                                                        
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
@@ -238,13 +222,17 @@ layouts('headerEditQuestion', $data);
                                                     <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&action=deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
+                                                <div style="position: absolute; right: 12px; bottom: 28px;">
+                                                <?php echo $countReply == 0 ? null : '<p style="font-size: 14px, font-weight: 100;">' . $countReply . ' comments</p>'; ?>
+
+                                                </div>
                                                 <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&action=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
                                                 <p>
                                                     <?php echo $item['content'] ?>
                                                 </p>
                                                 <div class="text-center">
 
-                                                    <?php echo !empty($item['questionImage']) ? '<img src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
+                                                    <?php echo !empty($item['questionImage']) ? '<img style="padding-bottom: 10px" src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
                                                 </div>
 
 
@@ -283,61 +271,59 @@ layouts('headerEditQuestion', $data);
                     ?>
 
                 </div>
+                <!-- /Forum Detail -->
+
+
+                <!-- /Inner main body -->
             </div>
-            <!-- /Forum Detail -->
-
-
-            <!-- /Inner main body -->
+            <!-- /Inner main -->
         </div>
-        <!-- /Inner main -->
-    </div>
 
-    <!-- New Question Modal -->
-    <div class="modal fade" id="EditQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit question</h5>
+        <!-- New Question Modal -->
+        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">New question</h5>
 
-                </div>
-                <div class="modal-body">
-                    <form method="post" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label class="col-form-label">Title:</label>
-                            <input name="title" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'title') ?>">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-form-label">Content</label>
-                            <input name="content" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'content') ?>">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-form-label">Image</label>
-                            <input name="questionImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile" value=<?php echo  getOldValue($old, 'questionImage') ?>>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="col-form-label">Title:</label>
+                                <input name="title" type="text" class="form-control" required="required">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Content</label>
+                                <input name="content" type="text" class="form-control" required="required">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Image</label>
+                                <input name="questionImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile">
 
-                        </div>
+                            </div>
 
-                        <input type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
+                            <input type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
 
-                        <input type="hidden" name='postId' value="<?php echo $postId; ?>">
-                        <div class="modal-footer">
-                        </div>
-                        <button type="button" class="mg-btn  rounded small">
-                            <a href="<?php echo _WEB_HOST; ?>/?module=home&action=post&postId=<?php echo $_GET['postId'] ?>&userIdEdit=<?php echo $_GET['userIdEdit'] ?>">Back</a>
-                        </button>
-                        <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
-                    </form>
+                            <input type="hidden" name='postId' value="<?php echo $postId; ?>">
+                            <div class="modal-footer">
+                            </div>
+                            <button type="button" class="mg-btn  rounded " data-dismiss="modal">Close</button>
+                            <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 </div>
 <script>
-    var myModal = new bootstrap.Modal(document.getElementById('EditQuestionModal'), {})
+    var myModal = new bootstrap.Modal(document.getElementById('addModal'), {})
     myModal.show()
 </script>
 <script>
+   
     // Get the button:
     let mybutton = document.getElementById("myBtn");
     let listQuestion = document.getElementById("listQuestion");
@@ -363,19 +349,21 @@ layouts('headerEditQuestion', $data);
     }
 
     function handleScrollWindow() {
-        if (listQuestion.scrollTop > 20 && window.scrollY > 100) {
-            mybutton.style.display = "none";
-        } else if (listQuestion.scrollTop > 20 && window.scrollY < 100) {
-            mybutton.style.display = "block";
-
-        }
+    if(listQuestion.scrollTop > 20 && window.scrollY>100) {
+        mybutton.style.display = "none";
+    } else if (listQuestion.scrollTop > 20 && window.scrollY<100){
+        mybutton.style.display = "block";
+        
     }
+}
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
         listQuestion.scrollTop = 0; // For Safari
         listQuestion.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
 </script>
+
+
 
 <?php
 layouts('footerIn')

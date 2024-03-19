@@ -160,9 +160,10 @@ layouts('headerEditPost', $data);
                 <!-- /Inner main header -->
 
                 <!-- Inner main body -->
-
+                
                 <!-- Forum List -->
-                <div class="inner-main-body p-2 p-sm-3 collapse forum-content show">
+                <div id='listPost' class="inner-main-body p-2 p-sm-3 collapse forum-content show">
+                    <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
                     <?php
                     if (!empty($listPost)) :
                         $count = 0;
@@ -283,6 +284,52 @@ layouts('headerEditPost', $data);
 <script>
     var myModal = new bootstrap.Modal(document.getElementById('editmodal'), {})
     myModal.show()
+</script>
+<script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    let deleteAll = document.getElementById("deleteAll");
+    deleteAll.onclick = function() {
+        return confirm("Delete all")
+    }
+    // Get the button:
+
+    let mybutton = document.getElementById("myBtn");
+    let listPost = document.getElementById("listPost");
+    // When the user scrolls down 20px from the top of the document, show the button
+    listPost.onscroll = function() {
+        scrollFunction()
+    };
+    mybutton.onclick = function() {
+        topFunction()
+    };
+    window.onscroll = function() {
+        handleScrollWindow()
+    }
+
+    function scrollFunction() {
+        console.log(document.body.scrollTop);
+        if (listPost.scrollTop > 20 && window.scrollY < 100) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    function handleScrollWindow() {
+        if (listPost.scrollTop > 20 && window.scrollY > 100) {
+            mybutton.style.display = "none";
+        } else if (listPost.scrollTop > 20 && window.scrollY < 100) {
+            mybutton.style.display = "block";
+
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        listPost.scrollTop = 0; // For Safari
+        listPost.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
 </script>
 <?php
 layouts('footerIn')
