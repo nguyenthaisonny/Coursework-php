@@ -20,10 +20,7 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['replyId']) && !empty(
     $questionId = $filterAll['questionId'];
     $userIdPost  = $filterAll['userIdPost'];
     $replyId = $filterAll['replyId'];
-    setFlashData('userIdPost', $userIdPost);
-    setFlashData('userIdEdit', $userIdEdit);
-    setFlashData('postId', $postId);
-    setFlashData('questionId', $questionId);
+  
 
     // check whether exist in database
     //if exist => get info
@@ -118,19 +115,16 @@ $old = getFlashData('old');
 
 $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
 
-$questionDetail = getFlashData('questionDetail');
-$userEditDetail = getFlashData('userEditDetail');
+
 $userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
-$userIdPost = getFlashData('userIdPost');
-$postId = getFlashData('postId');
-$userIdEdit = getFlashData('userIdEdit');
+
 if (!empty($replyDetail)) {
     $old = $replyDetail;
 }
 layouts('headerPost', $data);
 ?>
 
-<div id="overlay"></div>
+
 
 <div class="container">
     <div class="main-body p-0">
@@ -354,7 +348,7 @@ layouts('headerPost', $data);
         </div>
 
         <!-- New reply -->
-        <div class="modal fade" id="editReplyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -377,9 +371,12 @@ layouts('headerPost', $data);
 
                             </div>
 
-                            <input type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
+                            
+                            <input id="userIdEdit" type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
+                            <input id="userIdPost" type="hidden" name='userIdPost' value="<?php echo $userIdPost; ?>">
+                            <input id="questionId" type="hidden" name='questionId' value="<?php echo $questionId; ?>">
 
-                            <input type="hidden" name='postId' value="<?php echo $postId; ?>">
+                            <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn  rounded small">
@@ -396,8 +393,16 @@ layouts('headerPost', $data);
     </div>
 </div>
 <script>
-    var myModal = new bootstrap.Modal(document.getElementById('editReplyModal'), {})
+    // handle modal
+    var myModal = new bootstrap.Modal(document.getElementById('editModal'), {})
     myModal.show()
+
+    document.getElementById('editModal').onclick = function(e) {
+        console.log(e.target.className);
+        if(e.target.className === "modal fade") {
+            window.location.href = "?module=home&page=reply/question&questionId=" + document.getElementById('questionId').value + "&postId=" + document.getElementById('postId').value + "&userIdEdit=" + document.getElementById('userIdEdit').value + "&userIdPost=" + document.getElementById('userIdPost').value ;
+        }
+    }
 </script>
 
 <?php

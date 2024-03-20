@@ -303,9 +303,9 @@ layouts('headerPost', $data);
 
                             </div>
 
-                            <input type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
+                            <input id="userIdEdit" type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
 
-                            <input type="hidden" name='postId' value="<?php echo $postId; ?>">
+                            <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn  rounded small">
@@ -321,8 +321,16 @@ layouts('headerPost', $data);
     </div>
 </div>
 <script>
+    // handle modal
     var myModal = new bootstrap.Modal(document.getElementById('addModal'), {})
     myModal.show()
+
+    document.getElementById('addModal').onclick = function(e) {
+        console.log(e.target.className);
+        if(e.target.className === "modal fade") {
+            window.location.href = "?module=home&page=question/post&postId=" + document.getElementById('postId').value + "&userIdEdit=" + document.getElementById('userIdEdit').value;
+        }
+    }
 </script>
 <script>
     // Get the button:

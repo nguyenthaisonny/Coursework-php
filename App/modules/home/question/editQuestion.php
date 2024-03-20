@@ -212,6 +212,7 @@ layouts('headerEditQuestion', $data);
 
                     ?>
                             <div class="container posts-content" style="position: relative;">
+
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="card mb-4">
@@ -219,8 +220,7 @@ layouts('headerEditQuestion', $data);
                                                 <div style="margin-bottom: 6px;">
                                                     <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
-                                                    <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
-
+                                                        <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
                                                     </a>
                                                     <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                         <h6 style="margin: 0 ;padding: 0; font-size: 16px">
@@ -230,7 +230,6 @@ layouts('headerEditQuestion', $data);
                                                             </a>
                                                         </h6>
                                                         <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
-                                                        
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 14px; top: 13px;">
@@ -238,13 +237,17 @@ layouts('headerEditQuestion', $data);
                                                     <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                                     <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                                 </div>
+                                                <div style="position: absolute; right: 12px; bottom: 28px;">
+                                                    <?php echo $countReply == 0 ? null : '<p style="font-size: 14px, font-weight: 100;">' . $countReply . ' comments</p>'; ?>
+
+                                                </div>
                                                 <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
                                                 <p>
                                                     <?php echo $item['content'] ?>
                                                 </p>
                                                 <div class="text-center">
 
-                                                    <?php echo !empty($item['questionImage']) ? '<img src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
+                                                    <?php echo !empty($item['questionImage']) ? '<img style="padding-bottom: 10px" src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
                                                 </div>
 
 
@@ -254,8 +257,8 @@ layouts('headerEditQuestion', $data);
                                                     <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                                 </a>
-                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
-                                                    
+                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+
                                                     <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
                                                 </a>
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
@@ -293,7 +296,7 @@ layouts('headerEditQuestion', $data);
     </div>
 
     <!-- New Question Modal -->
-    <div class="modal fade" id="EditQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -316,9 +319,9 @@ layouts('headerEditQuestion', $data);
 
                         </div>
 
-                        <input type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
+                        <input id="userIdEdit" type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
 
-                        <input type="hidden" name='postId' value="<?php echo $postId; ?>">
+                        <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
                         <div class="modal-footer">
                         </div>
                         <button type="button" class="mg-btn  rounded small">
@@ -334,8 +337,16 @@ layouts('headerEditQuestion', $data);
 </div>
 </div>
 <script>
-    var myModal = new bootstrap.Modal(document.getElementById('EditQuestionModal'), {})
+    // handle modal
+    var myModal = new bootstrap.Modal(document.getElementById('editModal'), {})
     myModal.show()
+
+    document.getElementById('editModal').onclick = function(e) {
+        console.log(e.target.className);
+        if(e.target.className === "modal fade") {
+            window.location.href = "?module=home&page=question/post&postId=" + document.getElementById('postId').value + "&userIdEdit=" + document.getElementById('userIdEdit').value;
+        }
+    }
 </script>
 <script>
     // Get the button:

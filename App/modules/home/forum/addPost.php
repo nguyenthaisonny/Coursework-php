@@ -78,12 +78,12 @@ layouts('headerForum', $data);
                                     <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
                                         <div class="simplebar-content" style="padding: 16px;">
                                             <nav class="nav nav-pills nav-gap-y-1 flex-column">
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon active">All Threads</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular this week</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular all time</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Solved</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Unsolved</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">No replies yet</a>
+                                                <a href="" class="nav-link nav-link-faded has-icon active">All Threads</a>
+                                                <a href="" class="nav-link nav-link-faded has-icon">Popular this week</a>
+                                                <a href="" class="nav-link nav-link-faded has-icon">Popular all time</a>
+                                                <a href="" class="nav-link nav-link-faded has-icon">Solved</a>
+                                                <a href="" class="nav-link nav-link-faded has-icon">Unsolved</a>
+                                                <a href="" class="nav-link nav-link-faded has-icon">No replies yet</a>
                                             </nav>
                                         </div>
                                     </div>
@@ -250,8 +250,16 @@ layouts('headerForum', $data);
     </div>
 </div>
 <script>
+    // handle modal
     var myModal = new bootstrap.Modal(document.getElementById('addModal'), {})
     myModal.show()
+
+    document.getElementById('addModal').onclick = function(e) {
+        console.log(e.target.className);
+        if(e.target.className === "modal fade") {
+            window.location.href = '?module=home&page=forum/forum';
+        }
+    }
 </script>
 <script>
     $(function() {

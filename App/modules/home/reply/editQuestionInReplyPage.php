@@ -20,10 +20,7 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
     $questionId = $filterAll['questionId'];
     $userIdPost  = $filterAll['userIdPost'];
 
-    setFlashData('userIdPost', $userIdPost);
-    setFlashData('userIdEdit', $userIdEdit);
-    setFlashData('postId', $postId);
-    setFlashData('questionId', $questionId);
+ 
 
     // check whether exist in database
     //if exist => get info
@@ -117,18 +114,13 @@ $errors = getFlashData('errors');
 $smg = getFlashData('smg');
 $smgType = getFlashData(('smg_type'));
 $old = getFlashData('old');
-$ok = getFlashData('ok');
-$no = getFlashData('no');
+
 $questionDetail = getFlashData('questionDetail');
 $questionId = $questionDetail['id'];
 $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
 $userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
 
-$userEditDetail = getFlashData('userEditDetail');
-$listReply = getFlashData(('listReply'));
-$userIdPost = getFlashData('userIdPost');
-$postId = getFlashData('postId');
-$userIdEdit = getFlashData('userIdEdit');
+
 if (!empty($questionDetail)) {
     $old = $questionDetail;
 }
@@ -210,7 +202,7 @@ layouts('headerPost', $data);
 
 
                 <!-- Questions -->
-                <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse">
+                <div id='postCollapse' class="inner-main-body p-2 p-sm-3 forum-content collapse show">
                     <a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdPost; ?>" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <div class="container posts-content" style="position: relative;">
                         <div class="row">
@@ -360,7 +352,7 @@ layouts('headerPost', $data);
 
         <!-- Edit Question Modal -->
 
-        <div class="modal fade" id="EditQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -383,9 +375,11 @@ layouts('headerPost', $data);
 
                             </div>
 
-                            <input type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
+                            <input id="userIdEdit" type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
+                            <input id="userIdPost" type="hidden" name='userIdPost' value="<?php echo $userIdPost; ?>">
+                            <input id="questionId" type="hidden" name='questionId' value="<?php echo $questionId; ?>">
 
-                            <input type="hidden" name='postId' value="<?php echo $postId; ?>">
+                            <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn  rounded small">
@@ -402,13 +396,17 @@ layouts('headerPost', $data);
     </div>
 </div>
 <script>
-    var myCollapse = document.getElementById('postCollapse')
-    var bsCollapse = new bootstrap.Collapse(myCollapse, {
+    // handle modal
+    var myModal = new bootstrap.Modal(document.getElementById('editModal'), {})
+    myModal.show()
 
-
-
-
-    })
+    document.getElementById('editModal').onclick = function(e) {
+        console.log(e.target.className);
+        if(e.target.className === "modal fade") {
+            window.location.href = "?module=home&page=reply/question&questionId=" + document.getElementById('questionId').value + "&postId=" + document.getElementById('postId').value + "&userIdEdit=" + document.getElementById('userIdEdit').value + "&userIdPost=" + document.getElementById('userIdPost').value ;
+        }
+    }
+</script>
 </script>
 <script>
     var myModal = new bootstrap.Modal(document.getElementById('EditQuestionModal'), {})

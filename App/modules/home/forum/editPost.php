@@ -246,7 +246,7 @@ layouts('headerEditPost', $data);
 
         
         <!-- Edit Thread Modal -->
-        <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -282,8 +282,16 @@ layouts('headerEditPost', $data);
 </div>
 
 <script>
-    var myModal = new bootstrap.Modal(document.getElementById('editmodal'), {})
+    // handle modal
+    var myModal = new bootstrap.Modal(document.getElementById('editModal'), {})
     myModal.show()
+
+    document.getElementById('editModal').onclick = function(e) {
+        console.log(e.target.className);
+        if(e.target.className === "modal fade") {
+            window.location.href = '?module=home&page=forum/forum';
+        }
+    }
 </script>
 <script>
     $(function() {

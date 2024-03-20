@@ -20,10 +20,7 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
     $questionId = $filterAll['questionId'];
     $userIdPost  = $filterAll['userIdPost'];
 
-    setFlashData('userIdPost', $userIdPost);
-    setFlashData('userIdEdit', $userIdEdit);
-    setFlashData('postId', $postId);
-    setFlashData('questionId', $questionId);
+   
 
     // check whether exist in database
     //if exist => get info
@@ -47,75 +44,18 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
     }
 }
 
-if (isPost()) {
-    $filterAll = filter();
-    if (!empty($filterAll['replyContent']) || !empty($filterAll['contentImage'])) {
-        if (getSession('loginToken')) {
 
-            $loginToken = getSession('loginToken');
-            $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
-            $userIdLogin = $queyToken['userId'];
-            $userIdEdit = $filterAll['userIdEdit'];
-            $postId = $filterAll['postId'];
-            $questionId = $_GET['questionId'];
-            $userIdPost = $_GET['userIdPost'];
-
-            //handle Image
-
-            if (!empty($_FILES["replyImage"]['name'])) {
-
-                $target_dir = './templates/img/imgReply/';
-                $replyImage = $target_dir . $_FILES["replyImage"]["name"];
-                move_uploaded_file($_FILES["replyImage"]["tmp_name"], $replyImage);
-                $dataInsert = [
-
-                    'replyContent' => $filterAll['replyContent'],
-                    'update_at' => date('Y:m:d H:i:s'),
-                    'questionId' => $questionId,
-                    'userId' => $userIdLogin,
-                    'replyImage' => $replyImage
-
-                ];
-            } else {
-                $dataInsert = [
-
-                    'replyContent' => $filterAll['replyContent'],
-                    'update_at' => date('Y:m:d H:i:s'),
-                    'questionId' => $questionId,
-                    'userId' => $userIdLogin,
-                    'replyImage' => null
-
-                ];
-            }
-            $insertStatus = insert('replies', $dataInsert);
-            if ($insertStatus) {
-
-                setFlashData('smg', 'A new reply was just uploaded!');
-                setFlashData('smg_type', 'success');
-            } else {
-                setFlashData('smg', 'System faces errors! Please try again.');
-                setFlashData('smg_type', 'danger');
-            }
-            reDirect("?module=home&page=reply/question&questionId=" . $questionId . "&postId=" . $postId . "&userIdEdit=" . $userIdEdit . "&userIdPost=" . $userIdPost);
-        }
-    }
-}
 $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
 $smgType = getFlashData(('smg_type'));
 $old = getFlashData('old');
-$ok = getFlashData('ok');
-$no = getFlashData('no');
-$questionDetail = getFlashData('questionDetail');
+
+
 $questionId = $questionDetail['id'];
 $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
 $userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
-$userEditDetail = getFlashData('userEditDetail');
-$listReply = getFlashData(('listReply'));
-$userIdPost = getFlashData('userIdPost');
-$postId = getFlashData('postId');
-$userIdEdit = getFlashData('userIdEdit');
+
 if (!empty($listReply)) {
     $old = $listReply;
 }
@@ -132,8 +72,11 @@ layouts('headerPost', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;" data-toggle="modal" data-target="#newReply">
-                        New Reply <i class="fa-solid fa-plus"></i>
+                    <button  type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                        <a href="?module=home&page=reply/addReply&questionId=<?php echo $questionId;?>&postId=<?php echo $postId;?>&userIdEdit=<?php echo $userIdEdit;?>&userIdPost=<?php echo $userIdPost;?>" style="padding: 0 50px;">
+
+                            New reply <i class="fa-solid fa-plus"></i>
+                        </a>
                     </button>
                 </div>
                 <!-- /Inner sidebar header -->
@@ -208,7 +151,7 @@ layouts('headerPost', $data);
                                         <div style="margin-bottom: 6px;">
                                             <h6 style="margin: 0; position: absolute; right: 48%;top: 14px; font-weight: 300;">Question</h6>
                                             <a href="?module=user&page=profile/profileView&userId=<?php echo $userIdEdit ?>">
-                                            <img src="<?php echo !empty($userPostDetail['profileImage']) ? $userPostDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
+                                                <img src="<?php echo !empty($userPostDetail['profileImage']) ? $userPostDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
 
                                             </a>
                                             <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
@@ -278,7 +221,7 @@ layouts('headerPost', $data);
                                                     <h6 style="margin: 0; position: absolute; right: 49.5%;top: 14px; font-weight: 300;">Reply</h6>
                                                     <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
-                                                    <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle" >
+                                                        <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle">
 
                                                     </a>
 
@@ -346,42 +289,8 @@ layouts('headerPost', $data);
             <!-- /Inner main -->
         </div>
 
-        <!-- New Question Modal -->
-        <div class="modal fade" id="newReply" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">New reply</h5>
 
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" enctype="multipart/form-data">
-                            <!-- <div class="form-group">
-                                <label class="col-form-label">Title</label>
-                                <input name="title" type="text" class="form-control">
-                            </div> -->
-                            <div class="form-group">
-                                <label class="col-form-label" required="required">Content</label>
-                                <input name="replyContent" type="text" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Image</label>
-                                <input name="replyImage" class="form-control" id="inputUsername" type="file">
 
-                            </div>
-
-                            <input type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
-
-                            <input type="hidden" name='postId' value="<?php echo $postId; ?>">
-                            <div class="modal-footer">
-                            </div>
-                            <button type="button" class="mg-btn  rounded " data-dismiss="modal">Close</button>
-                            <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 </div>
@@ -410,14 +319,15 @@ layouts('headerPost', $data);
             mybutton.style.display = "none";
         }
     }
+
     function handleScrollWindow() {
-    if(listReply.scrollTop > 20 && window.scrollY>100) {
-        mybutton.style.display = "none";
-    } else if (listReply.scrollTop > 20 && window.scrollY<100){
-        mybutton.style.display = "block";
-        
+        if (listReply.scrollTop > 20 && window.scrollY > 100) {
+            mybutton.style.display = "none";
+        } else if (listReply.scrollTop > 20 && window.scrollY < 100) {
+            mybutton.style.display = "block";
+
+        }
     }
-}
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
         listReply.scrollTop = 0; // For Safari
