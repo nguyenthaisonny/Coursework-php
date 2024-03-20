@@ -20,7 +20,7 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
     $questionId = $filterAll['questionId'];
     $userIdPost  = $filterAll['userIdPost'];
 
-   
+
 
     // check whether exist in database
     //if exist => get info
@@ -72,8 +72,8 @@ layouts('headerPost', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button  type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a style="padding: 12px 52px" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId;?>&postId=<?php echo $postId;?>&userIdEdit=<?php echo $userIdEdit;?>&userIdPost=<?php echo $userIdPost;?>" >
+                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                        <a style="padding: 12px 52px" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">
 
                             New reply <i class="fa-solid fa-plus"></i>
                         </a>
@@ -164,13 +164,19 @@ layouts('headerPost', $data);
                                                 <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
                                             </div>
                                         </div>
-                                        <div style="position: absolute; right: 14px; top: 13px;">
+                                        <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
+                                            <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
+                                            </a>
 
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>&userIdPost=<?php echo $userIdPost ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>&userIdPost=<?php echo $userIdPost ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
+                                                <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
+                                            </div>
                                         </div>
+
                                         <div style="position: absolute; right: 12px; bottom: 44px;">
-                                                <?php echo $countReply == 0 ? null : '<a  style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
+                                            <?php echo $countReply == 0 ? null : '<a  style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
                                         </div>
 
 
@@ -235,11 +241,17 @@ layouts('headerPost', $data);
                                                         <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
                                                     </div>
                                                 </div>
-                                                <div style="position: absolute; right: 14px; top: 13px;">
+                                                <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
+                                                    <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
+                                                    </a>
 
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                    <a style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                    <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit reply</a>
+                                                    <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete reply</a>
+                                                    </div>
                                                 </div>
+                                               
 
                                                 <p>
                                                     <?php echo $item['replyContent'] ?>
@@ -331,8 +343,14 @@ layouts('headerPost', $data);
     }
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
-        listReply.scrollTo({top:0, behavior: 'smooth'})  // For Safari
-        listReply.documentElement.scrollTo({top:0, behavior: 'smooth'}); // For Chrome, Firefox, IE and Opera
+        listReply.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        }) // For Safari
+        listReply.documentElement.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        }); // For Chrome, Firefox, IE and Opera
     }
 </script>
 
