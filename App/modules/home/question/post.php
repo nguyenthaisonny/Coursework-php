@@ -356,8 +356,8 @@ layouts('headerPost', $data);
     }
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
-        listQuestion.scrollTop = 0; // For Safari
-        listQuestion.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        listQuestion.scrollTo({top:0, behavior: 'smooth'})  // For Safari
+        listQuestion.documentElement.scrollTo({top:0, behavior: 'smooth'}); // For Chrome, Firefox, IE and Opera
     }
 </script>
 
