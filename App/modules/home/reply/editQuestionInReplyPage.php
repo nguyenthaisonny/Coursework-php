@@ -383,7 +383,7 @@ layouts('headerPost', $data);
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn  rounded small">
-                                <a href="?module=home&page=reply/question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">Back</a>
+                                <a style="padding: 12px 84px"  href="?module=home&page=reply/question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">Back</a>
 
                             </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
@@ -407,11 +407,7 @@ layouts('headerPost', $data);
         }
     }
 </script>
-</script>
-<script>
-    var myModal = new bootstrap.Modal(document.getElementById('EditQuestionModal'), {})
-    myModal.show()
-</script>
+
 
 <?php
 layouts('footerIn')

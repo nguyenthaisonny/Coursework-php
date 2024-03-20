@@ -173,9 +173,9 @@ $old = getFlashData('old');
             </div>
             <div style="display: flex; justify-content: space-between;">
 
-                <button class="mg-btn medium rounded">
+                <button type="button" class="mg-btn medium rounded">
 
-                    <a href="?module=admin&page=manage/list">Back</a>
+                    <a style="padding: 12px 292px" href="?module=admin&page=manage/list">Back</a>
                 </button>
                 <button type="submit" class="mg-btn medium primary">Submit</button>
             </div>

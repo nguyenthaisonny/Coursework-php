@@ -114,11 +114,12 @@ layouts('headerPost', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a href="?module=home&page=question/addQuestion&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit ?>" style="padding: 0 39px;">
+                    
+                    <button  type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                    <a style="padding: 12px 38px;" href="?module=home&page=question/addQuestion&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit ?>" >
 
-                            New question <i class="fa-solid fa-plus"></i>
-                        </a>
+                        New question <i class="fa-solid fa-plus"></i>
+                    </a>
                     </button>
 
                 </div>

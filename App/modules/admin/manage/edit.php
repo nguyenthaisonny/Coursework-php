@@ -193,7 +193,7 @@ if (!empty($userDetail)) {
             <input type="hidden" name="id" value=<?php echo $userId; ?>>
             <div style="display: flex; justify-content: space-between;">
                 <button class="mg-btn medium rounded">
-                    <a href="?module=admin&page=manage/list">Back</a>
+                    <a style="padding: 12px 292px" href="?module=admin&page=manage/list">Back</a>
 
                 </button>
 

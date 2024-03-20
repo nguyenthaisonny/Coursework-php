@@ -31,17 +31,17 @@ a {
 .mg-btn.medium {
   width: 49%;
 }
-.mg-btn.medium a {
-  padding: 0 150px;
-}
+
 .mg-btn.small {
   width: 24%;
 }
-.mg-btn.small a {
-  padding: 0 80px;
+
+.largeAnker {
+  padding: 12px 218px;
+
 }
-button a {
-  padding: 0 170px;
+.mediumAnker {
+  padding: 12px 54px;
 }
 .primary {
   color: white;

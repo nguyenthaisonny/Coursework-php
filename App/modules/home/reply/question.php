@@ -73,7 +73,7 @@ layouts('headerPost', $data);
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
                     <button  type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a href="?module=home&page=reply/addReply&questionId=<?php echo $questionId;?>&postId=<?php echo $postId;?>&userIdEdit=<?php echo $userIdEdit;?>&userIdPost=<?php echo $userIdPost;?>" style="padding: 0 50px;">
+                        <a style="padding: 12px 52px" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId;?>&postId=<?php echo $postId;?>&userIdEdit=<?php echo $userIdEdit;?>&userIdPost=<?php echo $userIdPost;?>" >
 
                             New reply <i class="fa-solid fa-plus"></i>
                         </a>

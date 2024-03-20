@@ -31,7 +31,7 @@ layouts('headerForum', $data);
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
                     <button  type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                    <a href="?module=home&page=forum/addPost" style="padding: 0 50px;">
+                    <a class="mediumAnker" href="?module=home&page=forum/addPost" >
 
                         New post <i class="fa-solid fa-plus"></i>
                     </a>

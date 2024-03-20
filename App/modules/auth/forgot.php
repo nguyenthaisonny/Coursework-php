@@ -27,9 +27,9 @@ if ($_POST) {
                 $linkReset = _WEB_HOST.'?module=auth&page=reset'.'&token='.$forgotToken;
                 // send mail for user
                 $subject = 'Request to recover your password';
-                $content = 'Hi '. $fullname. '</br>';
-                $content .= ' We were sent the request to recover password from you. Please click this link bellow to recover your password!'.'</br>';
-                $content .= $linkReset. '</br>';
+                $content = 'Hi '. $fullname. '<br>';
+                $content .= ' We were sent the request to recover password from you. Please click this link bellow to recover your password!'.'<br>';
+                $content .= $linkReset. '<br>';
                 $content .= 'Thank you!';
                 $sendEmail = sendMail($email, $subject, $content);
                 if($sendEmail) {
@@ -88,12 +88,12 @@ $smgType = getFlashData('smg_type');
 
             <button class="mg-btn large rounded" >
     
-                 <a href="?module=auth&page=login" >Sign in</a>
+                 <a class="largeAnker" href="?module=auth&page=login" >Sign in</a>
             </button>
             
             <button class="mg-btn large rounded" >
     
-                <a href="?module=auth&page=register" >Sign up</a>
+                <a class="largeAnker" href="?module=auth&page=register" >Sign up</a>
             </button>
         
     </div>

@@ -268,7 +268,7 @@ layouts('headerEditPost', $data);
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn small rounded">
-                                <a href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum">Back</a>
+                                <a style="padding: 12px 84px" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum">Back</a>
                             </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>
