@@ -30,11 +30,11 @@ layouts('headerForum', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button  type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                    <a class="mediumAnker" href="?module=home&page=forum/addPost" >
+                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                        <a class="mediumAnker" href="?module=home&page=forum/addPost">
 
-                        New post <i class="fa-solid fa-plus"></i>
-                    </a>
+                            New post <i class="fa-solid fa-plus"></i>
+                        </a>
                     </button>
                 </div>
                 <!-- /Inner sidebar header -->
@@ -141,7 +141,7 @@ layouts('headerForum', $data);
                                             <a href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <a href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </div>
-                                        <div class="media-body" style="margin-top: 4px;">
+                                        <div class="media-body" style="margin-top: 8px;">
                                             <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
                                             <p style="margin-bottom: 20px;">
                                                 <?php echo $item['description'] ?>
@@ -154,7 +154,9 @@ layouts('headerForum', $data);
                                                 <i class="fa-solid fa-door-open icon-hover" style="font-size: 20px;"></i>
 
                                             </a>
-                                            <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;"><?php echo $questionCount ?> questions</span>
+                                            <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;">
+                                                <a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>"><?php echo $questionCount ?> questions</a>
+                                            </span>
 
                                         </div>
                                     </div>
@@ -190,7 +192,7 @@ layouts('headerForum', $data);
             <!-- /Inner main -->
         </div>
 
-        
+
 
     </div>
 </div>
@@ -236,8 +238,14 @@ layouts('headerForum', $data);
     }
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
-        listPost.scrollTo({top:0, behavior: 'smooth'})  // For Safari
-        listPost.documentElement.scrollTo({top:0, behavior: 'smooth'}); // For Chrome, Firefox, IE and Opera
+        listPost.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        }) // For Safari
+        listPost.documentElement.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        }); // For Chrome, Firefox, IE and Opera
     }
 </script>
 

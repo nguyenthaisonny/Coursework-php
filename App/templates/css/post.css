@@ -42,3 +42,13 @@
 .default-style .ui-bordered {
     border: 1px solid rgba(24,28,33,0.06);
 }
+
+
+.comment {
+    font-size: 14px;
+    font-weight: 300;
+    color: black;
+    }
+.comment:hover {
+    color: rgb(104, 85, 224);;
+}
