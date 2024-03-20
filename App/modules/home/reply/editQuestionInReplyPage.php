@@ -290,13 +290,13 @@ layouts('headerPost', $data);
 
                                                     </a>
 
-                                                    <div class="media-body ml-3" style="position: absolute; left: 66px; top: 11px;">
-                                                        <h6 style="margin: 0 ;padding: 0; font-size: 16px">
+                                                    <div class="media-body ml-3" style="position: absolute; left: 62px; top: 12px;">
+                                                        <h6 style="margin: 0 ;padding: 0; font-size: 14px">
                                                             <a style="color:black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
                                                                 <?php echo $userDetail['fullname'] ?>
                                                             </a>
                                                         </h6>
-                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 10px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">

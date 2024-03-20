@@ -161,7 +161,7 @@ layouts('headerForum', $data);
 
                                             </a>
                                             <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;">
-                                                <a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>"><?php echo $questionCount ?> questions</a>
+                                                <a class="hover-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>"><?php echo $questionCount ?> questions</a>
                                             </span>
 
                                         </div>

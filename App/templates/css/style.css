@@ -1,4 +1,32 @@
 /* CSS project */
+body {
+  font-family: 'TiktokFont', 'san-serif';
+  
+  text-rendering: optimizeSpeed;
+  overflow-y: overlay;
+}
+
+
+@font-face {
+    font-family: TikTokFont;
+    src: url('/App/templates/font/TikTokFont-Regular.woff2');
+    font-weight: 400;
+}
+@font-face {
+    font-family: TikTokFont;
+    src: url('/App/templates/font/TikTokFont-Semibold.woff2');
+    font-weight: 600;
+}
+@font-face {
+    font-family: TikTokFont;
+    src: url('/App/templates/font/TikTokFont-Bold.woff2');
+    font-weight: 700;
+}
+@font-face {
+    font-family: TikTokDisplayFont;
+    src: url('/App/templates/font/TikTokDisplayFont-Bold.woff2');
+    font-weight: 700;
+}
 .mg-form {
   margin-bottom: 10px;
 }
@@ -140,7 +168,14 @@ button:hover a {
 .icon-hover:hover {
   color: rgb(104, 85, 224);
 }
+
 .icon-hover.active {
+  color: rgb(104, 85, 224);
+}
+.hover-item {
+  color: black;
+}
+.hover-item:hover {
   color: rgb(104, 85, 224);
 }
 .sub {
