@@ -26,6 +26,8 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
     //if exist => get info
     //if not exist => navigat to list page
     $questionDetail = getRaw("SELECT * FROM questions WHERE id = '$questionId'");
+    $userIdQuestion = $questionDetail['userId'];
+    $userQuestionDetail = getRaw("SELECT * FROM users WHERE id='$userIdQuestion'");
     $userEditDetail = getRaw("SELECT * FROM users WHERE id = '$userIdEdit'");
     $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
 
@@ -150,15 +152,15 @@ layouts('headerPost', $data);
                                     <div class="card-body">
                                         <div style="margin-bottom: 6px;">
                                             <h6 style="margin: 0; position: absolute; right: 48%;top: 14px; font-weight: 300;">Question</h6>
-                                            <a href="?module=user&page=profile/profileView&userId=<?php echo $userIdEdit ?>">
-                                                <img src="<?php echo !empty($userPostDetail['profileImage']) ? $userPostDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
+                                            <a href="?module=user&page=profile/profileView&userId=<?php echo  $userQuestionDetail['id'] ?>">
+                                                <img src="<?php echo !empty($userQuestionDetail['profileImage']) ? $userQuestionDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
 
                                             </a>
                                             <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                 <h6 style="margin: 0 ;padding: 0; font-size: 16px">
-                                                    <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userIdEdit ?>">
+                                                    <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userQuestionDetail['id'] ?>">
 
-                                                        <?php echo $userEditDetail['fullname'] ?>
+                                                        <?php echo $userQuestionDetail['fullname'] ?>
                                                     </a>
                                                 </h6>
                                                 <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>

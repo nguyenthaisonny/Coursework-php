@@ -28,7 +28,8 @@ if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($
     $questionDetail = getRaw("SELECT * FROM questions WHERE id = '$questionId'");
     $userEditDetail = getRaw("SELECT * FROM users WHERE id = '$userIdEdit'");
     $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
-
+    $userIdQuestion = $questionDetail['userId'];
+    $userQuestionDetail = getRaw("SELECT * FROM users WHERE id='$userIdQuestion'");
     if (!empty($listReply)) {
         //exist
         setFlashData('listReply', $listReply);
@@ -55,6 +56,7 @@ if (isPost()) {
             $userIdEdit = $filterAll['userIdEdit'];
             $postId = $filterAll['postId'];
             $questionId = $_GET['questionId'];
+            
             if ($userIdLogin == $userIdEdit || checkAdminNotSignOut()) {
 
                 if (!empty($_FILES["questionImage"]['name'])) {
@@ -137,8 +139,11 @@ layouts('headerPost', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;" data-toggle="modal" data-target="#newReply">
-                        New Reply <i class="fa-solid fa-plus"></i>
+                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                        <a style="padding: 12px 52px" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">
+
+                            New reply <i class="fa-solid fa-plus"></i>
+                        </a>
                     </button>
                 </div>
                 <!-- /Inner sidebar header -->
@@ -211,15 +216,15 @@ layouts('headerPost', $data);
                                     <div class="card-body">
                                         <div style="margin-bottom: 6px;">
                                             <h6 style="margin: 0; position: absolute; right: 48%;top: 14px; font-weight: 300;">Question</h6>
-                                            <a href="?module=user&page=profile/profileView&userId=<?php echo $userIdEdit ?>">
-                                            <img src="<?php echo !empty($userPostDetail['profileImage']) ? $userPostDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
+                                            <a href="?module=user&page=profile/profileView&userId=<?php echo  $userQuestionDetail['id'] ?>">
+                                                <img src="<?php echo !empty($userQuestionDetail['profileImage']) ? $userQuestionDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
 
                                             </a>
                                             <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                 <h6 style="margin: 0 ;padding: 0; font-size: 16px">
-                                                    <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userIdEdit ?>">
+                                                    <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userQuestionDetail['id'] ?>">
 
-                                                        <?php echo $userEditDetail['fullname'] ?>
+                                                        <?php echo $userQuestionDetail['fullname'] ?>
                                                     </a>
                                                 </h6>
                                                 <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
@@ -235,9 +240,12 @@ layouts('headerPost', $data);
                                                 <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
                                             </div>
                                         </div>
+
                                         <div style="position: absolute; right: 12px; bottom: 44px;">
-                                                <?php echo $countReply == 0 ? null : '<a  style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
+                                            <?php echo $countReply == 0 ? null : '<a  style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
                                         </div>
+
+
                                         <h5 style="margin: 0;"><a href="" class="text-body"><?php echo $questionDetail['title'] ?></a></h5>
                                         <p>
                                             <?php echo $questionDetail['content'] ?>
