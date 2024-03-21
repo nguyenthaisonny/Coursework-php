@@ -14,36 +14,22 @@ if (!checkLogin()) {
 $filterAll = filter();
 
 
-if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($filterAll['questionId']) && !empty($filterAll['userIdPost'])) {
-    $userIdEdit = $filterAll['userIdEdit'];
+if (!empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
+
     $postId = $filterAll['postId'];
     $questionId = $filterAll['questionId'];
-    $userIdPost  = $filterAll['userIdPost'];
+    $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
+    $userIdQuestion = getRaw("SELECT userId FROM questions WHERE id = '$questionId'")['userId'];
 
 
 
-    // check whether exist in database
-    //if exist => get info
-    //if not exist => navigat to list page
     $questionDetail = getRaw("SELECT * FROM questions WHERE id = '$questionId'");
-    $userIdQuestion = $questionDetail['userId'];
+
     $userQuestionDetail = getRaw("SELECT * FROM users WHERE id='$userIdQuestion'");
-    $userEditDetail = getRaw("SELECT * FROM users WHERE id = '$userIdEdit'");
+
     $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
-
-    if (!empty($listReply)) {
-        //exist
-        setFlashData('listReply', $listReply);
-    }
-    if (!empty($userEditDetail)) {
-        //exist
-        setFlashData('userEditDetail', $userEditDetail);
-    }
-
-    if (!empty($questionDetail)) {
-        //exist
-        setFlashData('questionDetail', $questionDetail);
-    }
+    $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
+    $userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
 }
 
 
@@ -54,9 +40,8 @@ $smgType = getFlashData(('smg_type'));
 $old = getFlashData('old');
 
 
-$questionId = $questionDetail['id'];
-$countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
-$userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
+
+
 
 if (!empty($listReply)) {
     $old = $listReply;
@@ -75,7 +60,7 @@ layouts('headerPost', $data);
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
                     <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a style="padding: 12px 52px" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">
+                        <a style="padding: 12px 52px" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>">
 
                             New reply <i class="fa-solid fa-plus"></i>
                         </a>
@@ -172,7 +157,7 @@ layouts('headerPost', $data);
                                             </a>
 
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdEdit=<?php echo $questionDetail['userId'] ?>&userIdPost=<?php echo $userIdPost ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
+                                                <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editQuestionInReplyPage&questionId=<?php echo $questionId ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
                                                 <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
                                             </div>
                                         </div>
@@ -196,7 +181,7 @@ layouts('headerPost', $data);
                                             <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                         </a>
-                                        <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&postId=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+                                        <a style="position: relative;" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>" class="d-inline-block text-muted ml-3">
 
                                             <i class="fa-regular fa-comment icon-hover active" style="font-size: 26px;"></i>
                                         </a>
@@ -232,7 +217,7 @@ layouts('headerPost', $data);
 
 
 
-                                                    <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" >
+                                                    <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
                                                         <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle">
 
@@ -252,7 +237,7 @@ layouts('headerPost', $data);
                                                     </a>
 
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                        <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit reply</a>
+                                                        <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&questionId=<?php echo $item['questionId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit reply</a>
                                                         <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete reply</a>
                                                     </div>
                                                 </div>

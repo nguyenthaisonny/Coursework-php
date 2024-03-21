@@ -16,14 +16,11 @@ if (isGet()) {
     $filterAll = filter();
 
 
-    if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
-        $userIdEdit = $filterAll['userIdEdit'];
+    if (!empty($filterAll['postId'])) {
         $postId = $filterAll['postId'];
-        setSession('userIdPost', $userIdEdit);
-        setFlashData('postId', $postId);
-        // check whether exist in database
-        //if exist => get info
-        //if not exist => navigat to list page
+        $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
+        
+       
         $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
         if (!empty($listQuestion)) {
             //exist
@@ -88,11 +85,7 @@ $errors = getFlashData('errors');
 // print_r($errors);
 $smg = getFlashData('smg');
 $smgType = getFlashData(('smg_type'));
-$old = getFlashData('old');
-$ok = getFlashData('ok');
-$no = getFlashData('no');
-$listQuestion = getFlashData('listQuestion');
-$postId = getFlashData('postId');
+
 
 if (!empty($listQuestion)) {
     $old = $listQuestion;
@@ -116,7 +109,7 @@ layouts('headerPost', $data);
                     <!-- Button trigger modal -->
 
                     <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a style="padding: 12px 38px;" href="?module=home&page=question/addQuestion&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit ?>">
+                        <a style="padding: 12px 38px;" href="?module=home&page=question/addQuestion&postId=<?php echo $postId; ?>">
 
                             New question <i class="fa-solid fa-plus"></i>
                         </a>
@@ -190,12 +183,13 @@ layouts('headerPost', $data);
                     <?php
                     if (!empty($listQuestion)) :
                         $count = 0;
-                        $userIdPost = getSession('userIdPost');
+                        
                         foreach ($listQuestion as $item) :
                             $userId = $item['userId'];
                             $questionId = $item['id'];
                             $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
+                            
                             $count++;
 
                     ?>
@@ -226,17 +220,17 @@ layouts('headerPost', $data);
                                                     </a>
 
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                        <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i>  Edit question</a>
+                                                        <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i>  Edit question</a>
                                                         <a class="dropdown-item"  href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>  Delete question</a>
                                                     </div>
                                                 </div>
                                                 
                                                 <div style="position: absolute; right: 12px; bottom: 44px;">
-                                                    <?php echo $countReply == 0 ? null : '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '&userIdEdit=' . $item['userId'] . '&userIdPost=' . $userIdPost . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
+                                                    <?php echo $countReply == 0 ? null : '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId']. '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
 
 
                                                 </div>
-                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
+                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
                                                 <p>
                                                     <?php echo $item['content'] ?>
                                                 </p>
@@ -252,7 +246,7 @@ layouts('headerPost', $data);
                                                     <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                                 </a>
-                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
+                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="d-inline-block text-muted ml-3">
 
                                                     <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
                                                 </a>

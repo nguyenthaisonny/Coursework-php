@@ -11,14 +11,11 @@ if (!checkLogin()) {
     reDirect('?module=auth&page=login');
 }
 $filterAll = filter();
-if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId'])) {
+if (!empty($filterAll['postId'])) {
     $postId = $filterAll['postId'];
-    $userIdEdit = $filterAll['userIdEdit'];
-    setFlashData('userIdEdit', $userIdEdit);
-    setFlashData('postId', $postId);
-    // check whether exist in database
-    //if exist => get info
-    //if not exist => navigat to list page
+    $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
+    
+   
     $postDetail = getRaw("SELECT postName, description FROM posts WHERE id = '$postId'");
     setFlashData('postDetail', $postDetail);
 }
@@ -33,7 +30,7 @@ if (isPost()) {
             $loginToken = getSession('loginToken');
             $queryToken = getRaw("SELECT userId, id FROM tokenlogin WHERE token = '$loginToken'");
             $userIdLogin = $queryToken['userId'];
-            $userIdEdit = $_GET['userIdEdit'];
+            $userIdPost = $filterAll['userIdPost'];
 
             $dataUpdate = [
                 'postName' => $filterAll['postName'],
@@ -41,7 +38,7 @@ if (isPost()) {
                 'update_at' => date('Y:m:d H:i:s'),
 
             ];
-            if (($userIdLogin == $userIdEdit) || checkAdminNotSignOut()) {
+            if (($userIdLogin == $userIdPost) || checkAdminNotSignOut()) {
 
                 $updateStatus = update('posts', $dataUpdate, "id='$postId'");
                 if ($updateStatus) {
@@ -65,9 +62,7 @@ $listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
 
 $smg = getFlashData('smg');
 $smgType = getFlashData('smg_type');
-$postId = getFlashData('postId');
-$userIdEdit = getFlashData('userIdEdit');
-$postDetail = getFlashData('postDetail');
+
 // print_r($postDetail);
 if (!empty($postDetail)) {
     $old = $postDetail;
@@ -196,12 +191,12 @@ layouts('headerEditPost', $data);
                                             </a>
 
                                             <div  class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/editPost&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i>   Edit post</a>
+                                            <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/editPost&postId=<?php echo $item['id'] ?>&userIdPost=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i>   Edit post</a>
                                             <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>Delete post</a>
                                             </div>
                                         </div>
                                         <div class="media-body" style="margin-top: 8px;">
-                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
+                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdPost=<?php echo $item['userId'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
                                             <p style="margin-bottom: 20px;">
                                                 <?php echo $item['description'] ?>
                                             </p>
@@ -209,7 +204,7 @@ layouts('headerEditPost', $data);
                                         </div>
                                         <div>
 
-                                            <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="d-inline-block text-muted">
+                                            <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>&userIdPost=<?php echo $item['userId'] ?>" class="d-inline-block text-muted">
                                                 <i class="fa-solid fa-door-open icon-hover" style="font-size: 20px;"></i>
 
                                             </a>
@@ -268,7 +263,7 @@ layouts('headerEditPost', $data);
                                 <label class="col-form-label">Description</label>
                                 <input name="description" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'description') ?>">
                             </div>
-
+                            <input type="hidden" name="userIdPost" value="<?php echo $userIdPost?>" id="">
 
                             <div class="modal-footer">
                             </div>

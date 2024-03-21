@@ -14,36 +14,23 @@ if (!checkLogin()) {
 $filterAll = filter();
 
 
-if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($filterAll['questionId']) && !empty($filterAll['userIdPost'])) {
-    $userIdEdit = $filterAll['userIdEdit'];
+if (!empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
+    
     $postId = $filterAll['postId'];
     $questionId = $filterAll['questionId'];
-    $userIdPost  = $filterAll['userIdPost'];
-
+    
+    $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
+    $userIdQuestion = getRaw("SELECT userId FROM questions WHERE id = '$questionId'")['userId'];
     
 
-    // check whether exist in database
-    //if exist => get info
-    //if not exist => navigat to list page
+
+
     $questionDetail = getRaw("SELECT * FROM questions WHERE id = '$questionId'");
-    $userIdQuestion = $questionDetail['userId'];
+    
     $userQuestionDetail = getRaw("SELECT * FROM users WHERE id='$userIdQuestion'");
-    $userEditDetail = getRaw("SELECT * FROM users WHERE id = '$userIdEdit'");
+    
     $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
 
-    if (!empty($listReply)) {
-        //exist
-        setFlashData('listReply', $listReply);
-    }
-    if (!empty($userEditDetail)) {
-        //exist
-        setFlashData('userEditDetail', $userEditDetail);
-    }
-
-    if (!empty($questionDetail)) {
-        //exist
-        setFlashData('questionDetail', $questionDetail);
-    }
 }
 
 if (isPost()) {
@@ -54,10 +41,10 @@ if (isPost()) {
             $loginToken = getSession('loginToken');
             $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
             $userIdLogin = $queyToken['userId'];
-            $userIdEdit = $filterAll['userIdEdit'];
+           
             $postId = $filterAll['postId'];
-            $questionId = $_GET['questionId'];
-            $userIdPost = $_GET['userIdPost'];
+            $questionId = $filterAll['questionId'];
+            
 
             //handle Image
 
@@ -95,7 +82,7 @@ if (isPost()) {
                 setFlashData('smg', 'System faces errors! Please try again.');
                 setFlashData('smg_type', 'danger');
             }
-            reDirect("?module=home&page=reply/question&questionId=" . $questionId . "&postId=" . $postId . "&userIdEdit=" . $userIdEdit . "&userIdPost=" . $userIdPost);
+            reDirect("?module=home&page=reply/question&questionId=" . $questionId . "&postId=" . $postId );
         }
     }
 }
@@ -105,7 +92,7 @@ $smg = getFlashData('smg');
 $smgType = getFlashData(('smg_type'));
 $old = getFlashData('old');
 
-$questionDetail = getFlashData('questionDetail');
+
 $questionId = $questionDetail['id'];
 $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
 $userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
@@ -378,15 +365,14 @@ layouts('headerPost', $data);
 
                             </div>
 
-                            <input id="userIdEdit" type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
-                            <input id="userIdPost" type="hidden" name='userIdPost' value="<?php echo $userIdPost; ?>">
+                            
                             <input id="questionId" type="hidden" name='questionId' value="<?php echo $questionId; ?>">
 
                             <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn small rounded">
-                                <a style="padding: 12px 84px"  href="?module=home&page=reply/question&questionId=<?php echo $questionId;?>&postId=<?php echo $postId;?>&userIdEdit=<?php echo $userIdEdit;?>&userIdPost=<?php echo $userIdPost;?>">Back</a>
+                                <a style="padding: 12px 84px"  href="?module=home&page=reply/question&questionId=<?php echo $questionId;?>&postId=<?php echo $postId;?>">Back</a>
                             </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>
@@ -405,7 +391,7 @@ layouts('headerPost', $data);
     document.getElementById('addModal').onclick = function(e) {
         console.log(e.target.className);
         if(e.target.className === "modal fade") {
-            window.location.href = "?module=home&page=reply/question&questionId=" + document.getElementById('questionId').value + "&postId=" + document.getElementById('postId').value + "&userIdEdit=" + document.getElementById('userIdEdit').value + "&userIdPost=" + document.getElementById('userIdPost').value ;
+            window.location.href = "?module=home&page=reply/question&questionId=" + document.getElementById('questionId').value + "&postId=" + document.getElementById('postId').value;
         }
     }
 </script>

@@ -14,50 +14,37 @@ if (!checkLogin()) {
 $filterAll = filter();
 
 
-if (!empty($filterAll['userIdEdit']) && !empty($filterAll['postId']) && !empty($filterAll['questionId']) && !empty($filterAll['userIdPost'])) {
-    $userIdEdit = $filterAll['userIdEdit'];
+if (!empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
     $postId = $filterAll['postId'];
     $questionId = $filterAll['questionId'];
-    $userIdPost  = $filterAll['userIdPost'];
 
- 
+    $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
+    $userIdQuestion = getRaw("SELECT userId FROM questions WHERE id = '$questionId'")['userId'];
 
-    // check whether exist in database
-    //if exist => get info
-    //if not exist => navigat to list page
+
+
+
     $questionDetail = getRaw("SELECT * FROM questions WHERE id = '$questionId'");
-    $userEditDetail = getRaw("SELECT * FROM users WHERE id = '$userIdEdit'");
-    $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
+    
     $userIdQuestion = $questionDetail['userId'];
     $userQuestionDetail = getRaw("SELECT * FROM users WHERE id='$userIdQuestion'");
-    if (!empty($listReply)) {
-        //exist
-        setFlashData('listReply', $listReply);
-    }
-    if (!empty($userEditDetail)) {
-        //exist
-        setFlashData('userEditDetail', $userEditDetail);
-    }
-
-    if (!empty($questionDetail)) {
-        //exist
-        setFlashData('questionDetail', $questionDetail);
-    }
+    $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
 }
 
 if (isPost()) {
     $filterAll = filter();
     if (!empty($filterAll['title']) || !empty($filterAll['content'])) {
         if (getSession('loginToken')) {
-            $userIdPost = $_GET['userIdPost'];
+
             $loginToken = getSession('loginToken');
             $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
             $userIdLogin = $queryToken['userId'];
-            $userIdEdit = $filterAll['userIdEdit'];
             $postId = $filterAll['postId'];
-            $questionId = $_GET['questionId'];
-            
-            if ($userIdLogin == $userIdEdit || checkAdminNotSignOut()) {
+            $questionId = $filterAll['questionId'];
+            $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
+            $userIdQuestion = getRaw("SELECT userId FROM questions WHERE id = '$questionId'")['userId'];
+
+            if ($userIdLogin == $userIdQuestion || checkAdminNotSignOut()) {
 
                 if (!empty($_FILES["questionImage"]['name'])) {
                     //handle Image
@@ -71,7 +58,7 @@ if (isPost()) {
                         'title' => $filterAll['title'],
                         'content' => $filterAll['content'],
                         'update_at' => date('Y:m:d H:i:s'),
-                        'postId' => $filterAll['postId'],
+                        'postId' => $postId,
 
                         'questionImage' => $questionImage
 
@@ -84,7 +71,7 @@ if (isPost()) {
                         'title' => $filterAll['title'],
                         'content' => $filterAll['content'],
                         'update_at' => date('Y:m:d H:i:s'),
-                        'postId' => $filterAll['postId'],
+                        'postId' => $postId,
                         'questionImage' => $oldImage
 
 
@@ -117,7 +104,6 @@ $smg = getFlashData('smg');
 $smgType = getFlashData(('smg_type'));
 $old = getFlashData('old');
 
-$questionDetail = getFlashData('questionDetail');
 $questionId = $questionDetail['id'];
 $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
 $userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
@@ -294,7 +280,7 @@ layouts('headerPost', $data);
                                                     <h6 style="margin: 0; position: absolute; right: 49.5%;top: 14px; font-weight: 300;">Reply</h6>
                                                     <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
-                                                    <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle" >
+                                                        <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle">
 
                                                     </a>
 
@@ -313,8 +299,8 @@ layouts('headerPost', $data);
                                                     </a>
 
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                    <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit reply</a>
-                                                    <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete reply</a>
+                                                        <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit reply</a>
+                                                        <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete reply</a>
                                                     </div>
                                                 </div>
 
@@ -392,15 +378,14 @@ layouts('headerPost', $data);
 
                             </div>
 
-                            <input id="userIdEdit" type="hidden" name='userIdEdit' value="<?php echo $userIdEdit; ?>">
-                            <input id="userIdPost" type="hidden" name='userIdPost' value="<?php echo $userIdPost; ?>">
+                            
                             <input id="questionId" type="hidden" name='questionId' value="<?php echo $questionId; ?>">
 
                             <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn  rounded small">
-                                <a style="padding: 12px 84px"  href="?module=home&page=reply/question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit; ?>&userIdPost=<?php echo $userIdPost; ?>">Back</a>
+                                <a style="padding: 12px 84px" href="?module=home&page=reply/question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>">Back</a>
 
                             </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
@@ -419,8 +404,8 @@ layouts('headerPost', $data);
 
     document.getElementById('editModal').onclick = function(e) {
         console.log(e.target.className);
-        if(e.target.className === "modal fade") {
-            window.location.href = "?module=home&page=reply/question&questionId=" + document.getElementById('questionId').value + "&postId=" + document.getElementById('postId').value + "&userIdEdit=" + document.getElementById('userIdEdit').value + "&userIdPost=" + document.getElementById('userIdPost').value ;
+        if (e.target.className === "modal fade") {
+            window.location.href = "?module=home&page=reply/question&questionId=" + document.getElementById('questionId').value + "&postId=" + document.getElementById('postId').value;
         }
     }
 </script>
