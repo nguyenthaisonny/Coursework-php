@@ -137,7 +137,7 @@ layouts('headerPost', $data);
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular this week</a>
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular all time</a>
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Solved</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Unsolved</a>
+                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">None of question</a>
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">No replies yet</a>
                                             </nav>
                                         </div>
@@ -167,7 +167,7 @@ layouts('headerPost', $data);
                         <option selected="">Latest</option>
                         <option value="1">Popular</option>
                         <option value="3">Solved</option>
-                        <option value="3">Unsolved</option>
+                        <option value="3">None of question</option>
                         <option value="3">No Replies Yet</option>
                     </select>
 
@@ -186,7 +186,7 @@ layouts('headerPost', $data);
                     <div class="container posts-content" style="position: relative;">
                         <div class="row">
                             <div class="col-lg-12">
-                            <div class="card mb-4">
+                                <div class="card mb-4">
                                     <div class="card-body">
                                         <div style="margin-bottom: 6px;">
                                             <h6 style="margin: 0; position: absolute; right: 48%;top: 14px; font-weight: 300;">Question</h6>
@@ -195,8 +195,8 @@ layouts('headerPost', $data);
 
                                             </a>
                                             <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
-                                                
-                                            <div style="display: flex; align-items: flex-start">
+
+                                                <div style="display: flex; align-items: flex-start">
                                                     <div style="padding-right: 6px;">
 
                                                         <h6 style="margin: 0 ;padding: 0; font-size: 18px; font-weight: 600;">
@@ -207,7 +207,7 @@ layouts('headerPost', $data);
                                                         </h6>
                                                         <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
                                                     </div>
-                                                    <?php echo checkAdminInList($userIdQuestion) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
+                                                    <?php echo checkAdminInList($userIdQuestion) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -223,7 +223,17 @@ layouts('headerPost', $data);
                                         </div>
 
                                         <div style="position: absolute; right: 12px; bottom: 44px;">
-                                            <?php echo $countReply == 0 ? null : '<a  style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
+                                            <?php
+                                            if ($countReply >= 0) {
+                                                if ($countReply == 0) {
+                                                    echo null;
+                                                } else if ($countReply == 1) {
+                                                    echo '<a href="?module=home&page=reply/question&questionId=' . $questionId . '&postId=' . $postId . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' reply</a>';
+                                                } else {
+                                                    echo '<a href="?module=home&page=reply/question&questionId=' . $questionId . '&postId=' . $postId . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' replies</a>';
+                                                }
+                                            }
+                                            ?>
                                         </div>
 
 
@@ -280,7 +290,7 @@ layouts('headerPost', $data);
                                                     </a>
 
                                                     <div class="media-body ml-3" style="position: absolute; left: 62px; top: 12px;">
-                                                        <h6 style="margin: 0 ;padding: 0; font-size: 14px">
+                                                        <h6 style="margin: 0 ;padding: 0; font-size: 14px; font-weight: 600">
                                                             <a style="color:black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
                                                                 <?php echo $userDetail['fullname'] ?>
                                                             </a>

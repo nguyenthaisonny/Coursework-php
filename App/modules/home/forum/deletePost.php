@@ -23,8 +23,15 @@ if(!empty($filterAll['postId'] && !empty($filterAll['userIdDelete']))) {
         
         if ($userId == $_GET['userIdDelete'] || checkAdminNotSignOut()) {
     
+            $listQuestion = getRaws("SELECT * FROM questions WHERE postId = '$postId' ");
+            foreach($listQuestion as $item) {
+                $questionId = $item['id'];
+                $deleteReply = delete('replies', "questionId='$questionId'");
+            }
+            $deleteQuestion = delete('questions', "postId='$postId'");
             $deleteStatus = delete('posts', "id='$postId'");
-            if ($deleteStatus) {
+
+            if ($deleteStatus && $deleteQuestion) {
     
                 setFlashData('smg', 'Delete post successfully!');
                 setFlashData('smg_type', 'success');

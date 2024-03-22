@@ -11,8 +11,40 @@ if (!checkLogin()) {
     reDirect('?module=auth&page=login');
 }
 
-
 $listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
+if (!empty($_GET['type'])) {
+    $newListPost = [];
+    switch ($_GET['type']) {
+        case 'oldest':
+
+            $newListPost =  getRaws("SELECT * FROM posts ORDER BY update_at");
+            break;
+        case 'noneQuestion':
+            foreach ($listPost as $item) {
+                $postId = $item['id'];
+                $questionCount = countRow("SELECT id FROM questions WHERE postId = '$postId'");
+
+                if ($questionCount == 0) {
+                    array_push($newListPost, $item);
+                }
+            }
+            break;
+        case 'popular':
+            foreach ($listPost as $item) {
+                $postId = $item['id'];
+                $questionCount = countRow("SELECT id FROM questions WHERE postId = '$postId'");
+
+                if ($questionCount >= 6) {
+                    array_push($newListPost, $item);
+                }
+            }
+            break;
+    }
+} else {
+    $newListPost = $listPost;
+}
+
+
 
 $smg = getFlashData('smg');
 $smgType = getFlashData('smg_type');
@@ -31,7 +63,7 @@ layouts('headerForum', $data);
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
                     <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a class="mediumAnker" href="?module=home&page=forum/addPost">
+                        <a class="mediumAnker" href="?module=home&page=forum/addPost<?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">
 
                             New post <i class="fa-solid fa-plus"></i>
                         </a>
@@ -51,12 +83,13 @@ layouts('headerForum', $data);
                                     <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
                                         <div class="simplebar-content" style="padding: 16px;">
                                             <nav class="nav nav-pills nav-gap-y-1 flex-column">
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon active">All Threads</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular this week</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular all time</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Solved</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Unsolved</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">No replies yet</a>
+                                                <a id='latest' href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo empty($_GET['type']) ? 'active' : '' ?>">Latest</a>
+                                                <a id="oldest" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'oldest') ? 'active' : '' ?>">Oldest</a>
+                                                <a id="popular" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'popular') ? 'active' : '' ?>">Popular</a>
+                                                
+
+                                                <a id="noneQuestion" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'noneQuestion') ? 'active' : '' ?>">None of question</a>
+                                                
                                             </nav>
                                         </div>
                                     </div>
@@ -85,7 +118,7 @@ layouts('headerForum', $data);
                         <option selected="">Latest</option>
                         <option value="1">Popular</option>
                         <option value="3">Solved</option>
-                        <option value="3">Unsolved</option>
+                        <option value="3">None of question</option>
                         <option value="3">No Replies Yet</option>
                     </select>
                     <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 36px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
@@ -108,9 +141,9 @@ layouts('headerForum', $data);
                     <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
 
                     <?php
-                    if (!empty($listPost)) :
+                    if (!empty($newListPost)) :
                         $count = 0;
-                        foreach ($listPost as $item) :
+                        foreach ($newListPost as $item) :
                             $userId = $item['userId'];
                             $postId = $item['id'];
 
@@ -136,8 +169,8 @@ layouts('headerForum', $data);
                                                     <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['update_at']); ?></p>
 
                                                 </div>
-                                                
-                                                <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
+
+                                                <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>
                                             </div>
 
                                         </div>
@@ -147,13 +180,13 @@ layouts('headerForum', $data);
                                             </a>
 
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/editPost&postId=<?php echo $item['id'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit post</a>
+                                                <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/editPost&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit post</a>
                                                 <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>Delete post</a>
                                             </div>
                                         </div>
 
                                         <div class="media-body" style="margin-top: 8px;">
-                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
+                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
                                             <p style="margin-bottom: 20px;">
                                                 <?php echo $item['description'] ?>
                                             </p>
@@ -161,12 +194,12 @@ layouts('headerForum', $data);
                                         </div>
                                         <div>
 
-                                            <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>" class="d-inline-block text-muted">
+                                            <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" class="d-inline-block text-muted">
                                                 <i class="fa-solid fa-door-open icon-hover" style="font-size: 20px;"></i>
 
                                             </a>
                                             <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;">
-                                                <a class="hover-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>"><?php echo $questionCount ?> questions</a>
+                                                <a class="hover-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>"><?php echo $questionCount ?> <?php echo ($questionCount == 1 || $questionCount == 0 )? 'question' : 'questions'?></a>
                                             </span>
 
                                         </div>
@@ -180,34 +213,84 @@ layouts('headerForum', $data);
                         <?php
                         endforeach;
                     else :
-        ?>
-        <tr>
-            <td>
-                <div class="alert alert-danger text-center">None of Post</div>
-            </td>
-        </tr>
-    <?php
+                        ?>
+                        <tr>
+                            <td>
+                                <div class="alert alert-danger text-center">None of Post</div>
+                            </td>
+                        </tr>
+                    <?php
 
                     endif;
-    ?>
+                    ?>
 
-    </ul>
-    <!-- /Forum List -->
+                </ul>
+                <!-- /Forum List -->
 
-    <!-- Forum Detail -->
+                <!-- Forum Detail -->
 
-    <!-- /Forum Detail -->
+                <!-- /Forum Detail -->
 
-    <!-- /Inner main body -->
+                <!-- /Inner main body -->
+            </div>
+            <!-- /Inner main -->
         </div>
-        <!-- /Inner main -->
+
+
+
     </div>
-
-
-
-</div>
 </div>
 <script>
+    //handle sort case
+    const latest = document.getElementById('latest');
+
+    latest.onclick = function(e) {
+
+        const urlParams = new URLSearchParams('?module=home&page=forum/forum');
+
+        window.location.search = urlParams;
+
+
+
+    }
+    const oldest = document.getElementById('oldest');
+
+    oldest.onclick = function(e) {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('type', 'oldest');
+        window.location.search = urlParams;
+
+
+
+    }
+    const noneQuestion = document.getElementById('noneQuestion');
+
+    noneQuestion.onclick = function(e) {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('type', 'noneQuestion');
+        window.location.search = urlParams;
+
+
+
+    }
+    const popular = document.getElementById('popular');
+
+        popular.onclick = function(e) {
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        urlParams.set('type', 'popular');
+        window.location.search = urlParams;
+
+
+
+    }
+    
+
+    //handle delete all
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
     })
@@ -215,8 +298,8 @@ layouts('headerForum', $data);
     deleteAll.onclick = function() {
         return confirm("Delete all")
     }
-    // Get the button:
 
+    //handle scroll top
     let mybutton = document.getElementById("myBtn");
     let listPost = document.getElementById("listPost");
     // When the user scrolls down 20px from the top of the document, show the button

@@ -84,7 +84,7 @@ layouts('headerPost', $data);
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular this week</a>
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular all time</a>
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Solved</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Unsolved</a>
+                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">None of question</a>
                                                 <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">No replies yet</a>
                                             </nav>
                                         </div>
@@ -114,7 +114,7 @@ layouts('headerPost', $data);
                         <option selected="">Latest</option>
                         <option value="1">Popular</option>
                         <option value="3">Solved</option>
-                        <option value="3">Unsolved</option>
+                        <option value="3">None of question</option>
                         <option value="3">No Replies Yet</option>
                     </select>
 
@@ -170,7 +170,18 @@ layouts('headerPost', $data);
                                         </div>
 
                                         <div style="position: absolute; right: 12px; bottom: 44px;">
-                                            <?php echo $countReply == 0 ? null : '<a  style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
+                                        <?php 
+                                                if($countReply >= 0) {
+                                                    if($countReply == 0) {
+                                                        echo null;
+                                                    } else if($countReply == 1) {
+                                                        echo '<a href="?module=home&page=reply/question&questionId=' . $questionId . '&postId=' . $postId . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' reply</a>';
+                                                    } else {
+                                                        echo '<a href="?module=home&page=reply/question&questionId=' . $questionId . '&postId=' . $postId . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' replies</a>';
+
+                                                    }
+                                                }
+                                               ?>
                                         </div>
 
 
