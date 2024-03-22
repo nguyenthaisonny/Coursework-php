@@ -208,13 +208,19 @@ layouts('headerPost', $data);
                                             </a>
                                             <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                 
-     <h6 style="margin: 0 ;padding: 0; font-size: 18px; font-weight: 600;">
-                                                    <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userQuestionDetail['id'] ?>">
+                                            <div style="display: flex; align-items: flex-start">
+                                                    <div style="padding-right: 6px;">
 
-                                                        <?php echo $userQuestionDetail['fullname'] ?>
-                                                    </a>
-                                                </h6>
-                                                <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
+                                                        <h6 style="margin: 0 ;padding: 0; font-size: 18px; font-weight: 600;">
+                                                            <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userQuestionDetail['id'] ?>">
+
+                                                                <?php echo $userQuestionDetail['fullname'] ?>
+                                                            </a>
+                                                        </h6>
+                                                        <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
+                                                    </div>
+                                                    <?php echo checkAdminInList($userIdQuestion) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
+                                                </div>
                                             </div>
                                         </div>
                                         <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
@@ -286,12 +292,19 @@ layouts('headerPost', $data);
                                                     </a>
 
                                                     <div class="media-body ml-3" style="position: absolute; left: 62px; top: 12px;">
-                                                        <h6 style="margin: 0 ;padding: 0; font-size: 14px">
-                                                            <a style="color:black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
-                                                                <?php echo $userDetail['fullname'] ?>
-                                                            </a>
-                                                        </h6>
-                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 10px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+                                                        <div style="display: flex; align-items: flex-start;">
+                                                            <div style="padding-right: 4px;">
+                                                                <h6 style="margin: 0 ;padding: 0; font-size: 14px; font-weight: 600">
+                                                                    <a style="color:black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+                                                                        <?php echo $userDetail['fullname'] ?>
+                                                                    </a>
+                                                                </h6>
+                                                                <div class="text-muted small" style="margin: 2px 0; font-size: 10px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+
+                                                            </div>
+                                                            <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 12px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>
+
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">

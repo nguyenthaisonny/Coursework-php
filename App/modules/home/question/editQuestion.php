@@ -195,7 +195,7 @@ layouts('headerEditQuestion', $data);
                     <a style="margin-bottom: 16px" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <div class="row">
 
-                        <?php
+                    <?php
                         if (!empty($listQuestion)) :
                             $count = 0;
 
@@ -208,72 +208,78 @@ layouts('headerEditQuestion', $data);
                                 $count++;
 
                         ?>
+                                
 
 
+                                    <div class="col-lg-6 mb-4">
 
-                                <div class="col-lg-6 mb-4">
+                                        <div class="card ">
+                                            <div class="card-body">
+                                                <div style="margin-bottom: 6px;">
+                                                    <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
-                                    <div class="card ">
-                                        <div class="card-body">
-                                            <div style="margin-bottom: 6px;">
-                                                <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
-
-                                                    <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
-                                                </a>
-                                                <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
-                                                    <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight:600;">
-                                                        <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
-
-                                                            <?php echo $userDetail['fullname'] ?>
-                                                        </a>
-                                                    </h6>
-                                                    <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+                                                        <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
+                                                    </a>
+                                                    <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
+                                                    <div style="display: flex; align-items: flex-start;">
+                                                        <div  style="padding: 0 6px;">
+                                                            <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight:600;">
+                                                                <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+    
+                                                                    <?php echo $userDetail['fullname'] ?>
+                                                                </a>
+                                                            </h6>
+                                                            <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+                                                        </div>
+                                                        
+                                                        <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
+                                                    </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
-                                                <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
-                                                </a>
+                                                <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
+                                                    <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
+                                                    </a>
 
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                    <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
-                                                    <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
+                                                        <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
+                                                    </div>
                                                 </div>
+
+                                                <div style="position: absolute; right: 12px; bottom: 44px;">
+                                                    <?php echo $countReply == 0 ? null : '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
+
+
+                                                </div>
+                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
+                                                <p>
+                                                    <?php echo $item['content'] ?>
+                                                </p>
+                                                <div class="text-center">
+
+                                                    <?php echo !empty($item['questionImage']) ? '<a href="?module=home&page=reply/question&questionId='.$item['id'].'&postId='. $item['postId'] .'" ><img style="padding-bottom: 10px" src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" ></a>' :  null ?>
+                                                </div>
+
+
                                             </div>
+                                            <div class="card-footer" style="display: flex; justify-content: space-evenly;">
+                                                <a href="javascript:void(0)" class="d-inline-block text-muted">
+                                                    <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
-                                            <div style="position: absolute; right: 12px; bottom: 44px;">
-                                                <?php echo $countReply == 0 ? null : '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
+                                                </a>
+                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="d-inline-block text-muted ml-3">
 
-
+                                                    <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
+                                                </a>
+                                                <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
+                                                    <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
+                                                </a>
                                             </div>
-                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
-                                            <p>
-                                                <?php echo $item['content'] ?>
-                                            </p>
-                                            <div class="text-center">
-
-                                                <?php echo !empty($item['questionImage']) ? '<img style="padding-bottom: 10px" src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
-                                            </div>
-
-
-                                        </div>
-                                        <div class="card-footer" style="display: flex; justify-content: space-evenly;">
-                                            <a href="javascript:void(0)" class="d-inline-block text-muted">
-                                                <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
-
-                                            </a>
-                                            <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="d-inline-block text-muted ml-3">
-
-                                                <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
-                                            </a>
-                                            <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                                <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
-                                            </a>
                                         </div>
                                     </div>
-                                </div>
 
-
+                                
                             <?php
 
                             endforeach; ?>

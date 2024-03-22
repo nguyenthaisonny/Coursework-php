@@ -15,22 +15,21 @@ $filterAll = filter();
 
 
 if (!empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
-    
+
     $postId = $filterAll['postId'];
     $questionId = $filterAll['questionId'];
-    
+
     $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
     $userIdQuestion = getRaw("SELECT userId FROM questions WHERE id = '$questionId'")['userId'];
-    
+
 
 
 
     $questionDetail = getRaw("SELECT * FROM questions WHERE id = '$questionId'");
-    
-    $userQuestionDetail = getRaw("SELECT * FROM users WHERE id='$userIdQuestion'");
-    
-    $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
 
+    $userQuestionDetail = getRaw("SELECT * FROM users WHERE id='$userIdQuestion'");
+
+    $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
 }
 
 if (isPost()) {
@@ -41,10 +40,10 @@ if (isPost()) {
             $loginToken = getSession('loginToken');
             $queyToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
             $userIdLogin = $queyToken['userId'];
-           
+
             $postId = $filterAll['postId'];
             $questionId = $filterAll['questionId'];
-            
+
 
             //handle Image
 
@@ -82,7 +81,7 @@ if (isPost()) {
                 setFlashData('smg', 'System faces errors! Please try again.');
                 setFlashData('smg_type', 'danger');
             }
-            reDirect("?module=home&page=reply/question&questionId=" . $questionId . "&postId=" . $postId );
+            reDirect("?module=home&page=reply/question&questionId=" . $questionId . "&postId=" . $postId);
         }
     }
 }
@@ -187,7 +186,7 @@ layouts('headerPost', $data);
                     <div class="container posts-content" style="position: relative;">
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="card mb-4">
+                            <div class="card mb-4">
                                     <div class="card-body">
                                         <div style="margin-bottom: 6px;">
                                             <h6 style="margin: 0; position: absolute; right: 48%;top: 14px; font-weight: 300;">Question</h6>
@@ -197,13 +196,19 @@ layouts('headerPost', $data);
                                             </a>
                                             <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
                                                 
-     <h6 style="margin: 0 ;padding: 0; font-size: 18px; font-weight: 600;">
-                                                    <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userQuestionDetail['id'] ?>">
+                                            <div style="display: flex; align-items: flex-start">
+                                                    <div style="padding-right: 6px;">
 
-                                                        <?php echo $userQuestionDetail['fullname'] ?>
-                                                    </a>
-                                                </h6>
-                                                <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
+                                                        <h6 style="margin: 0 ;padding: 0; font-size: 18px; font-weight: 600;">
+                                                            <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userQuestionDetail['id'] ?>">
+
+                                                                <?php echo $userQuestionDetail['fullname'] ?>
+                                                            </a>
+                                                        </h6>
+                                                        <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
+                                                    </div>
+                                                    <?php echo checkAdminInList($userIdQuestion) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
+                                                </div>
                                             </div>
                                         </div>
                                         <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
@@ -270,7 +275,7 @@ layouts('headerPost', $data);
                                                     <h6 style="margin: 0; position: absolute; right: 49.5%;top: 14px; font-weight: 300;">Reply</h6>
                                                     <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
-                                                    <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle" >
+                                                        <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle">
 
                                                     </a>
 
@@ -289,8 +294,8 @@ layouts('headerPost', $data);
                                                     </a>
 
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                    <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit reply</a>
-                                                    <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete reply</a>
+                                                        <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&userIdEdit=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit reply</a>
+                                                        <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete reply</a>
                                                     </div>
                                                 </div>
                                                 <p>
@@ -366,14 +371,14 @@ layouts('headerPost', $data);
 
                             </div>
 
-                            
+
                             <input id="questionId" type="hidden" name='questionId' value="<?php echo $questionId; ?>">
 
                             <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn small rounded">
-                                <a style="padding: 12px 84px"  href="?module=home&page=reply/question&questionId=<?php echo $questionId;?>&postId=<?php echo $postId;?>">Back</a>
+                                <a style="padding: 12px 84px" href="?module=home&page=reply/question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>">Back</a>
                             </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
                         </form>
@@ -391,7 +396,7 @@ layouts('headerPost', $data);
 
     document.getElementById('addModal').onclick = function(e) {
         console.log(e.target.className);
-        if(e.target.className === "modal fade") {
+        if (e.target.className === "modal fade") {
             window.location.href = "?module=home&page=reply/question&questionId=" + document.getElementById('questionId').value + "&postId=" + document.getElementById('postId').value;
         }
     }
@@ -420,14 +425,15 @@ layouts('headerPost', $data);
             mybutton.style.display = "none";
         }
     }
+
     function handleScrollWindow() {
-    if(listReply.scrollTop > 20 && window.scrollY>100) {
-        mybutton.style.display = "none";
-    } else if (listReply.scrollTop > 20 && window.scrollY<100){
-        mybutton.style.display = "block";
-        
+        if (listReply.scrollTop > 20 && window.scrollY > 100) {
+            mybutton.style.display = "none";
+        } else if (listReply.scrollTop > 20 && window.scrollY < 100) {
+            mybutton.style.display = "block";
+
+        }
     }
-}
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
         listReply.scrollTop = 0; // For Safari

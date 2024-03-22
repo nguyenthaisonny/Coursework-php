@@ -208,13 +208,19 @@ layouts('headerPost', $data);
                                                         <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
                                                     </a>
                                                     <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
-                                                        <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight:600;">
-                                                            <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
-
-                                                                <?php echo $userDetail['fullname'] ?>
-                                                            </a>
-                                                        </h6>
-                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+                                                    <div style="display: flex; align-items: flex-start;">
+                                                        <div  style="padding: 0 6px;">
+                                                            <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight:600;">
+                                                                <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+    
+                                                                    <?php echo $userDetail['fullname'] ?>
+                                                                </a>
+                                                            </h6>
+                                                            <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+                                                        </div>
+                                                        
+                                                        <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
+                                                    </div>
                                                     </div>
                                                 </div>
                                                 <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
@@ -239,7 +245,7 @@ layouts('headerPost', $data);
                                                 </p>
                                                 <div class="text-center">
 
-                                                    <?php echo !empty($item['questionImage']) ? '<img style="padding-bottom: 10px" src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
+                                                    <?php echo !empty($item['questionImage']) ? '<a href="?module=home&page=reply/question&questionId='.$item['id'].'&postId='. $item['postId'] .'" ><img style="padding-bottom: 10px" src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" ></a>' :  null ?>
                                                 </div>
 
 

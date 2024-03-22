@@ -177,11 +177,16 @@ layouts('headerEditPost', $data);
                                         <div style="display: flex;align-items: flex-start;">
                                             <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>"><img src="<?php echo $userDetail['profileImage'] ? $userDetail['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
 
-                                            <div style="padding-left: 6px;">
+                                            <div style="display: flex; ">
 
-                                               <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight: 600;"><a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></p>
+                                                <div style="padding: 0 6px;">
 
+                                                    <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight: 600;"><a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
+                                                    <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['update_at']); ?></p>
+
+                                                </div>
+                                                
+                                                <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
                                             </div>
 
                                         </div>

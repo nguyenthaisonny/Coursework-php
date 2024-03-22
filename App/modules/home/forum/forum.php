@@ -125,7 +125,7 @@ layouts('headerForum', $data);
 
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
-                                        <div style="display: flex;align-items: flex-start;align-items: center;">
+                                        <div style="display: flex;align-items: flex-start;">
 
                                             <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>"><img src="<?php echo $userDetail['profileImage'] ? $userDetail['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                             <div style="display: flex; ">
@@ -137,7 +137,7 @@ layouts('headerForum', $data);
 
                                                 </div>
                                                 
-                                                <?php echo checkAdminNotSignOut() ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
+                                                <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
                                             </div>
 
                                         </div>
@@ -180,32 +180,32 @@ layouts('headerForum', $data);
                         <?php
                         endforeach;
                     else :
-                        ?>
-                        <tr>
-                            <td>
-                                <div class="alert alert-danger text-center">None of Post</div>
-                            </td>
-                        </tr>
-                    <?php
+        ?>
+        <tr>
+            <td>
+                <div class="alert alert-danger text-center">None of Post</div>
+            </td>
+        </tr>
+    <?php
 
                     endif;
-                    ?>
+    ?>
 
-                </ul>
-                <!-- /Forum List -->
+    </ul>
+    <!-- /Forum List -->
 
-                <!-- Forum Detail -->
+    <!-- Forum Detail -->
 
-                <!-- /Forum Detail -->
+    <!-- /Forum Detail -->
 
-                <!-- /Inner main body -->
-            </div>
-            <!-- /Inner main -->
+    <!-- /Inner main body -->
         </div>
-
-
-
+        <!-- /Inner main -->
     </div>
+
+
+
+</div>
 </div>
 <script>
     $(function() {

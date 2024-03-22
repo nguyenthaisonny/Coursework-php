@@ -239,6 +239,16 @@ function checkAdminNotSignOut() {
     }
     return $checkAdmin;
 }
+function checkAdminInList($userId) {
+    $checkAdmin = false;
+    $query = getRaw("SELECT role FROM users WHERE id='$userId'");
+    $role = $query['role'];
+    if($role == 'admin') {
+        $checkAdmin = true;
+    }
+    return $checkAdmin;
+    
+}
 function formatTimeDifference($inputDate) {
     // Convert input date to a DateTime object
     $inputDateTime = new DateTime($inputDate);
