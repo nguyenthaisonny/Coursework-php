@@ -207,7 +207,8 @@ layouts('headerPost', $data);
 
                                             </a>
                                             <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
-                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px">
+                                                
+     <h6 style="margin: 0 ;padding: 0; font-size: 18px; font-weight: 600;">
                                                     <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userQuestionDetail['id'] ?>">
 
                                                         <?php echo $userQuestionDetail['fullname'] ?>

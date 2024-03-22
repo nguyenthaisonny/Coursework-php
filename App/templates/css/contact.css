@@ -86,10 +86,14 @@
   width: 100%;
 }
 
-.btn-contact-bg:hover,
+.btn-contact-bg:hover {
+  background-color: #fff;
+  color: #7564e5;
+} */
+
 .btn-contact-bg:focus {
-  background: #232434;
-  color: #fff;
+  background: #fff !important;
+  color: #7564e5;
 }
 
 /*START ADDRESS*/

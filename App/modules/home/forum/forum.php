@@ -125,28 +125,33 @@ layouts('headerForum', $data);
 
                                 <div class="card-body p-2 p-sm-3" style="display: flex;justify-content: space-between;">
                                     <div class="media forum-item">
-                                        <div style="display: flex;align-items: flex-start;">
+                                        <div style="display: flex;align-items: flex-start;align-items: center;">
 
                                             <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>"><img src="<?php echo $userDetail['profileImage'] ? $userDetail['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50" alt="User" /></a>
-                                            <div style="padding-left: 6px;">
+                                            <div style="display: flex; ">
 
-                                                <h6 style="margin: 0 ;padding: 0; font-size: 16px"><a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['update_at']); ?></p>
+                                                <div style="padding: 0 6px;">
 
+                                                    <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight: 600;"><a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
+                                                    <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['update_at']); ?></p>
+
+                                                </div>
+                                                
+                                                <?php echo checkAdminNotSignOut() ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null ;?>
                                             </div>
 
                                         </div>
                                         <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
-                                            <a  href="#"  id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
+                                            <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
                                             </a>
 
-                                            <div  class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/editPost&postId=<?php echo $item['id'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i>   Edit post</a>
-                                            <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>Delete post</a>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/editPost&postId=<?php echo $item['id'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit post</a>
+                                                <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>Delete post</a>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="media-body" style="margin-top: 8px;">
                                             <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
                                             <p style="margin-bottom: 20px;">
