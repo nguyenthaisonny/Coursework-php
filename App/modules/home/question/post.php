@@ -19,8 +19,8 @@ if (isGet()) {
     if (!empty($filterAll['postId'])) {
         $postId = $filterAll['postId'];
         $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
-        
-       
+
+
         $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
         if (!empty($listQuestion)) {
             //exist
@@ -108,7 +108,7 @@ layouts('headerPost', $data);
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
 
-                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%; ">
                         <a style="padding: 12px 38px;" href="?module=home&page=question/addQuestion&postId=<?php echo $postId; ?>">
 
                             New question <i class="fa-solid fa-plus"></i>
@@ -179,25 +179,28 @@ layouts('headerPost', $data);
                 <!-- list questions -->
                 <div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
                     <button id="myBtn" title="Go to top" style="border-radius: 50%; right: 168px"><i class="fa-solid fa-arrow-up"></i></button>
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
-                    <?php
-                    if (!empty($listQuestion)) :
-                        $count = 0;
+                    <a style="margin-bottom: 16px" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
+                    <div class="row">
                         
-                        foreach ($listQuestion as $item) :
-                            $userId = $item['userId'];
-                            $questionId = $item['id'];
-                            $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
-                            $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
-                            
-                            $count++;
+                        <?php
+                        if (!empty($listQuestion)) :
+                            $count = 0;
 
-                    ?>
-                            <div class="container posts-content" style="position: relative;">
+                            foreach ($listQuestion as $item) :
+                                $userId = $item['userId'];
+                                $questionId = $item['id'];
+                                $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
+                                $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
 
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="card mb-4">
+                                $count++;
+
+                        ?>
+                                
+
+
+                                    <div class="col-lg-6 mb-4">
+
+                                        <div class="card ">
                                             <div class="card-body">
                                                 <div style="margin-bottom: 6px;">
                                                     <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
@@ -220,13 +223,13 @@ layouts('headerPost', $data);
                                                     </a>
 
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                        <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i>  Edit question</a>
-                                                        <a class="dropdown-item"  href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>  Delete question</a>
+                                                        <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
+                                                        <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div style="position: absolute; right: 12px; bottom: 44px;">
-                                                    <?php echo $countReply == 0 ? null : '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId']. '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
+                                                    <?php echo $countReply == 0 ? null : '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
 
 
                                                 </div>
@@ -257,22 +260,24 @@ layouts('headerPost', $data);
                                         </div>
                                     </div>
 
-                                </div>
-                            </div>
-                        <?php
+                                
+                            <?php
 
-                        endforeach;
-                    else :
-                        ?>
-                        <tr>
-                            <td>
-                                <div class="alert alert-danger text-center">None of question</div>
-                            </td>
-                        </tr>
-                    <?php
+                            endforeach; ?>
+                    </div>
+                <?php
+                        else :
+                ?>
 
-                    endif;
-                    ?>
+                    <tr>
+                        <td>
+                            <div class="alert alert-danger text-center">None of question</div>
+                        </td>
+                    </tr>
+                <?php
+
+                        endif;
+                ?>
 
                 </div>
                 <!-- /Forum Detail -->

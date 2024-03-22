@@ -19,7 +19,7 @@ if (isGet()) {
     if (!empty($filterAll['postId'])) {
         $postId = $filterAll['postId'];
         $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
-       
+
         // check whether exist in database
         //if exist => get info
         //if not exist => navigat to list page
@@ -39,7 +39,7 @@ if (isPost()) {
             $loginToken = getSession('loginToken');
             $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
             $userIdLogin = $queryToken['userId'];
-            
+
             $postId = $filterAll['postId'];
             //handle Image
             if (!empty($_FILES["questionImage"]['name'])) {
@@ -176,101 +176,106 @@ layouts('headerPost', $data);
                 ?>
 
 
-                <!-- list questions -->
                 <div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
                     <button id="myBtn" title="Go to top" style="border-radius: 50%; right: 168px"><i class="fa-solid fa-arrow-up"></i></button>
-                    <a href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
-                    <?php
-                    if (!empty($listQuestion)) :
-                        $count = 0;
-                        
-                        foreach ($listQuestion as $item) :
-                            $userId = $item['userId'];
-                            $questionId = $item['id'];
-                            $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
-                            $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
-                            $count++;
+                    <a style="margin-bottom: 16px" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
+                    <div class="row">
 
-                    ?>
-                            <div class="container posts-content" style="position: relative;">
+                        <?php
+                        if (!empty($listQuestion)) :
+                            $count = 0;
 
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="card mb-4">
-                                            <div class="card-body">
-                                                <div style="margin-bottom: 6px;">
-                                                    <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+                            foreach ($listQuestion as $item) :
+                                $userId = $item['userId'];
+                                $questionId = $item['id'];
+                                $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
+                                $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
 
-                                                        <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
-                                                    </a>
-                                                    <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
-                                                        <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight:600;">
-                                                            <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+                                $count++;
 
-                                                                <?php echo $userDetail['fullname'] ?>
-                                                            </a>
-                                                        </h6>
-                                                        <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
-                                                    </div>
+                        ?>
+
+
+
+                                <div class="col-lg-6 mb-4">
+
+                                    <div class="card ">
+                                        <div class="card-body">
+                                            <div style="margin-bottom: 6px;">
+                                                <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+
+                                                    <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50">
+                                                </a>
+                                                <div class="media-body ml-3" style="position: absolute; left: 72px; top: 14px;">
+                                                    <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight:600;">
+                                                        <a style="color: black;" href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+
+                                                            <?php echo $userDetail['fullname'] ?>
+                                                        </a>
+                                                    </h6>
+                                                    <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
                                                 </div>
-                                                <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
-                                                    <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
-                                                    </a>
+                                            </div>
+                                            <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
+                                                <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
+                                                </a>
 
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                        <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i>  Edit post</a>
-                                                        <a class="dropdown-item"  href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>  Delete post</a>
-                                                    </div>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                    <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
+                                                    <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
                                                 </div>
-                                                <div style="position: absolute; right: 12px; bottom: 44px;">
-                                                <?php echo $countReply == 0 ? null : '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '&userIdEdit=' . $item['userId'] . '&userIdPost=' . $userIdPost . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
+                                            </div>
 
-
-                                                </div>
-                                                <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
-                                                <p>
-                                                    <?php echo $item['content'] ?>
-                                                </p>
-                                                <div class="text-center">
-
-                                                    <?php echo !empty($item['questionImage']) ? '<img style="padding-bottom: 10px" src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
-                                                </div>
+                                            <div style="position: absolute; right: 12px; bottom: 44px;">
+                                                <?php echo $countReply == 0 ? null : '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' comments</a>'; ?>
 
 
                                             </div>
-                                            <div class="card-footer" style="display: flex; justify-content: space-evenly;">
-                                                <a href="javascript:void(0)" class="d-inline-block text-muted">
-                                                    <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
+                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="text-body"><?php echo $item['title'] ?></a></h5>
+                                            <p>
+                                                <?php echo $item['content'] ?>
+                                            </p>
+                                            <div class="text-center">
 
-                                                </a>
-                                                <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&userIdEdit=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
-
-                                                    <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
-                                                </a>
-                                                <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                                    <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
-                                                </a>
+                                                <?php echo !empty($item['questionImage']) ? '<img style="padding-bottom: 10px" src=' . $item['questionImage'] . '  class="img-fluid" alt="Responsive image" >' :  null ?>
                                             </div>
+
+
+                                        </div>
+                                        <div class="card-footer" style="display: flex; justify-content: space-evenly;">
+                                            <a href="javascript:void(0)" class="d-inline-block text-muted">
+                                                <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
+
+                                            </a>
+                                            <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="d-inline-block text-muted ml-3">
+
+                                                <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
+                                                <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
+                                            </a>
                                         </div>
                                     </div>
-
                                 </div>
-                            </div>
-                        <?php
 
-                        endforeach;
-                    else :
-                        ?>
-                        <tr>
-                            <td>
-                                <div class="alert alert-danger text-center">None of question</div>
-                            </td>
-                        </tr>
-                    <?php
 
-                    endif;
-                    ?>
+                            <?php
+
+                            endforeach; ?>
+                    </div>
+                <?php
+                        else :
+                ?>
+                    <tr>
+                        <td>
+                            <div class="alert alert-danger text-center">None of question</div>
+                        </td>
+                    </tr>
+                <?php
+
+                        endif;
+                ?>
 
                 </div>
                 <!-- /Forum Detail -->
@@ -305,7 +310,7 @@ layouts('headerPost', $data);
 
                             </div>
 
-                            
+
 
                             <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
                             <div class="modal-footer">
@@ -329,7 +334,7 @@ layouts('headerPost', $data);
 
     document.getElementById('addModal').onclick = function(e) {
         console.log(e.target.className);
-        if(e.target.className === "modal fade") {
+        if (e.target.className === "modal fade") {
             window.location.href = "?module=home&page=question/post&postId=" + document.getElementById('postId').value;
         }
     }
