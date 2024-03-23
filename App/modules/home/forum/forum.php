@@ -121,7 +121,7 @@ layouts('headerForum', $data);
                         <option value="3">None of question</option>
                         <option value="3">No Replies Yet</option>
                     </select>
-                    <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 36px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
+                    <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 26px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
                     <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
                     </a>' : null; ?>
 

@@ -179,7 +179,7 @@ layouts('headerEditPost', $data);
                         <option value="3">None of question</option>
                         <option value="3">No Replies Yet</option>
                     </select>
-                    <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 36px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
+                    <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 26px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
                     <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
                     </a>' : null; ?>
                 </div>
@@ -249,7 +249,9 @@ layouts('headerEditPost', $data);
                                                 <i class="fa-solid fa-door-open icon-hover" style="font-size: 20px;"></i>
 
                                             </a>
-                                            <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;"><?php echo $questionCount ?> <?php echo $questionCount ?> <?php echo $questionCount==1 ? 'question' : 'questions'?></span>
+                                            <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;">
+                                                <a class="hover-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>"><?php echo $questionCount ?> <?php echo ($questionCount == 1 || $questionCount == 0 )? 'question' : 'questions'?></a>
+                                            </span>
 
                                         </div>
                                     </div>

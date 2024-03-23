@@ -279,9 +279,9 @@ layouts('headerPost', $data);
                                                     if($countReply == 0) {
                                                         echo null;
                                                     } else if($countReply == 1) {
-                                                        echo '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' reply</a>';
+                                                        echo '<a class="hover-item" href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;">' . $countReply . ' reply</a>';
                                                     } else {
-                                                        echo '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' replies</a>';
+                                                        echo '<a class="hover-item" href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;">' . $countReply . ' replies</a>';
 
                                                     }
                                                 }
