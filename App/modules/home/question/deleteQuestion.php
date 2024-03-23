@@ -25,9 +25,13 @@ if (getSession('loginToken')) {
     echo $userIdDelete;
     
     if ($userIdLogin == $userIdDelete || checkAdminNotSignOut()) {
-        $deleteReplies = delete('replies', "questionId = $questionId ");
-        $deleteStatus = delete('questions', "id='$questionId'");
-        if ($deleteStatus) {
+        $listReply = getRaws("SELECT id FROM replies WHERE questionId = '$questionId'");
+        foreach($listReply as $item) {
+            $questionId = $item['id'];
+            $deleteReplies = delete('replies', "questionId = $questionId ");
+        }
+        $deleteQuestion = delete('questions', "id='$questionId'");
+        if ($deleteQuestion) {
 
             setFlashData('smg', 'Delete question successfully!');
             setFlashData('smg_type', 'success');

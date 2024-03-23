@@ -8,8 +8,12 @@ if(!$isAdmin) {
 }
 //check whether id exist
 // delete login token -> delete user
-$deleteStatus = delete('posts', "1=1");
-if($deleteStatus) {
+$deleteAllReply = delete('replies', "1=1");
+$deleteAllQuestion = delete('qeustions', "1=1");
+
+$deleteAllPost = delete('posts', "1=1");
+
+if($deleteAllPost) {
     setFlashData('smg', 'Delete all successfully');
     setFlashData('smg_type', 'success');
 } else {

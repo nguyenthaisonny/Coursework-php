@@ -23,10 +23,16 @@ if(!empty($filterAll['postId'] && !empty($filterAll['userIdDelete']))) {
         
         if ($userId == $_GET['userIdDelete'] || checkAdminNotSignOut()) {
     
-            $listQuestion = getRaws("SELECT * FROM questions WHERE postId = '$postId' ");
+            $listQuestion = getRaws("SELECT id FROM questions WHERE postId = '$postId' ");
+            //delete Reply
             foreach($listQuestion as $item) {
                 $questionId = $item['id'];
                 $deleteReply = delete('replies', "questionId='$questionId'");
+            }
+            //deleteQuestion
+            foreach($listQuestion as $item) {
+                $questionId = $item['id'];
+                $deleteQuestion = delete('questions', "id='$questionId'");
             }
             $deleteQuestion = delete('questions', "postId='$postId'");
             $deleteStatus = delete('posts', "id='$postId'");
