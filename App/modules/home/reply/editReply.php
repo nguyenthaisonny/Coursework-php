@@ -30,7 +30,18 @@ if (!empty($filterAll['replyId']) && !empty($filterAll['questionId']) ) {
     $questionDetail = getRaw("SELECT * FROM questions WHERE id = '$questionId'");
    
     $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
+    $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
+    if (!empty($_GET['type'])) {
+        $newListReply = [];
+        switch ($_GET['type']) {
+            case 'oldest':
 
+                $newListReply = getRaws("SELECT * FROM replies  WHERE questionId='$questionId' ORDER BY update_at");
+                break;
+        }
+    } else {
+        $newListReply = $listReply;
+    }
  
 }
 
@@ -92,9 +103,14 @@ if (isPost()) {
                 setFlashData('smg', 'Can not edit reply of another user!'.$replyId);
                 setFlashData('smg_type', 'danger');
             }
-            $condition = "id='$replyId'";
+            
 
-            reDirect("?module=home&page=reply/question&questionId=" . $questionId . "&postId=" . $postId);
+            if (!empty($_GET['type'])) {
+                reDirect('?module=home&page=reply/question&questionId='. $question .'&postId=' . $postId . '&type=' . $_GET['type']);
+            } else {
+    
+                reDirect('?module=home&page=reply/question&questionId='. $questionId .'&postId=' . $postId);
+            }
         }
     }
 }
@@ -146,12 +162,8 @@ layouts('headerPost', $data);
                                     <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
                                         <div class="simplebar-content" style="padding: 16px;">
                                             <nav class="nav nav-pills nav-gap-y-1 flex-column">
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon active">All Replies</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular this week</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular all time</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Solved</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">None of question</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">No replies yet</a>
+                                            <a id='latest' href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo empty($_GET['type']) ? 'active' : '' ?>">Latest</a>
+                                                <a id="oldest" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'oldest') ? 'active' : '' ?>">Oldest</a>
                                             </nav>
                                         </div>
                                     </div>
@@ -278,9 +290,9 @@ layouts('headerPost', $data);
                         </div>
                     </div>
                     <?php
-                    if (!empty($listReply)) :
+                    if (!empty($newListReply)) :
                         $count = 0;
-                        foreach ($listReply as $item) :
+                        foreach ($newListReply as $item) :
                             $userId = $item['userId'];
 
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
@@ -404,6 +416,7 @@ layouts('headerPost', $data);
 
                             
                             <input type="hidden" name='replyId' value="<?php echo $replyId; ?>">
+                            <input type="hidden" id="type" value="<?php echo !empty($_GET['type']) ? $_GET['type'] : '' ?>">
                            
                             <input id="questionId" type="hidden" name='questionId' value="<?php echo $questionId; ?>">
 
@@ -411,7 +424,7 @@ layouts('headerPost', $data);
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn  rounded small">
-                                <a style="padding: 12px 84px"  href="?module=home&page=reply/question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>">Back</a>
+                                <a style="padding: 12px 84px" href="?module=home&page=reply/question&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>">Back</a>
 
                             </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
@@ -424,18 +437,49 @@ layouts('headerPost', $data);
     </div>
 </div>
 <script>
-    // handle modal
     var myModal = new bootstrap.Modal(document.getElementById('editModal'), {})
     myModal.show()
 
     document.getElementById('editModal').onclick = function(e) {
-        console.log(e.target.className);
-        if(e.target.className === "modal fade") {
-            window.location.href = "?module=home&page=reply/question&questionId=" + document.getElementById('questionId').value + "&postId=" + document.getElementById('postId').value ;
+        
+        if (e.target.className === "modal fade") {
+            console.log(1);
+            if (document.getElementById('type').value != '') {
+
+                window.location.href = '?module=home&page=reply/question&questionId=' + document.getElementById('questionId').value + '&postId=' + document.getElementById('postId').value + '&type=' + document.getElementById('type').value;
+            } else {
+                window.location.href = '?module=home&page=reply/question&questionId=' + document.getElementById('questionId').value + '&postId=' + document.getElementById('postId').value
+            }
         }
     }
 </script>
+<script>
+    //handle click sort case
+    const latest = document.getElementById('latest');
 
+    latest.onclick = function(e) {
+
+        const urlParams = new URLSearchParams('?module=home&page=reply/question&questionId=' + document.getElementById('questionId').value + '&postId=' +  document.getElementById('postId').value);
+
+
+
+        window.location.search = urlParams;
+
+
+
+    }
+    const oldest = document.getElementById('oldest');
+
+    oldest.onclick = function(e) {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('type', 'oldest');
+        window.location.search = urlParams;
+
+
+
+    }
+</script>
 <?php
 layouts('footerIn')
 ?>

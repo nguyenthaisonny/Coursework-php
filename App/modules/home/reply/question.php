@@ -28,6 +28,19 @@ if (!empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
     $userQuestionDetail = getRaw("SELECT * FROM users WHERE id='$userIdQuestion'");
 
     $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
+    if (!empty($_GET['type'])) {
+        $newListReply = [];
+        switch ($_GET['type']) {
+            case 'oldest':
+
+                $newListReply = getRaws("SELECT * FROM replies  WHERE questionId='$questionId' ORDER BY update_at");
+                break;
+
+            
+        }
+    } else {
+        $newListReply = $listReply;
+    }
     $countReply = countRow("SELECT id FROM replies WHERE questionId='$questionId'");
     $userPostDetail = getRaw("SELECT * FROM users WHERE id='$userIdPost'");
 }
@@ -60,7 +73,7 @@ layouts('headerPost', $data);
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
                     <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a style="padding: 12px 52px" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>">
+                        <a style="padding: 12px 52px" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">
 
                             New reply <i class="fa-solid fa-plus"></i>
                         </a>
@@ -80,12 +93,8 @@ layouts('headerPost', $data);
                                     <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
                                         <div class="simplebar-content" style="padding: 16px;">
                                             <nav class="nav nav-pills nav-gap-y-1 flex-column">
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon active">All Replies</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular this week</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Popular all time</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Solved</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">None of question</a>
-                                                <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">No replies yet</a>
+                                                <a id='latest' href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo empty($_GET['type']) ? 'active' : '' ?>">Latest</a>
+                                                <a id="oldest" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'oldest') ? 'active' : '' ?>">Oldest</a>
                                             </nav>
                                         </div>
                                     </div>
@@ -164,24 +173,23 @@ layouts('headerPost', $data);
                                             </a>
 
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editQuestionInReplyPage&questionId=<?php echo $questionId ?>&postId=<?php echo $postId ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
+                                                <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editQuestionInReplyPage&questionId=<?php echo $questionId ?>&postId=<?php echo $postId ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
                                                 <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteQuestionInReplyPage&questionId=<?php echo $questionDetail['id'] ?>&userIdDelete=<?php echo $questionDetail['userId'] ?>&postId=<?php echo $questionDetail['postId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
                                             </div>
                                         </div>
 
                                         <div style="position: absolute; right: 12px; bottom: 44px;">
-                                        <?php 
-                                                if($countReply >= 0) {
-                                                    if($countReply == 0) {
-                                                        echo null;
-                                                    } else if($countReply == 1) {
-                                                        echo '<a href="?module=home&page=reply/question&questionId=' . $questionId . '&postId=' . $postId . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' reply</a>';
-                                                    } else {
-                                                        echo '<a href="?module=home&page=reply/question&questionId=' . $questionId . '&postId=' . $postId . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' replies</a>';
-
-                                                    }
+                                            <?php
+                                            if ($countReply >= 0) {
+                                                if ($countReply == 0) {
+                                                    echo null;
+                                                } else if ($countReply == 1) {
+                                                    echo '<a href="?module=home&page=reply/question&questionId=' . $questionId . '&postId=' . $postId . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' reply</a>';
+                                                } else {
+                                                    echo '<a href="?module=home&page=reply/question&questionId=' . $questionId . '&postId=' . $postId . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' replies</a>';
                                                 }
-                                               ?>
+                                            }
+                                            ?>
                                         </div>
 
 
@@ -213,9 +221,9 @@ layouts('headerPost', $data);
                         </div>
                     </div>
                     <?php
-                    if (!empty($listReply)) :
+                    if (!empty($newListReply)) :
                         $count = 0;
-                        foreach ($listReply as $item) :
+                        foreach ($newListReply as $item) :
                             $userId = $item['userId'];
 
                             $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
@@ -262,7 +270,7 @@ layouts('headerPost', $data);
                                                     </a>
 
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                        <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&questionId=<?php echo $item['questionId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit reply</a>
+                                                        <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/editReply&replyId=<?php echo $item['id'] ?>&questionId=<?php echo $item['questionId'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit reply</a>
                                                         <a class="dropdown-item" style="padding: 6px 7px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/deleteReply&replyId=<?php echo $item['id'] ?>&userIdReply=<?php echo $item['userId'] ?>&postId=<?php echo $postId ?>&questionId=<?php echo $item['questionId'] ?>" onclick="return confirm('Delete this reply?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete reply</a>
                                                     </div>
                                                 </div>
@@ -318,12 +326,38 @@ layouts('headerPost', $data);
         </div>
 
 
-
+        <input id='postId' type="hidden" value="<?php echo $postId?>" >
+        <input id='questionId' type="hidden" value="<?php echo $questionId?>" >
 
     </div>
 </div>
 
 <script>
+    //handle click sort case
+    const latest = document.getElementById('latest');
+
+    latest.onclick = function(e) {
+
+        const urlParams = new URLSearchParams('?module=home&page=reply/question&questionId=' + document.getElementById('questionId').value + '&postId=' +  document.getElementById('postId').value);
+
+
+
+        window.location.search = urlParams;
+
+
+
+    }
+    const oldest = document.getElementById('oldest');
+
+    oldest.onclick = function(e) {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('type', 'oldest');
+        window.location.search = urlParams;
+
+
+
+    }
     // Get the button:
     let mybutton = document.getElementById("myBtn");
     let listReply = document.getElementById("listReply");

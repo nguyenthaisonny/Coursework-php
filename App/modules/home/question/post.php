@@ -384,6 +384,7 @@ layouts('headerPost', $data);
     </div>
 </div>
 <script>
+    //handle click sort case
     const latest = document.getElementById('latest');
 
     latest.onclick = function(e) {

@@ -25,7 +25,7 @@ if (getSession('loginToken')) {
     echo $userIdDelete;
     
     if ($userIdLogin == $userIdDelete || checkAdminNotSignOut()) {
-
+        $deleteReplies = delete('replies', "questionId = $questionId ");
         $deleteStatus = delete('questions', "id='$questionId'");
         if ($deleteStatus) {
 
