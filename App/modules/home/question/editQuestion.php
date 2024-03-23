@@ -28,7 +28,8 @@ if (!empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
         switch ($_GET['type']) {
             case 'oldest':
 
-                $newListQuestion = getRaws("SELECT * FROM questions ORDER BY update_at");
+                $newListQuestion = getRaws("SELECT * FROM questions  WHERE postId='$postId' ORDER BY update_at");
+
                 break;
 
             case 'popular':
