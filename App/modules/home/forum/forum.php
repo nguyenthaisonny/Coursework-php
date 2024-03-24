@@ -290,7 +290,7 @@ layouts('headerForum', $data);
     }
     
 
-    //handle delete all
+    //handle tooltip
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
     })

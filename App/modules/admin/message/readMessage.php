@@ -59,7 +59,7 @@ layouts('headerReadMessage', $data);
             </ul>
         </nav>
         <main class="inbox">
-            <div class="toolbar">
+            <div style="position: relative;" class="toolbar">
                 <div class="btn-group">
                     <button type="button" class="btn btn-light">
                         <span class="fa fa-envelope"></span>
@@ -108,6 +108,9 @@ layouts('headerReadMessage', $data);
                         <span class="fa fa-chevron-right"></span>
                     </a>
                 </div>
+                <a id="deleteAll" href="?module=admin&page=message/deleteAllMessage" onclick="return confirm('Delete all message?')" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 16px; top: 12px; color: rgb(254, 44, 85); " type="button" href="">
+                    <i class="fa-solid fa-delete-left" style="font-size: 26px"></i>
+                </a>
             </div>
             <?php
             if (!empty($smg)) {
@@ -168,21 +171,19 @@ layouts('headerReadMessage', $data);
     </div>
 </div>
 <script>
-    // $(function() {
-    //     $('[data-toggle="tooltip"]').tooltip()
-    // })
-    // let deleteAll = document.getElementById("deleteAll");
-    // deleteAll.onclick = function() {
-    //     return confirm("Delete all")
-    // }
-    // Get the button:
-
-    // Get the button:
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    let deleteAll = document.getElementById("deleteAll");
+    deleteAll.onclick = function() {
+        return confirm("Delete all")
+    }
+   //handle scroll top
     let mybutton = document.getElementById("myBtn");
     mybutton.onclick = function() {
         topFunction();
     }
-    // When the user scrolls down 20px from the top of the document, show the button
+    
     window.onscroll = function() {
         scrollFunction()
     };
