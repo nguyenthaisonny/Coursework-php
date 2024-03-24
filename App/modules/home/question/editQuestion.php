@@ -196,13 +196,7 @@ layouts('headerEditQuestion', $data);
                 <!-- Inner main header -->
                 <div class="inner-main-header">
 
-                    <select class="custom-select custom-select-sm w-auto mr-1">
-                        <option selected="">Latest</option>
-                        <option value="1">Popular</option>
-                        <option value="3">Solved</option>
-                        <option value="3">None of question</option>
-                        <option value="3">No Replies Yet</option>
-                    </select>
+                   
 
                 </div>
 

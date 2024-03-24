@@ -170,18 +170,15 @@ layouts('headerEditPost', $data);
             <!-- Inner main -->
             <div class="inner-main">
                 <!-- Inner main header -->
-                <div class="inner-main-header">
-                    <a class="nav-link nav-icon rounded-circle nav-link-faded mr-3 d-md-none" href="#" data-toggle="inner-sidebar"><i class="material-icons">arrow_forward_ios</i></a>
-                    <select class="custom-select custom-select-sm w-auto mr-1">
-                        <option selected="">Latest</option>
-                        <option value="1">Popular</option>
-                        <option value="3">Solved</option>
-                        <option value="3">None of question</option>
-                        <option value="3">No Replies Yet</option>
-                    </select>
+                <div  class="inner-main-header" style="display: flex;">
+
+                    <div style="margin: auto; font-size: 20px; color: rgb(104, 85, 224);font-weight: 600;">
+                    Welcome to our forum community <span><i style="    color: rgb(254, 44, 85); " class="fa-solid fa-heart"></i></span></div>
                     <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 26px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
                     <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
                     </a>' : null; ?>
+
+
                 </div>
                 <?php
                 if (!empty($smg)) {

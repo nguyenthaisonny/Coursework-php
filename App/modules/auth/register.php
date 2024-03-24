@@ -38,10 +38,18 @@ if (isPost()) {
     //valide phone number: required, true notation
     if (empty($filterAll['phone'])) {
         $errors['phone']['required'] = 'Phone number is required!';
+        
     } else {
         if (!isPhone($filterAll['phone'])) {
             $errors['phone']['isPhone'] = 'Invalid phone number';
+        } 
+        $phone = $filterAll['phone'];
+        $sql = "SELECT id FROM users WHERE phone = '$phone'";
+        if (countRow($sql) > 0) {
+            $errors['phone']['unique'] = 'This phone number has already existed!';
         }
+
+        
     }
     //validate passwoed: required, min 8, 
     if (empty($filterAll['password'])) {

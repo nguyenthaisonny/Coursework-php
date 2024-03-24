@@ -86,10 +86,10 @@ layouts('headerForum', $data);
                                                 <a id='latest' href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo empty($_GET['type']) ? 'active' : '' ?>">Latest</a>
                                                 <a id="oldest" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'oldest') ? 'active' : '' ?>">Oldest</a>
                                                 <a id="popular" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'popular') ? 'active' : '' ?>">Popular</a>
-                                                
+
 
                                                 <a id="noneQuestion" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'noneQuestion') ? 'active' : '' ?>">None of question</a>
-                                                
+
                                             </nav>
                                         </div>
                                     </div>
@@ -112,15 +112,10 @@ layouts('headerForum', $data);
             <!-- Inner main -->
             <div class="inner-main">
                 <!-- Inner main header -->
-                <div class="inner-main-header" style="position: relative;">
+                <div  class="inner-main-header" style="display: flex;">
 
-                    <select class="custom-select custom-select-sm w-auto mr-1">
-                        <option selected="">Latest</option>
-                        <option value="1">Popular</option>
-                        <option value="3">Solved</option>
-                        <option value="3">None of question</option>
-                        <option value="3">No Replies Yet</option>
-                    </select>
+                    <div style="margin: auto; font-size: 20px; color: rgb(104, 85, 224);font-weight: 600;">
+                    Welcome to our forum community <span><i style="    color: rgb(254, 44, 85); " class="fa-solid fa-heart"></i></span></div>
                     <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 26px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
                     <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
                     </a>' : null; ?>
@@ -199,7 +194,7 @@ layouts('headerForum', $data);
 
                                             </a>
                                             <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;">
-                                                <a class="hover-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>"><?php echo $questionCount ?> <?php echo ($questionCount == 1 || $questionCount == 0 )? 'question' : 'questions'?></a>
+                                                <a class="hover-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>"><?php echo $questionCount ?> <?php echo ($questionCount == 1 || $questionCount == 0) ? 'question' : 'questions' ?></a>
                                             </span>
 
                                         </div>
@@ -277,7 +272,7 @@ layouts('headerForum', $data);
     }
     const popular = document.getElementById('popular');
 
-        popular.onclick = function(e) {
+    popular.onclick = function(e) {
 
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -288,7 +283,7 @@ layouts('headerForum', $data);
 
 
     }
-    
+
 
     //handle tooltip
     $(function() {

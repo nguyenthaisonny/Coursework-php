@@ -43,6 +43,30 @@ if (isGet()) {
                         }
                     }
                     break;
+                case 'noReplyYet':
+                    foreach ($listQuestion as $item) {
+                        $questionId = $item['id'];
+
+                        $loginToken = getSession('loginToken');
+                        $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+                        $userIdLogin = $queryToken['userId'];
+                        $countUserLoginReply = countRow("SELECT id FROM replies WHERE questionId='$questionId' AND userId='$userIdLogin'");
+
+                        if ($countUserLoginReply == 0) {
+                            array_push($newListQuestion, $item);
+                        }
+                    }
+                    break;
+                case 'noneReply':
+                    foreach ($listQuestion as $item) {
+                        $questionId = $item['id'];
+                        $replyCount = countRow("SELECT id FROM replies WHERE questionId = '$questionId'");
+
+                        if ($replyCount == 0) {
+                            array_push($newListQuestion, $item);
+                        }
+                    }
+                    break;
             }
         } else {
             $newListQuestion = $listQuestion;
@@ -151,6 +175,9 @@ layouts('headerPost', $data);
                                                 <a id='latest' href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo empty($_GET['type']) ? 'active' : '' ?>">Latest</a>
                                                 <a id="oldest" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'oldest') ? 'active' : '' ?>">Oldest</a>
                                                 <a id="popular" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'popular') ? 'active' : '' ?>">Popular</a>
+                                                <a id="noneReply" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'noneReply') ? 'active' : '' ?>">None of reply</a>
+
+                                                <a id="noReplyYet" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'noReplyYet') ? 'active' : '' ?>">No replies yet</a>
                                             </nav>
                                         </div>
                                     </div>
@@ -175,13 +202,7 @@ layouts('headerPost', $data);
                 <!-- Inner main header -->
                 <div class="inner-main-header">
 
-                    <select class="custom-select custom-select-sm w-auto mr-1">
-                        <option selected="">Latest</option>
-                        <option value="1">Popular</option>
-                        <option value="3">Solved</option>
-                        <option value="3">None of question</option>
-                        <option value="3">No Replies Yet</option>
-                    </select>
+                   
 
                 </div>
                 <?php
@@ -249,18 +270,17 @@ layouts('headerPost', $data);
                                             </div>
 
                                             <div style="position: absolute; right: 12px; bottom: 44px;">
-                                            <?php 
-                                                if($countReply >= 0) {
-                                                    if($countReply == 0) {
+                                                <?php
+                                                if ($countReply >= 0) {
+                                                    if ($countReply == 0) {
                                                         echo null;
-                                                    } else if($countReply == 1) {
+                                                    } else if ($countReply == 1) {
                                                         echo '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' reply</a>';
                                                     } else {
                                                         echo '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' replies</a>';
-
                                                     }
                                                 }
-                                               ?>
+                                                ?>
 
 
                                             </div>
@@ -349,7 +369,7 @@ layouts('headerPost', $data);
                             <div class="modal-footer">
                             </div>
                             <button type="button" class="mg-btn  rounded small">
-                                <a style="padding: 12px 84px" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $postId;?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">Back</a>
+                                <a style="padding: 12px 84px" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $postId; ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">Back</a>
 
                             </button>
                             <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
@@ -412,6 +432,32 @@ layouts('headerPost', $data);
         const urlParams = new URLSearchParams(window.location.search);
 
         urlParams.set('type', 'popular');
+        window.location.search = urlParams;
+
+
+
+    }
+    const noReplyYet = document.getElementById('noReplyYet');
+
+    noReplyYet.onclick = function(e) {
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        urlParams.set('type', 'noReplyYet');
+        window.location.search = urlParams;
+
+
+
+    }
+    const noneReply = document.getElementById('noneReply');
+
+    noneReply.onclick = function(e) {
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        urlParams.set('type', 'noneReply');
         window.location.search = urlParams;
 
 

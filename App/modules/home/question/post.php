@@ -43,7 +43,7 @@ if (isGet()) {
                 case 'noReplyYet':
                     foreach ($listQuestion as $item) {
                         $questionId = $item['id'];
-                        
+
                         $loginToken = getSession('loginToken');
                         $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
                         $userIdLogin = $queryToken['userId'];
@@ -54,16 +54,16 @@ if (isGet()) {
                         }
                     }
                     break;
-                    case 'noneReply':
-                        foreach ($listQuestion as $item) {
-                            $questionId = $item['id'];
-                            $replyCount = countRow("SELECT id FROM replies WHERE questionId = '$questionId'");
-    
-                            if ($replyCount == 0) {
-                                array_push($newListQuestion, $item);
-                            }
+                case 'noneReply':
+                    foreach ($listQuestion as $item) {
+                        $questionId = $item['id'];
+                        $replyCount = countRow("SELECT id FROM replies WHERE questionId = '$questionId'");
+
+                        if ($replyCount == 0) {
+                            array_push($newListQuestion, $item);
                         }
-                        break;
+                    }
+                    break;
             }
         } else {
             $newListQuestion = $listQuestion;
@@ -199,13 +199,7 @@ layouts('headerPost', $data);
                 <!-- Inner main header -->
                 <div class="inner-main-header">
 
-                    <select class="custom-select custom-select-sm w-auto mr-1">
-                        <option selected="">Latest</option>
-                        <option value="1">Popular</option>
-                        <option value="3">Solved</option>
-                        <option value="3">None of question</option>
-                        <option value="3">No Replies Yet</option>
-                    </select>
+                   
 
                 </div>
                 <?php
@@ -274,18 +268,17 @@ layouts('headerPost', $data);
                                             </div>
 
                                             <div style="position: absolute; right: 12px; bottom: 44px;">
-                                                <?php 
-                                                if($countReply >= 0) {
-                                                    if($countReply == 0) {
+                                                <?php
+                                                if ($countReply >= 0) {
+                                                    if ($countReply == 0) {
                                                         echo null;
-                                                    } else if($countReply == 1) {
+                                                    } else if ($countReply == 1) {
                                                         echo '<a class="hover-item" href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;">' . $countReply . ' reply</a>';
                                                     } else {
                                                         echo '<a class="hover-item" href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;">' . $countReply . ' replies</a>';
-
                                                     }
                                                 }
-                                               ?>
+                                                ?>
 
 
                                             </div>

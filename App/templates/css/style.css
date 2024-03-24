@@ -5,6 +5,12 @@ body {
   text-rendering: optimizeSpeed;
   overflow-y: overlay;
 }
+/* Remove the up/down increment/decrement buttons on number  */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
 
 
 @font-face {
@@ -39,6 +45,9 @@ body {
 a {
   text-decoration: none;
   color: rgb(104, 85, 224);
+}
+li a {
+  color: black;
 }
 .mg-btn {
   margin-top: 10px;
@@ -101,7 +110,12 @@ button:hover a {
 
 /* header css */
 .nav-item:hover {
-  color: black;
+  color: rgb(104, 85, 224);
+  font-size: 20px;
+}
+.nav-item.active {
+  color: rgb(104, 85, 224);
+  font-size: 20px;
 }
 /* profile */
 /* body {
