@@ -10,13 +10,13 @@ $data = [
 if (!checkLogin()) {
     reDirect('?module=auth&page=login');
 }
-$listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
+$listPost = getRaws("SELECT * FROM posts ORDER BY updateAt DESC");
 if (!empty($_GET['type'])) {
     $newListPost = [];
     switch ($_GET['type']) {
         case 'oldest':
 
-            $newListPost = $listPost = getRaws("SELECT * FROM posts ORDER BY update_at");
+            $newListPost = $listPost = getRaws("SELECT * FROM posts ORDER BY updateAt");
             break;
         case 'noneQuestion':
             foreach ($listPost as $item) {
@@ -57,7 +57,7 @@ if (isPost()) {
             $dataInsert = [
                 'postName' => $filterAll['postName'],
                 'description' => $filterAll['description'],
-                'update_at' => date('Y:m:d H:i:s'),
+                'updateAt' => date('Y:m:d H:i:s'),
                 'userId' => $userId
             ];
             $insertStatus = insert('posts', $dataInsert);
@@ -194,7 +194,7 @@ layouts('headerForum', $data);
                                                 <div style="padding: 0 6px;">
 
                                                     <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight: 600;"><a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                    <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['update_at']); ?></p>
+                                                    <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['updateAt']); ?></p>
 
                                                 </div>
 

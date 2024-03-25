@@ -5,7 +5,7 @@ if (!defined('_CODE')) {
 }
 
 $data = [
-    'titlePage' => 'Read message'
+    'titlePage' => 'New email'
 ];
 // if(checkAdmin()) {
 //     reDirect('?module=users&action=list');

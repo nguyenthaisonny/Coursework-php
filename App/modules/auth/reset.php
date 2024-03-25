@@ -36,7 +36,7 @@ if (!empty($token)) {
                 $dataUpdate = [
                     'password' => $passwordHash,
                     'forgotToken' => NULL,
-                    'update_at' => date('Y-m-d H:i:s')
+                    'updateAt' => date('Y-m-d H:i:s')
                 ];
                 $updateStatus = update('users', $dataUpdate, "id='$userId'");
                 if ($updateStatus) {
@@ -78,7 +78,7 @@ if (!empty($token)) {
 
                     <div class="form-group mg-form">
                         <label for="">Password</label>
-                        <input name="password" type="password" class="form-control" placeholder="Enter your password" value=<?php  ?>>
+                        <input name="password" type="password" class="form-control" placeholder="Enter your new password" value=<?php  ?>>
                         <?php
                         echo formErr('password', '<span class="error" >', '</span>', $errors);
 

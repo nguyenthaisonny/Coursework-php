@@ -3,7 +3,7 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $data = [
-    'pageTitle' => 'Add user'
+    'pageTitle' => 'User managment'
 
 ];
 // $result = countRow('SELECT * FROM users');

@@ -3,7 +3,7 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $data = [
-    'titlePage' => 'Home'
+    'titlePage' => 'Reply'
 ];
 
 

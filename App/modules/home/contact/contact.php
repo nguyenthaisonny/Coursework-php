@@ -82,7 +82,7 @@ layouts('headerContact', $data)
 				<div class="single_address">
 					<i class="fa fa-map-marker"></i>
 					<h4>Our Address</h4>
-					<p>3481 Melrose Place, Beverly Hills</p>
+					<p>Cong Hoa Garden, 20 Cong Hoa, Ward 12, Tan Binh, HCMC</p>
 				</div>
 				<div class="single_address">
 					<i class="fa fa-envelope"></i>
@@ -92,7 +92,7 @@ layouts('headerContact', $data)
 				<div class="single_address">
 					<i class="fa fa-phone"></i>
 					<h4>Call us on</h4>
-					<p>(+1) 517 397 7100</p>
+					<p>09 123 456 78</p>
 				</div>
 				<div class="single_address">
 					<i class="fa fa-clock-o"></i>

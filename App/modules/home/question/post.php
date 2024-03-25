@@ -3,7 +3,7 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $data = [
-    'titlePage' => 'Home'
+    'titlePage' => 'Question'
 ];
 
 
@@ -21,13 +21,13 @@ if (isGet()) {
         $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
 
 
-        $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY update_at DESC");
+        $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY updateAt DESC");
         if (!empty($_GET['type'])) {
             $newListQuestion = [];
             switch ($_GET['type']) {
                 case 'oldest':
 
-                    $newListQuestion = getRaws("SELECT * FROM questions  WHERE postId='$postId' ORDER BY update_at");
+                    $newListQuestion = getRaws("SELECT * FROM questions  WHERE postId='$postId' ORDER BY updateAt");
                     break;
 
                 case 'popular':
@@ -91,7 +91,7 @@ if (isPost()) {
 
                     'title' => $filterAll['title'],
                     'content' => $filterAll['content'],
-                    'update_at' => date('Y:m:d H:i:s'),
+                    'updateAt' => date('Y:m:d H:i:s'),
                     'postId' => $filterAll['postId'],
                     'userId' => $userId,
                     'questionImage' => $questionImage
@@ -102,7 +102,7 @@ if (isPost()) {
 
                     'title' => $filterAll['title'],
                     'content' => $filterAll['content'],
-                    'update_at' => date('Y:m:d H:i:s'),
+                    'updateAt' => date('Y:m:d H:i:s'),
                     'postId' => $filterAll['postId'],
                     'userId' => $userId,
                     'questionImage' => null
@@ -249,7 +249,7 @@ layouts('headerPost', $data);
                                                                     <?php echo $userDetail['fullname'] ?>
                                                                 </a>
                                                             </h6>
-                                                            <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+                                                            <div class="text-muted small" style="margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['updateAt']); ?></div>
                                                         </div>
 
                                                         <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>

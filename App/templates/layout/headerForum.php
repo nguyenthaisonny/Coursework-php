@@ -17,7 +17,9 @@ if (getSession('loginToken')) {
     };
   }
 }
-$unRead = countRow("SELECT id FROM messages WHERE readStatus=0");
+$unRead = countRow("SELECT id FROM messages WHERE readStatus=0 AND belong='user'");
+$userUnRead = countRow("SELECT id FROM messages WHERE readStatus=0 AND belong='admin'");
+
 
 ?>
 
@@ -35,7 +37,7 @@ $unRead = countRow("SELECT id FROM messages WHERE readStatus=0");
 
   <link rel="stylesheet" href="<?php echo _WEB_HOST_TEMPLATES ?>/css/style.css?ver=<?php echo rand(); ?>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+  
 
 </head>
 
@@ -63,6 +65,13 @@ $unRead = countRow("SELECT id FROM messages WHERE readStatus=0");
         <?php
         echo checkAdminNotSignOut() ? "<a style='position: relative; margin-left: 10px;' class='col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3' href='?module=admin&page=message/readMessage'>" .
           '<div style="position: absolute; top: -7; right: 0;" class="sub">' . $unRead . '</div>' .
+          '<i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
+         </a>'
+          : null ;
+        ?>
+        <?php
+        echo !checkAdminNotSignOut() ? "<a id='goToGmail' style='position: relative; margin-left: 10px;' class='col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3' href='https://mail.google.com/mail/u/0/#inbox'>" .
+          '<div id="userUnRead" value='.$userUnRead.' style="position: absolute; top: -7; right: 0;" class="sub">' . $userUnRead . '</div>' .
           '<i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
          </a>'
           : null;

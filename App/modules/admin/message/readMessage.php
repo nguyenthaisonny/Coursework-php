@@ -15,7 +15,8 @@ if (!$isAdmin) {
     reDirect('?module=home&page=forum/forum');
 }
 
-$listMessage = getRaws("SELECT * FROM messages ORDER BY create_at DESC");
+$listMessage = getRaws("SELECT * FROM messages WHERE belong = 'user' ORDER BY createAt DESC");
+
 
 
 
@@ -126,19 +127,26 @@ layouts('headerReadMessage', $data);
                     foreach ($listMessage as $item) :
                         $userId = $item['userId'];
                         $postId = $item['id'];
-
+                        
+                        
                         $questionCount = countRow("SELECT id FROM questions WHERE postId = '$postId'");
-
+                        
                         $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
+                        $isReply = false;
+                        $messageSubject = $item['messageSubject'];
+                        $messageAdminReply = getRaw("SELECT * FROM messages WHERE messageSubject='$messageSubject' AND belong='admin'");
+                        if(!empty($messageAdminReply)) {
+                            $isReply = true;
+                        }
                         $count++;
                 ?>
                         <li style="position: relative;" class="message <?php echo $item['readStatus'] == 0 ? 'unread' : null; ?>">
                             <a style="height: 50px" href="?module=admin&page=message/replyMessage&messageId=<?php echo $item['id']; ?>">
 
                                 <div class="header">
-                                    <span class="from" style="font-size: 18px; line-height: 16px;"><i style="margin-right: 6px; font-weight:300; font-size: 16px;" class="fa fa-square-o"></i><?php echo $item['fullnameMessage']; ?></span>
+                                    <span class="from" style="font-size: 18px; line-height: 16px;"><i data-toggle="tooltip" title="<?php echo $isReply ? 'replied':  'no reply yet'?>" style="margin-right: 6px; font-weight:300; font-size: 16px;" class="<?php echo $isReply ? 'fa-solid fa-square-check':  'fa fa-square-o'?>"></i><?php echo $item['fullnameMessage']; ?></span>
                                     <span class="date">
-                                        <span class="fa fa-paper-clip"></span><?php echo formatTimeDifference($item['create_at']); ?></span>
+                                    <span class="fa fa-paper-clip"></span><?php echo formatTimeDifference($item['createAt']); ?></span>
 
                                 </div>
                                 <div class="title">

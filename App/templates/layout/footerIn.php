@@ -56,7 +56,7 @@
         <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
           <!-- Links -->
           <h6 class="text-uppercase fw-bold mb-4 icon-hover">Contact</h6>
-          <p><i class="fas fa-home me-3 icon-hover"></i> Ho Chi Minh City, VietNam</p>
+          <p><i class="fas fa-home me-3 icon-hover"></i>Cong Hoa Garden, 20 Cong Hoa, Ward 12, Tan Binh, HCMC</p>
           <p>
             <i class="fas fa-envelope me-3"></i>
             sonnynguyenthai@gmail.com

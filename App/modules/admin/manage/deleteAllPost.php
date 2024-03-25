@@ -9,7 +9,7 @@ if(!$isAdmin) {
 //check whether id exist
 // delete login token -> delete user
 $deleteAllReply = delete('replies', "1=1");
-$deleteAllQuestion = delete('qeustions', "1=1");
+$deleteAllQuestion = delete('questions', "1=1");
 
 $deleteAllPost = delete('posts', "1=1");
 

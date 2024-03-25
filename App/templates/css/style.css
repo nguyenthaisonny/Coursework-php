@@ -117,6 +117,13 @@ button:hover a {
   color: rgb(104, 85, 224);
   font-size: 20px;
 }
+.forum-welcome {
+  font-size: 20px;
+}
+.forum-welcome:hover {
+  cursor: none;
+  font-size: 26px;
+}
 /* profile */
 /* body {
   margin-top: 20px;

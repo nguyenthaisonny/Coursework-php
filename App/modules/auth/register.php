@@ -46,7 +46,7 @@ if (isPost()) {
         $phone = $filterAll['phone'];
         $sql = "SELECT id FROM users WHERE phone = '$phone'";
         if (countRow($sql) > 0) {
-            $errors['phone']['unique'] = 'This phone number has already existed!';
+            $errors['phone']['unique'] = 'This phone has already existed!';
         }
 
         
@@ -185,7 +185,7 @@ $old = getFlashData('old');
             <hr>
 
             <p class="text-center">
-                <a href="?module=auth&page=login">I already had an account  <span>❤</span> </a>
+                <a href="?module=auth&page=login">I already had an account  <span><i style="    color: rgb(254, 44, 85); " class="fa-solid fa-heart"></i> </a>
             </p>
         </form>
     </div>

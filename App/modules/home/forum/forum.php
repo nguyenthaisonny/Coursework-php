@@ -11,13 +11,13 @@ if (!checkLogin()) {
     reDirect('?module=auth&page=login');
 }
 
-$listPost = getRaws("SELECT * FROM posts ORDER BY update_at DESC");
+$listPost = getRaws("SELECT * FROM posts ORDER BY updateAt DESC");
 if (!empty($_GET['type'])) {
     $newListPost = [];
     switch ($_GET['type']) {
         case 'oldest':
 
-            $newListPost =  getRaws("SELECT * FROM posts ORDER BY update_at");
+            $newListPost =  getRaws("SELECT * FROM posts ORDER BY updateAt");
             break;
         case 'noneQuestion':
             foreach ($listPost as $item) {
@@ -114,7 +114,7 @@ layouts('headerForum', $data);
                 <!-- Inner main header -->
                 <div  class="inner-main-header" style="display: flex;">
 
-                    <div style="margin: auto; font-size: 20px; color: rgb(104, 85, 224);font-weight: 600;">
+                    <div class="forum-welcome" style="margin: auto;color: rgb(104, 85, 224);font-weight: 600;">
                     Welcome to our forum community <span><i style="    color: rgb(254, 44, 85); " class="fa-solid fa-heart"></i></span></div>
                     <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 26px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
                     <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
@@ -161,7 +161,7 @@ layouts('headerForum', $data);
                                                 <div style="padding: 0 6px;">
 
                                                     <h6 style="margin: 0 ;padding: 0; font-size: 18px;font-weight: 600;"><a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" class="text-body"><?php echo $userDetail['fullname'] ?></a></h6>
-                                                    <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['update_at']); ?></p>
+                                                    <p style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo  formatTimeDifference($item['updateAt']); ?></p>
 
                                                 </div>
 

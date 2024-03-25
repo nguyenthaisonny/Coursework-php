@@ -3,7 +3,7 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $data = [
-    'pageTitle' => 'Edit user'
+    'pageTitle' => 'User managment'
 
 ];
 $isAdmin = checkAdmin();
@@ -85,7 +85,7 @@ if (isPost()) {
             'phone' => $filterAll['phone'],
 
             'status' => $filterAll['status'],
-            'update_at' => date('Y:m:d H:i:s')
+            'updateAt' => date('Y:m:d H:i:s')
 
 
 

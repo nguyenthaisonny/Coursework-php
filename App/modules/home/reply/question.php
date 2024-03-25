@@ -3,7 +3,7 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $data = [
-    'titlePage' => 'Home'
+    'titlePage' => 'Reply'
 ];
 
 
@@ -27,13 +27,13 @@ if (!empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
 
     $userQuestionDetail = getRaw("SELECT * FROM users WHERE id='$userIdQuestion'");
 
-    $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY update_at DESC");
+    $listReply = getRaws("SELECT * FROM replies WHERE questionId = '$questionId' ORDER BY updateAt DESC");
     if (!empty($_GET['type'])) {
         $newListReply = [];
         switch ($_GET['type']) {
             case 'oldest':
 
-                $newListReply = getRaws("SELECT * FROM replies  WHERE questionId='$questionId' ORDER BY update_at");
+                $newListReply = getRaws("SELECT * FROM replies  WHERE questionId='$questionId' ORDER BY updateAt");
                 break;
 
             
@@ -154,7 +154,7 @@ layouts('headerPost', $data);
                                                                 <?php echo $userQuestionDetail['fullname'] ?>
                                                             </a>
                                                         </h6>
-                                                        <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['update_at']); ?></div>
+                                                        <div class="text-muted small" style=" margin: 2px 0; font-size: 12px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($questionDetail['updateAt']); ?></div>
                                                     </div>
                                                     <?php echo checkAdminInList($userIdQuestion) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>
                                                 </div>
@@ -250,7 +250,7 @@ layouts('headerPost', $data);
                                                                         <?php echo $userDetail['fullname'] ?>
                                                                     </a>
                                                                 </h6>
-                                                                <div class="text-muted small" style="margin: 2px 0; font-size: 10px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['update_at']); ?></div>
+                                                                <div class="text-muted small" style="margin: 2px 0; font-size: 10px; font-weight: 300;line-height: 12px;"><?php echo formatTimeDifference($item['updateAt']); ?></div>
 
                                                             </div>
                                                             <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 12px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>
