@@ -86,7 +86,7 @@ $userUnRead = countRow("SELECT id FROM messages WHERE readStatus=0 AND belong='a
           </a>
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
 
-            <?php echo checkAdminNotSignOut() ?  "<li><a class='dropdown-item' href='?module=admin&page=manage/list'>User managment</a></li>" : null; ?>
+            <?php echo checkAdminNotSignOut() ?  "<li><a class='dropdown-item' href='?module=admin&page=manage/list'>User management</a></li>" : null; ?>
             <li><a class="dropdown-item" href="?module=user&page=profile/profile&id=<?php echo $userId ?>">Profile setting</a></li>
             <li><a class="dropdown-item" href="?module=auth&page=change">Change password</a></li>
             <li>

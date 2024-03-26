@@ -181,7 +181,7 @@ layouts('headerForum', $data);
                                         </div>
 
                                         <div class="media-body" style="margin-top: 8px;">
-                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
+                                            <h5 style="margin: 0;"><a href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>" class="text-body"><?php echo $item['postName'] ?></a></h5>
                                             <p style="margin-bottom: 20px;">
                                                 <?php echo $item['description'] ?>
                                             </p>
@@ -189,12 +189,12 @@ layouts('headerForum', $data);
                                         </div>
                                         <div>
 
-                                            <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" class="d-inline-block text-muted">
+                                            <a style="margin-right: 4px;" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>" class="d-inline-block text-muted">
                                                 <i class="fa-solid fa-door-open icon-hover" style="font-size: 20px;"></i>
 
                                             </a>
                                             <span class="d-none d-sm-inline-block" style="font-size: 16px; font-weight: 300; line-height: 16px;">
-                                                <a class="hover-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>"><?php echo $questionCount ?> <?php echo ($questionCount == 1 || $questionCount == 0) ? 'question' : 'questions' ?></a>
+                                                <a class="hover-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $item['id'] ?>"><?php echo $questionCount ?> <?php echo ($questionCount == 1 || $questionCount == 0) ? 'question' : 'questions' ?></a>
                                             </span>
 
                                         </div>
@@ -290,13 +290,17 @@ layouts('headerForum', $data);
         $('[data-toggle="tooltip"]').tooltip()
     })
     let deleteAll = document.getElementById("deleteAll");
-    deleteAll.onclick = function() {
-        return confirm("Delete all")
+    if(!!deleteAll) {
+
+        deleteAll.onclick = function() {
+            return confirm("Delete all")
+        }
     }
 
     //handle scroll top
     let mybutton = document.getElementById("myBtn");
     let listPost = document.getElementById("listPost");
+   
     // When the user scrolls down 20px from the top of the document, show the button
     listPost.onscroll = function() {
         scrollFunction()
@@ -309,7 +313,7 @@ layouts('headerForum', $data);
     }
 
     function scrollFunction() {
-        console.log(document.body.scrollTop);
+        
         if (listPost.scrollTop > 20 && window.scrollY < 100) {
             mybutton.style.display = "block";
         } else {

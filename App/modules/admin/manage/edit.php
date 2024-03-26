@@ -3,7 +3,7 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $data = [
-    'pageTitle' => 'User managment'
+    'pageTitle' => 'User management'
 
 ];
 $isAdmin = checkAdmin();
