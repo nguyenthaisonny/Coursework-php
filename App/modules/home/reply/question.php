@@ -201,7 +201,7 @@ layouts('headerPost', $data);
                                             <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                         </a>
-                                        <a style="position: relative;" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?>" class="d-inline-block text-muted ml-3">
+                                        <a style="position: relative;" href="?module=home&page=reply/addReply&questionId=<?php echo $questionId; ?>&postId=<?php echo $postId; ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" class="d-inline-block text-muted ml-3">
 
                                             <i class="fa-regular fa-comment icon-hover active" style="font-size: 26px;"></i>
                                         </a>

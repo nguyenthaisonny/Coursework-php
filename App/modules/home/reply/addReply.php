@@ -97,7 +97,7 @@ if (isPost()) {
                 setFlashData('smg_type', 'danger');
             }
             if (!empty($_GET['type'])) {
-                reDirect('?module=home&page=reply/question&questionId='. $question .'&postId=' . $postId . '&type=' . $_GET['type']);
+                reDirect('?module=home&page=reply/question&questionId='. $questionId .'&postId=' . $postId . '&type=' . $_GET['type']);
             } else {
     
                 reDirect('?module=home&page=reply/question&questionId='. $questionId .'&postId=' . $postId);

@@ -45,5 +45,6 @@ if (file_exists($path)) {
 
     require_once($path);
 } else {
+    http_response_code(404);
     require_once 'modules/error/404.php';
 }
