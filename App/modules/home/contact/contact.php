@@ -21,8 +21,7 @@ if(isPost()) {
     $filterAll = filter();
     $dataInsert = [
         'userId' => $userId,
-        'fullnameMessage' => $filterAll['fullnameMessage'],
-        'emailMessage' => $filterAll['emailMessage'],
+        
 
         'messageSubject' => $filterAll['messageSubject'],
         'messageContent' => $filterAll['messageContent']
@@ -60,10 +59,10 @@ layouts('headerContact', $data)
 					<form class="form" method="post" action="" onsubmit="return validation();">
 						<div class="row">
 							<div class="form-group col-md-6">
-								<input type="text" name="fullnameMessage" class="form-control" placeholder="Name" required="required" value="<?php echo getOldValue($old, 'fullname')?>">
+								<input type="text" name="fullnameMessage" class="form-control" placeholder="Name" style="cursor: not-allowed;" value="<?php echo getOldValue($old, 'fullname')?>">
 							</div>
 							<div class="form-group col-md-6" >
-								<input type="email" name="emailMessage" class="form-control" placeholder="Email" required="required" value="<?php echo getOldValue($old, 'email')?>">
+								<input type="email" name="emailMessage" class="form-control" placeholder="Email" style="cursor: not-allowed;"  value="<?php echo getOldValue($old, 'email')?>">
 							</div>
 							<div class="form-group col-md-12 " style="margin-top: 16px;">
 								<input type="text" name="messageSubject" class="form-control" placeholder="Subject" required="required">

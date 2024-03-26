@@ -6,9 +6,7 @@ $data = [
     'titlePage' => 'Sign in'
 ];
 
-if (checkLogin()) {
-    reDirect('?module=home&page=forum/forum');
-}
+
 if ($_POST) {
     $filterAll = filter();
     if (!empty(trim($filterAll['email'])) && !empty(trim($filterAll['password']))) {
@@ -30,6 +28,7 @@ if ($_POST) {
 
                 if ($inserStatus) {
                     // insert success
+                    setSession('userId', $userId);
                     setSession('loginToken', $tokenLogin);
 
                     reDirect('?module=home&page=forum/forum');

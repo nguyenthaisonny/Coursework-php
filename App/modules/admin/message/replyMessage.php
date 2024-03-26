@@ -43,8 +43,7 @@ if (isPost()) {
         //insert to database
        
         $dataInsert = [
-            'fullnameMessage' => $adminDetail['fullname'],
-            'emailMessage' => $adminDetail['email'],
+            
             'userId' => $adminId,
             'messageSubject' => $messageDetail['messageSubject'],
             'messageContent' => $filterAll['replyContent'],
