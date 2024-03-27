@@ -204,6 +204,7 @@ function checkLogin()
     return $checkLogin;
 
 }
+
 function checkAdmin() {
     $checkAdmin = false;
     if (getSession('loginToken')) {

@@ -47,7 +47,8 @@ if (isPost()) {
             'userId' => $adminId,
             'messageSubject' => $messageDetail['messageSubject'],
             'messageContent' => $filterAll['replyContent'],
-            'belong' => 'admin'
+            'belong' => 'admin',
+            'toUserId' => $userId
             
         ];
         $insertStatus = insert('messages', $dataInsert);

@@ -14,8 +14,10 @@ $isAdmin = checkAdmin();
 if (!$isAdmin) {
     reDirect('?module=home&page=forum/forum');
 }
-
-$listMessage = getRaws("SELECT * FROM messages WHERE belong = 'user' ORDER BY createAt DESC");
+$loginToken = getSession('loginToken');
+$queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
+$adminId = $queryToken['userId'];
+$listMessage = getRaws("SELECT * FROM messages WHERE belong = 'user' AND toUserId = '$adminId' ORDER BY createAt DESC");
 
 
 
@@ -144,7 +146,7 @@ layouts('headerReadMessage', $data);
                             <a style="height: 50px" href="?module=admin&page=message/replyMessage&messageId=<?php echo $item['id']; ?>">
 
                                 <div class="header">
-                                    <span class="from" style="font-size: 18px; line-height: 16px;"><i data-toggle="tooltip" title="<?php echo $isReply ? 'replied':  'no reply yet'?>" style="margin-right: 6px; font-weight:300; font-size: 16px;" class="<?php echo $isReply ? 'fa-solid fa-square-check':  'fa fa-square-o'?>"></i><?php echo $userId['fullname']; ?></span>
+                                    <span class="from" style="font-size: 18px; line-height: 16px;"><i data-toggle="tooltip" title="<?php echo $isReply ? 'replied':  'no reply yet'?>" style="margin-right: 6px; font-weight:300; font-size: 16px;" class="<?php echo $isReply ? 'fa-solid fa-square-check':  'fa fa-square-o'?>"></i><?php echo $userDetail['fullname']; ?></span>
                                     <span class="date">
                                     <span class="fa fa-paper-clip"></span><?php echo formatTimeDifference($item['createAt']); ?></span>
 

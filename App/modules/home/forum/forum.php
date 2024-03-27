@@ -5,6 +5,7 @@ if (!defined('_CODE')) {
 $data = [
     'titlePage' => 'Forum'
 ];
+$userId = getSession('userId');
 
 
 if (!checkLogin()) {

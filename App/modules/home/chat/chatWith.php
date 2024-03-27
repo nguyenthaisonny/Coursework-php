@@ -15,6 +15,7 @@ if (isGet()) {
 
     $listFriend = getRaws("SELECT * FROM users");
     $friendId = $filterAll['friendId'];
+    $friendDetail = getRaw("SELECT fullname, profileImage FROM users WHERE id = '$friendId'");
     $listMessageUser = getRaws("SELECT * FROM messages WHERE userId = '$userId' AND toUserId='$friendId' ORDER BY 'createAt' DESC");
     $listMessageFriend = getRaws("SELECT * FROM messages WHERE userId = '$friendId' AND toUserId='$userId'  ORDER BY 'createAt' DESC");
     $listMessage = array_merge($listMessageUser, $listMessageFriend);
@@ -25,15 +26,13 @@ if (isGet()) {
     }
     array_multisort($ord, SORT_ASC, $listMessage);
     
-    // echo '<pre>';
-    // print_r($listMessage);
-    // echo '</pre>';
+    
 }
 if (isPost()) {
     $filterAll = filter();
     $friendId = $_GET['friendId'];
     $userId = trim($_GET['userId']);
-    
+
     $messageContent = $filterAll['messageContent'];
     $dataInsert = [
         'userId' => $userId,
@@ -43,10 +42,8 @@ if (isPost()) {
     ];
     $insertStatus = insert('messages', $dataInsert);
     if ($insertStatus) {
-        
-        reDirect('?module=home&page=chat/chatWith&userId= ' . $userId . '&friendId=' . $friendId);
-        
 
+        reDirect('?module=home&page=chat/chatWith&userId= ' . $userId . '&friendId=' . $friendId);
     }
 }
 
@@ -62,23 +59,63 @@ layouts('headerRoom', $data)
         <div class="col-lg-12">
             <div class="card chat-app">
                 <div id="plist" class="people-list">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="Search...">
+                    <div style="display: flex; justify-content: center;">
+                        <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                            <a class="mediumAnker" href="?module=home&page=forum/forum">
+
+                                Back
+                            </a>
+                        </button>
                     </div>
-                
+
 
                     <ul class="list-unstyled chat-list mt-2 mb-0" style="height: 400px; overflow-y: auto;">
                         <?php
                         if (!empty($listFriend)) :
                             $count = 0;
+
                             foreach ($listFriend as $item) :
                                 $friendId = $item['id'];
                                 if ($friendId == $userId) {
                                     continue;
                                 }
+                                $isOnline = false;
+                                if (countRow("SELECT id FROM tokenlogin WHERE userId=$friendId")) {
+                                    $isOnline = true;
+                                }
+                                $listMessageUser = getRaws("SELECT * FROM messages WHERE userId = '$userId' AND toUserId='$friendId' ORDER BY 'createAt' DESC");
+                                $listMessageFriend = getRaws("SELECT * FROM messages WHERE userId = '$friendId' AND toUserId='$userId'  ORDER BY 'createAt' DESC");
+                                $listMessageInFriendList = array_merge($listMessageUser, $listMessageFriend);
+                                // sort listMe$listMessageInFriendList to latest
+                                $ord = array();
+                                foreach ($listMessageInFriendList as $key => $value) {
+                                    $ord[] = strtotime($value['createAt']);
+                                    if($value['toUserId']==$userId) {
+                                        continue;
+                                    }
+                                }
+                                array_multisort($ord, SORT_ASC, $listMessageInFriendList);
+                                if(!empty($listMessageInFriendList)) {
+
+                                    $lastMessage = $listMessageInFriendList[count($listMessageInFriendList) - 1];
+                                    $myMessage = false;
+                                    $readStatus = false;
+                                    // check  last mess belongs to user of friend
+                                    if($lastMessage['userId'] == $userId) {
+                                        $myMessage = true;
+                                    } else {
+                                        // check read status
+                                        if($lastMessage['userId'] == $friendId && $lastMessage['toUserId'] == $userId) {
+                                            $readStatus = true;
+                                            $dataUpdate = ['readStatus' => 1];
+                                            update('messages', $dataUpdate, "userId = '$friendId' AND toUserId = '$userId'");
+                                        }
+                                    }
+                                } else {
+                                    $lastMessage = [];
+                                }
+                               
+
 
 
 
@@ -86,10 +123,21 @@ layouts('headerRoom', $data)
                         ?>
                                 <li class="clearfix <?php echo $friendId == $_GET['friendId'] ? 'active' : null ?>">
                                     <a class="clearfix" href="?module=home&page=chat/chatWith&userId=<?php echo $userId ?>&friendId=<?php echo $friendId ?>">
-                                        <img src="<?php echo $item['profileImage'] ? $item['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50" alt="User" />
+                                        <div style="position: relative;">
+                                            <img style="position: relative;" src="<?php echo $item['profileImage'] ? $item['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="mr-3 rounded-circle" width="50" alt="User" />
+
+                                            <i style="position: absolute; left: 34px; top: 28px;" class="fa fa-circle <?php echo $isOnline ? 'online' : 'offline' ?>"></i>
+                                        </div>
                                         <div class="about">
-                                            <div class="name"><?php echo $item['fullname'] ?></div>
-                                            <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>
+                                            <div style="font-weight: 600;" class="name"><?php echo $item['fullname'] ?></div>
+                                            <div style="<?php echo $myMessage || $readStatus ? 'color: #65676b;': null ?>">
+
+                                            <?php
+                                                if(!empty($lastMessage)) {
+                                                    echo strlen($lastMessage['messageContent']) < 14  ? $lastMessage['messageContent'] :  substr($lastMessage['messageContent'], 0, 14) . "..."; 
+                                                }
+                                            ?>
+                                            </div>
                                         </div>
                                     </a>
                                 </li>
@@ -114,26 +162,22 @@ layouts('headerRoom', $data)
                         <div class="row">
                             <div class="col-lg-6">
                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
+                                    <img src="<?php echo $friendDetail['profileImage'] ? $friendDetail['profileImage'] :  "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" lass="rounded-circle" style="width: 60px;" alt="User" />
+
                                 </a>
                                 <div class="chat-about">
-                                    <h6 class="m-b-0">Aiden Chavez</h6>
+                                    <h6 class="m-b-0"><?php echo $friendDetail['fullname'] ?></h6>
                                     <small>Last seen: 2 hours ago</small>
                                 </div>
                             </div>
-                            <div class="col-lg-6 hidden-sm text-right">
-                                <a href="javascript:void(0);" class="btn btn-outline-secondary"><i class="fa fa-camera"></i></a>
-                                <a href="javascript:void(0);" class="btn btn-outline-primary"><i class="fa fa-image"></i></a>
-                                <a href="javascript:void(0);" class="btn btn-outline-info"><i class="fa fa-cogs"></i></a>
-                                <a href="javascript:void(0);" class="btn btn-outline-warning"><i class="fa fa-question"></i></a>
-                            </div>
+
                         </div>
                     </div>
-                    
-                    
+
+
                     <div class="chat-history" id="chat-history" style="height: 400px; overflow-y: auto;">
 
-                        <ul class="m-b-0" >
+                        <ul class="m-b-0">
                             <?php
                             if (!empty($listMessage)) :
                                 $count = 0;
@@ -144,9 +188,12 @@ layouts('headerRoom', $data)
 
                                     $count++;
                             ?>
-                                    <li class="clearfix">
+                                    <li class="clearfix" style="position: relative;">
 
-                                        <div class="<?php echo $item['userId'] == $_GET['userId'] ? 'message other-message float-right' : 'message my-message'; ?>"><?php echo $item['messageContent'] ?> </div>
+                                        <div class="<?php echo $item['userId'] == $_GET['userId'] ? 'message other-message float-right' : 'message my-message'; ?>">
+                                            <?php echo $item['messageContent'] ?>
+                                        </div>
+                                        <p style="<?php echo $item['userId'] == $_GET['userId'] ? 'position: absolute; right: 6px;; bottom: -18px; margin: 2px 0; font-size: 12px; color: #ccc ;line-height: 12px;' : 'position: absolute; left: 6px; bottom: -18px; margin: 2px 0; font-size: 12px; color: #ccc ;line-height: 12px;'; ?>"><?php echo  formatTimeDifference($item['createAt']); ?></p>
                                     </li>
                                 <?php
                                 endforeach;
@@ -164,15 +211,15 @@ layouts('headerRoom', $data)
                         </ul>
 
                     </div>
-                   
+
 
                     <?php
                     echo checkAdminInList($_GET['friendId']) ?
-                    '
+                        '
                     <div class="alert alert-warning text-center">If you still confuse please tell us in contact page or email</div>
                     '
-                            :
-                    '<div class="chat-message clearfix">
+                        :
+                        '<div class="chat-message clearfix">
                         <div class="input-group mb-0">
                             <form action="" method="post" style="width: 100%;">
                                 <div style="display: flex;">
@@ -190,7 +237,7 @@ layouts('headerRoom', $data)
                             </form>
                         </div>
                     </div>'
-                    
+
                     ?>
                 </div>
             </div>

@@ -28,8 +28,8 @@ if ($_POST) {
 
                 if ($inserStatus) {
                     // insert success
-                    setSession('userId', $userId);
-                    setSession('loginToken', $tokenLogin);
+                   
+                    setSession('loginToken', $tokenLogin); 
 
                     reDirect('?module=home&page=forum/forum');
                 } else {

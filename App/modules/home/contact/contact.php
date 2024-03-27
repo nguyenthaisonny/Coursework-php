@@ -19,12 +19,14 @@ if(!empty($userDetail)) {
 }
 if(isPost()) {
     $filterAll = filter();
+	$adminId = getRaw("SELECT id FROM users WHERE role='admin'")['id'];
     $dataInsert = [
         'userId' => $userId,
         
-
+		
         'messageSubject' => $filterAll['messageSubject'],
-        'messageContent' => $filterAll['messageContent']
+        'messageContent' => $filterAll['messageContent'],
+		'toUserId' => $adminId
 
     ];
     $insertStatus = insert('messages', $dataInsert);
