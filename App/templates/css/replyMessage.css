@@ -23,7 +23,9 @@
 .email-app nav .nav .nav-item {
   position: relative;
 }
-
+.nav-item.active {
+  background-color: #ccc;
+}
 .email-app nav .nav .nav-item .nav-link,
 .email-app nav .nav .nav-item .navbar .dropdown-toggle,
 .navbar .email-app nav .nav .nav-item .dropdown-toggle {

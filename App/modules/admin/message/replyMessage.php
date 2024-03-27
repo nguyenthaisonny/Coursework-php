@@ -95,68 +95,12 @@ layouts('headerReplyMessage', $data);
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container">
     <div class="email-app mb-4">
-        <nav>
-            <a href="?module=admin&page=message/readMessage" class="btn mg-btn rounded">Back</a>
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">4</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-star"></i> Stared</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-rocket"></i> Sent</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-trash-o"></i> Trash</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-bookmark"></i> Important<span class="badge badge-info">5</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">4</span></a>
-                </li>
-            </ul>
-        </nav>
+        
+        
         <main class="message">
+            <a href="?module=admin&page=message/readMessage" class="btn mg-btn rounded">Back</a>
             <div class="toolbar">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-star"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-star-o"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-bookmark-o"></span>
-                    </button>
-                </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-mail-reply"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-mail-reply-all"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-mail-forward"></span>
-                    </button>
-                </div>
-                <button type="button" class="btn btn-light">
-                    <span class="fa fa-trash-o"></span>
-                </button>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
-                        <span class="fa fa-tags"></span>
-                        <span class="caret"></span>
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">add label <span class="badge badge-danger"> Home</span></a>
-                        <a class="dropdown-item" href="#">add label <span class="badge badge-info"> Job</span></a>
-                        <a class="dropdown-item" href="#">add label <span class="badge badge-success"> Clients</span></a>
-                        <a class="dropdown-item" href="#">add label <span class="badge badge-warning"> News</span></a>
-                    </div>
-                </div>
+                
             </div>
             <?php
             if (!empty($smg)) {
@@ -164,7 +108,7 @@ layouts('headerReplyMessage', $data);
             }
             ?>
             <div class="details">
-                <div class="title"><?php echo $messageDetail['messageSubject'] ?></div>
+                <div class="title">Subject: <?php echo $messageDetail['messageSubject'] ?></div>
                 <div class="header">
                     <img class="avatar" src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>">
                     <div class="from">
@@ -176,7 +120,7 @@ layouts('headerReplyMessage', $data);
                 <div class="content">
                     <blockquote>
                         <p>
-                            <?php echo $messageDetail['messageContent'] ?>
+                             <?php echo $messageDetail['messageContent'] ?>
                         </p>
 
                     </blockquote>

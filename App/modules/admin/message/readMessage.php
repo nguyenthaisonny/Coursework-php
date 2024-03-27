@@ -41,77 +41,16 @@ layouts('headerReadMessage', $data);
         <nav>
             <a href="?module=admin&page=message/newEmail" class="btn mg-btn primary">New Email</a>
             <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">4</span></a>
+                <li class="nav-item" style="background-color: #eee;">
+                    <a class="nav-link" href="#"><i class="fa fa-inbox"></i> Inbox </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-star"></i> Stared</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-rocket"></i> Sent</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-trash-o"></i> Trash</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-bookmark"></i> Important</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">4</span></a>
-                </li>
+                
             </ul>
         </nav>
         <main class="inbox">
             <div style="position: relative;" class="toolbar">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-envelope"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-star"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-star-o"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-bookmark-o"></span>
-                    </button>
-                </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-mail-reply"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-mail-reply-all"></span>
-                    </button>
-                    <button type="button" class="btn btn-light">
-                        <span class="fa fa-mail-forward"></span>
-                    </button>
-                </div>
-                <button type="button" class="btn btn-light">
-                    <span class="fa fa-trash-o"></span>
-                </button>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
-                        <span class="fa fa-tags"></span>
-                        <span class="caret"></span>
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">add label <span class="badge badge-danger"> Home</span></a>
-                        <a class="dropdown-item" href="#">add label <span class="badge badge-info"> Job</span></a>
-                        <a class="dropdown-item" href="#">add label <span class="badge badge-success"> Clients</span></a>
-                        <a class="dropdown-item" href="#">add label <span class="badge badge-warning"> News</span></a>
-                    </div>
-                </div>
-                <div class="btn-group float-right">
-                    <a type="button" class="btn btn-light">
-                        <span class="fa fa-chevron-left"></span>
-                    </a>
-                    <a type="button" class="btn btn-light">
-                        <span class="fa fa-chevron-right"></span>
-                    </a>
-                </div>
-                <a id="deleteAll" href="?module=admin&page=message/deleteAllMessage" onclick="return confirm('Delete all message?')" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 16px; top: 12px; color: rgb(254, 44, 85); " type="button" href="">
+                
+                <a id="deleteAll" href="?module=admin&page=message/deleteAllMessage" onclick="return confirm('Delete all message?')" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 16px; top: -12px; color: rgb(254, 44, 85); " type="button" href="">
                     <i class="fa-solid fa-delete-left" style="font-size: 26px"></i>
                 </a>
             </div>

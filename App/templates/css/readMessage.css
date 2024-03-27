@@ -19,7 +19,9 @@
 .email-app nav .nav {
   flex-direction: column;
 }
-
+.nav-item.active {
+  background-color: #ccc;
+}
 .email-app nav .nav .nav-item {
   position: relative;
 }
