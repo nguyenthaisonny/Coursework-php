@@ -267,17 +267,17 @@ layouts('headerPost', $data);
                                         </div>
                                     </div>
                                     <div class="card-footer" style="display: flex; justify-content: space-evenly;">
-                                        <a href="javascript:void(0)" class="d-inline-block text-muted">
+                                        <!-- <a href="javascript:void(0)" class="d-inline-block text-muted">
                                             <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
-                                        </a>
+                                        </a> -->
                                         <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>&postId=<?php echo $item['userId'] ?>&userIdPost=<?php echo $userIdPost ?>" class="d-inline-block text-muted ml-3">
 
                                             <i class="fa-regular fa-comment icon-hover active" style="font-size: 26px;"></i>
                                         </a>
-                                        <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
+                                        <!-- <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
                                             <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
-                                        </a>
+                                        </a> -->
                                     </div>
                                 </div>
                             </div>
@@ -348,14 +348,14 @@ layouts('headerPost', $data);
 
                                             </div>
                                             <div class="card-footer" style="display: flex; justify-content: space-evenly;">
-                                                <a href="javascript:void(0)" class="d-inline-block text-muted">
+                                                <!-- <a href="javascript:void(0)" class="d-inline-block text-muted">
                                                     <i class="fa-regular fa-thumbs-up icon-hover" style="font-size: 26px;"></i>
 
                                                 </a>
                                                 <div></div>
                                                 <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
                                                     <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
-                                                </a>
+                                                </a> -->
                                             </div>
                                         </div>
                                     </div>
