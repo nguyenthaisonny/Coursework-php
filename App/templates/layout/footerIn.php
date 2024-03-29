@@ -14,18 +14,18 @@
       <a href="https://www.facebook.com/profile.php?id=100015817663167" class="me-4 text-reset">
         <i class="fab fa-facebook-f icon-hover"></i>
       </a>
-      <a href="" class="me-4 text-reset">
+      <a href="https://twitter.com/NguyenThaiSonny" class="me-4 text-reset">
         <i class="fab fa-twitter icon-hover"></i>
       </a>
-      <a href="" class="me-4 text-reset">
+      <a href="?module=home&page=contact/contact" class="me-4 text-reset">
         <i class="fab fa-google icon-hover"></i>
       </a>
       <a href="https://www.instagram.com/sonnynguyenthai/" class="me-4 text-reset">
         <i class="fab fa-instagram icon-hover"></i>
       </a>
-      <a href="" class="me-4 text-reset">
+      <!-- <a href="" class="me-4 text-reset">
         <i class="fab fa-linkedin icon-hover"></i>
-      </a>
+      </a> -->
       <a href="https://github.com/nguyenthaisonny" class="me-4 text-reset">
         <i class="fab fa-github icon-hover"></i>
       </a>
@@ -46,8 +46,7 @@
             <i class="fas fa-gem me-3"></i>Nguyen Thai Sonny Group
           </h6>
           <p>
-            Here you can use rows and columns to organize your footer content. Lorem ipsum
-            dolor sit amet, consectetur adipisicing elit.
+          his forum is proudly created and maintained by NGUYEN THAI SONNY GROUP's IT team to facilitate engaging discussions among our community members.
           </p>
         </div>
         <!-- Grid column -->

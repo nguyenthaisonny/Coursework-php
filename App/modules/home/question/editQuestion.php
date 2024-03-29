@@ -199,16 +199,8 @@ layouts('headerEditQuestion', $data);
                    
 
                 </div>
-
-                <?php
-                if (!empty($smg)) {
-                    getSmg($smg, $smgType);
-                }
-                ?>
-
-
-
-                <div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
+<!-- list questions -->
+<div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
                     <button id="myBtn" title="Go to top" style="border-radius: 50%; right: 168px"><i class="fa-solid fa-arrow-up"></i></button>
                     <a style="margin-bottom: 16px" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <div class="row">
@@ -260,24 +252,23 @@ layouts('headerEditQuestion', $data);
                                                 </a>
 
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                    <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
-                                                    <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
+                                                    <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/editQuestion&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit question</a>
+                                                    <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/deleteQuestion&questionId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>&postId=<?php echo $item['postId'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>" onclick="return confirm('Delete this question ?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete question</a>
                                                 </div>
                                             </div>
 
                                             <div style="position: absolute; right: 12px; bottom: 44px;">
-                                            <?php 
-                                                if($countReply >= 0) {
-                                                    if($countReply == 0) {
+                                                <?php
+                                                if ($countReply >= 0) {
+                                                    if ($countReply == 0) {
                                                         echo null;
-                                                    } else if($countReply == 1) {
-                                                        echo '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' reply</a>';
+                                                    } else if ($countReply == 1) {
+                                                        echo '<a class="hover-item" href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;">' . $countReply . ' reply</a>';
                                                     } else {
-                                                        echo '<a href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;color: black;">' . $countReply . ' replies</a>';
-
+                                                        echo '<a class="hover-item" href="?module=home&page=reply/question&questionId=' . $item['id'] . '&postId=' . $item['postId'] . '" style="font-size: 14px;font-weight: 400;">' . $countReply . ' replies</a>';
                                                     }
                                                 }
-                                               ?>
+                                                ?>
 
 
                                             </div>
@@ -300,8 +291,8 @@ layouts('headerEditQuestion', $data);
                                             <a style="position: relative;" href="<?php echo _WEB_HOST; ?>/?module=home&page=reply/question&questionId=<?php echo $item['id'] ?>&postId=<?php echo $item['postId'] ?>" class="d-inline-block text-muted ml-3">
 
                                                 <i class="fa-regular fa-comment icon-hover" style="font-size: 26px;"></i>
-                                            <!-- </a>
-                                            <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
+                                            </a>
+                                            <!-- <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
                                                 <i class="fa-solid fa-share icon-hover" style="font-size: 26px;"></i>
                                             </a> -->
                                         </div>
@@ -316,6 +307,7 @@ layouts('headerEditQuestion', $data);
                 <?php
                         else :
                 ?>
+
                     <tr>
                         <td>
                             <div class="alert alert-danger text-center">None of question</div>
@@ -327,16 +319,15 @@ layouts('headerEditQuestion', $data);
                 ?>
 
                 </div>
+                <!-- /Forum Detail -->
+
+
+                <!-- /Inner main body -->
             </div>
-            <!-- /Forum Detail -->
-
-
-            <!-- /Inner main body -->
+            <!-- /Inner main -->
         </div>
-        <!-- /Inner main -->
-    </div>
 
-    <!-- New Question Modal -->
+    <!-- edit Question Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

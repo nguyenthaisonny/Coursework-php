@@ -65,7 +65,7 @@ $smgType = getFlashData('smg_type');
 
 <div class="row">
     <div class="col-4" style="margin: 50px auto;">
-        <h2 class="text-center text-uppercase">Forgot Password</h2>
+        <h2 class="text-center text-uppercase">Change Password</h2>
         <?php
         if (!empty($smg)) {
             getSmg($smg, $smgType);

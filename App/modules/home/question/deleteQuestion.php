@@ -22,7 +22,7 @@ if (getSession('loginToken')) {
     $loginToken = getSession('loginToken');
     $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
     $userIdLogin = $queryToken['userId'];
-    echo $userIdDelete;
+    
     
     if ($userIdLogin == $userIdDelete || checkAdminNotSignOut()) {
         $listReply = getRaws("SELECT id FROM replies WHERE questionId = '$questionId'");
@@ -43,7 +43,14 @@ if (getSession('loginToken')) {
         setFlashData('smg', 'Error! Can not delete question of another user.');
         setFlashData('smg_type', 'danger');
     }
-    reDirect("?module=home&page=question/post&postId=".$postId."&userIdEdit=".$userIdPost);
+    if (!empty($_GET['type'])) {
+        reDirect("?module=home&page=question/post&postId=".$postId."&type=". $_GET['type']);
+       
+    } else {
+
+        reDirect("?module=home&page=question/post&postId=".$postId);
+    }
+    
 }
 
 

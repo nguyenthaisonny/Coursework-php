@@ -40,7 +40,14 @@ if (getSession('loginToken')) {
         setFlashData('smg', 'Error! Can not delete reply of another user.');
         setFlashData('smg_type', 'danger');
     }
-    reDirect("?module=home&page=reply/question&questionId=".$questionId."&postId=".$postId."&userIdEdit=".$userIdLogin."&userIdPost=".$userIdPost);
+    if (!empty($_GET['type'])) {
+        
+        reDirect("?module=home&page=reply/question&questionId=".$questionId."&postId=".$postId."&type=" . $_GET['type']);
+    } else {
+
+        reDirect("?module=home&page=reply/question&questionId=".$questionId."&postId=".$postId);
+    }
+    
 }
 
 

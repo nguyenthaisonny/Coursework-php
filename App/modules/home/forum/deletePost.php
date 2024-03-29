@@ -50,7 +50,12 @@ if(!empty($filterAll['postId'] && !empty($filterAll['userIdDelete']))) {
             setFlashData('smg_type', 'danger');
         }
     }
-    reDirect('?module=home&page=forum/forum');
+    if (!empty($_GET['type'])) {
+        reDirect('?module=home&page=forum/forum&type=' . $_GET['type']);
+    } else {
+
+        reDirect('?module=home&page=forum/forum');
+    }
 }
 
 
