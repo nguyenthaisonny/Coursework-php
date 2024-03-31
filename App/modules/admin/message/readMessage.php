@@ -67,16 +67,17 @@ layouts('headerReadMessage', $data);
                     $count = 0;
                     foreach ($listMessage as $item) :
                         $userId = $item['userId'];
-                        $postId = $item['id'];
+                        $messageId = $item['id'];
                         $userDetail = getRaw("SELECT * FROM users WHERE id = '$userId'");
                         
-                        $questionCount = countRow("SELECT id FROM questions WHERE postId = '$postId'");
+                        $messageSubject = $item['messageSubject'];
+                        $messageContent = $item['messageContent'];
                         
                         $userDetail = getRaw("SELECT fullname, email, profileImage FROM users WHERE id='$userId' ");
                         $isReply = false;
-                        $messageSubject = $item['messageSubject'];
-                        $messageAdminReply = getRaw("SELECT * FROM messages WHERE messageSubject='$messageSubject' AND belong='admin'");
-                        if(!empty($messageAdminReply)) {
+                        
+                       
+                        if($item['replyStatus'] == 1) {
                             $isReply = true;
                         }
                         $count++;

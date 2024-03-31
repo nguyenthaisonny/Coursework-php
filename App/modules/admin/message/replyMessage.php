@@ -52,6 +52,11 @@ if (isPost()) {
             
         ];
         $insertStatus = insert('messages', $dataInsert);
+        //update replystatus
+        $dataUpdate = [
+            'replyStatus' => 1
+        ];
+        $updateStatus = update('messages',$dataUpdate, "id = '$messageId'");
         //send mail
         $replyContent = $filterAll['replyContent'];
         $subject = $userDetail['fullname'] . ' [Reply] ';

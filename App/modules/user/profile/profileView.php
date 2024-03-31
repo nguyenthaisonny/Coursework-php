@@ -7,6 +7,10 @@ $data = [
   'titlePage' => 'Profile'
 ];
 if (isGet()) {
+
+  $loginToken = getSession('loginToken');
+  $queryToken = getRaw("SELECT userId, id FROM tokenlogin WHERE token = '$loginToken'");
+  $userIdLogin = $queryToken['userId'];
   $userId = filter()['userId'];
   $userDetail = getRaw("SELECT * FROM users WHERE id='$userId'");
   $questionCount = countRow("SELECT id FROM questions WHERE userId='$userId'");
@@ -18,7 +22,7 @@ if (!checkLogin()) {
 }
 layouts('headerProfileView', $data)
 ?>
-<section class="vh-200" style="background-color: #f4f5f7; padding: 100px 0;" >
+<section class="vh-200" style="background-color: #f4f5f7; padding: 100px 0;">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-lg-12 mb-4 mb-lg-0">
@@ -49,7 +53,23 @@ layouts('headerProfileView', $data)
             </div>
             <div class="col-md-8">
               <div class="card-body p-4">
-                <h6>Information</h6>
+                <div class="row pt-1">
+                  <div class="col-11 mb-3">
+                    <h6>Information</h6>
+                  </div>
+                  <div class="col-1 mb-3">
+                    <?php echo $userIdLogin == $userId ?
+                     '<a href="?module=user&page=profile/profile&id='.$userIdLogin.'">
+                      <i class="fa-solid fa-gear"></i>
+                      </a>' 
+                      : 
+                      null 
+                      ?>
+
+
+                  </div>
+                </div>
+
                 <hr class="mt-0 mb-4">
                 <div class="row pt-1">
                   <div class="col-7 mb-3">
@@ -74,9 +94,9 @@ layouts('headerProfileView', $data)
                   </div>
                 </div>
                 <div class="d-flex justify-content-start">
-                  <a href="#!"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
-                  <a href="#!"><i class="fab fa-twitter fa-lg me-3"></i></a>
-                  <a href="#!"><i class="fab fa-instagram fa-lg"></i></a>
+                  <a href="<?php echo checkAdminInList($userId) ? 'https://www.facebook.com/profile.php?id=100015817663167' : '#' ?>"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
+                  <a href="<?php echo checkAdminInList($userId) ? 'https://twitter.com/NguyenThaiSonny' : '#' ?>"><i class="fab fa-twitter fa-lg me-3"></i></a>
+                  <a href="<?php echo checkAdminInList($userId) ? 'https://www.instagram.com/sonnynguyenthai/' : '#' ?>"><i class="fab fa-instagram fa-lg"></i></a>
                 </div>
               </div>
             </div>

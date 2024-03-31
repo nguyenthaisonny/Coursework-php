@@ -53,11 +53,11 @@ $userUnRead = countRow("SELECT id FROM messages WHERE readStatus=0 AND userId !=
         </a>
 
 
+        
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="?module=home&page=forum/forum" class=" px-2 nav-item <?php echo explode('/',$_GET['page'])[0] =='forum' || explode('/',$_GET['page'])[0] =='question'  || explode('/',$_GET['page'])[0] =='reply'   ? 'active' : null ?> ">Forum</a></li>
           <li><a  href="?module=home&page=contact/contact" class=" px-2 nav-item  <?php echo !empty($_GET['page']) && $_GET['page']=='contact/contact'  ? 'active' : null ?>">Contact</a></li>
-          <li><a href="#" class=" px-2 nav-item">Customers</a></li>
-          <li><a href="#" class=" px-2 nav-item">Products</a></li>
+          <li><a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" class=" px-2 nav-item <?php echo !empty($_GET['page']) && $_GET['page']=='profile/profileView'  ? 'active' : null ?>">Wall</a></li>
         </ul>
 
         <button class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 mg-btn primary" style="margin-top: 0;">

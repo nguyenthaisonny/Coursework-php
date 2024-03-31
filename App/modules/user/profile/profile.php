@@ -173,7 +173,12 @@ if (!empty($userDetail)) {
 
 
                     <!-- Profile info-->
-                    <h6 style="margin: 16px 0 0 0;font-size: 14px; font-weight: 500;"><?php echo getOldValue($old, 'fullname') ?></h6>
+                    <h6 style="margin: 16px 0 0 0;font-size: 16px; font-weight: 600;">
+                        <?php echo getOldValue($old, 'fullname') ?>
+                        <?php echo checkAdminInList($userId) ? '<span style="color: #20D5EC; font-size: 16px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>
+
+                    </h6>
+
                     <p class="small font-italic text-muted mb-4"><?php echo getOldValue($old, 'email') ?></p>
 
                     <!-- Profile picture button-->
@@ -220,11 +225,11 @@ if (!empty($userDetail)) {
 
                             echo formErr('phone', '<span class="error" >', '</span>', $errors);
                             ?>
-                            
+
                             <div class=" gx-3" style="padding-top: 16px;">
                                 <label class="small mb-1" for="inputUsername">Description</label>
                                 <input name="description" type="text" class="form-control" placeholder="Description about your self ^^" value="<?php echo getOldValue($old, 'description') != 'NULL' ? getOldValue($old, 'description') : null ?>">
-                                
+
 
                             </div>
 

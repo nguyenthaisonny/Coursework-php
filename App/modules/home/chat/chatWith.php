@@ -15,8 +15,12 @@ if (isGet()) {
 
     $listFriend = getRaws("SELECT * FROM users");
     $friendId = $filterAll['friendId'];
-    $friendDetail = getRaw("SELECT fullname, profileImage FROM users WHERE id = '$friendId'");
+    $friendDetail = getRaw("SELECT fullname, profileImage, description FROM users WHERE id = '$friendId'");
     $listMessageUser = getRaws("SELECT * FROM messages WHERE userId = '$userId' AND toUserId='$friendId' ORDER BY 'createAt' DESC");
+//     echo '<pre>';
+//    print_r($friendDetail);
+//    echo '</pre>';
+
     $listMessageFriend = getRaws("SELECT * FROM messages WHERE userId = '$friendId' AND toUserId='$userId'  ORDER BY 'createAt' DESC");
     $listMessage = array_merge($listMessageUser, $listMessageFriend);
     // sort listMessage to latest
@@ -25,8 +29,6 @@ if (isGet()) {
         $ord[] = strtotime($value['createAt']);
     }
     array_multisort($ord, SORT_ASC, $listMessage);
-    
-    
 }
 if (isPost()) {
     $filterAll = filter();
@@ -90,31 +92,38 @@ layouts('headerRoom', $data)
                                 $ord = array();
                                 foreach ($listMessageInFriendList as $key => $value) {
                                     $ord[] = strtotime($value['createAt']);
-                                    if($value['toUserId']==$userId) {
+                                    if ($value['toUserId'] == $userId) {
                                         continue;
                                     }
                                 }
                                 array_multisort($ord, SORT_ASC, $listMessageInFriendList);
-                                if(!empty($listMessageInFriendList)) {
+                                if (!empty($listMessageInFriendList)) {
 
                                     $lastMessage = $listMessageInFriendList[count($listMessageInFriendList) - 1];
                                     $myMessage = false;
                                     $readStatus = false;
                                     // check  last mess belongs to user of friend
-                                    if($lastMessage['userId'] == $userId) {
+                                    if ($lastMessage['userId'] == $userId) {
                                         $myMessage = true;
                                     } else {
                                         // check read status
-                                        if($lastMessage['userId'] == $friendId && $lastMessage['toUserId'] == $userId) {
+                                        $lastMessageId = $lastMessage['id'];
+    
+                                        $queryReadStatus = getRaw("SELECT readStatus FROM messages WHERE id = $lastMessageId");
+                                        if($queryReadStatus['readStatus'] == 1) {
+                                            $readStatus = true;
+                                           
+                                        }
+                                        if ($lastMessage['userId'] == $_GET['friendId'] && $lastMessage['toUserId'] == $_GET['userId']) {
                                             $readStatus = true;
                                             $dataUpdate = ['readStatus' => 1];
-                                            update('messages', $dataUpdate, "userId = '$friendId' AND toUserId = '$userId'");
+                                            update('messages', $dataUpdate, "id='$lastMessageId'");
                                         }
                                     }
                                 } else {
                                     $lastMessage = [];
                                 }
-                               
+
 
 
 
@@ -128,17 +137,29 @@ layouts('headerRoom', $data)
 
                                             <i style="position: absolute; left: 34px; top: 28px;" class="fa fa-circle <?php echo $isOnline ? 'online' : 'offline' ?>"></i>
                                         </div>
-                                        <div class="about">
-                                            <div style="font-weight: 600;" class="name"><?php echo $item['fullname'] ?></div>
-                                            <div style="<?php echo $myMessage || $readStatus ? 'color: #65676b;': null ?>">
 
-                                            <?php
-                                                if(!empty($lastMessage)) {
-                                                    echo strlen($lastMessage['messageContent']) < 14  ? $lastMessage['messageContent'] :  substr($lastMessage['messageContent'], 0, 14) . "..."; 
+                                        <div class="about">
+                                            <div style="font-weight: 600;" class="name">
+                                                <?php echo $item['fullname'] ?>
+                                                <?php echo checkAdminInList($friendId) ? '<span style="color: #20D5EC; font-size: 14px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>
+                                            </div>
+                                            <div style="<?php echo $myMessage || $readStatus ? 'color: #65676b;': 'color: black; font-weight:600;'?>">
+
+
+                                                <?php
+
+                                                if (!empty($lastMessage)) {
+                                                    if ($lastMessage['userId'] == $userId) {
+
+                                                        echo strlen($lastMessage['messageContent']) < 14  ? 'You: ' . $lastMessage['messageContent'] :  substr($lastMessage['messageContent'], 0, 14) . "...";
+                                                    } else {
+                                                        echo strlen($lastMessage['messageContent']) < 14  ? $lastMessage['messageContent'] :  substr($lastMessage['messageContent'], 0, 14) . "...";
+                                                    }
                                                 }
-                                            ?>
+                                                ?>
                                             </div>
                                         </div>
+
                                     </a>
                                 </li>
                             <?php
@@ -166,8 +187,8 @@ layouts('headerRoom', $data)
 
                                 </a>
                                 <div class="chat-about">
-                                    <h6 class="m-b-0"><?php echo $friendDetail['fullname'] ?></h6>
-                                    <small>Last seen: 2 hours ago</small>
+                                    <h5 style="font-weight: 600;" class="m-b-0"><?php echo $friendDetail['fullname'] ?></h5>
+                                    <small><?php echo $friendDetail['description'] ?></small>
                                 </div>
                             </div>
 

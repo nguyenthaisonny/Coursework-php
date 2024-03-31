@@ -95,14 +95,24 @@ layouts('headerRoom', $data)
                                             <i style="position: absolute; left: 34px; top: 28px;" class="fa fa-circle <?php echo $isOnline ? 'online' : 'offline' ?>"></i>
                                         </div>
                                         <div class="about">
-                                            <div style="font-weight: 600;" class="name"><?php echo $item['fullname'] ?></div>
-                                            <div style="<?php echo $myMessage || $readStatus ? 'color: #65676b;': null ?>">
+                                            <div style="font-weight: 600;" class="name">
+                                            <?php echo $item['fullname'] ?>
+                                            <?php echo checkAdminInList($friendId) ? '<span style="color: #20D5EC; font-size: 14px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>
+                                        </div>
+                                            <div style="<?php echo $myMessage || $readStatus ? 'color: #65676b;': 'color: black; font-weight:600;'?>">
 
                                             <?php
+
                                                 if(!empty($lastMessage)) {
-                                                    echo strlen($lastMessage['messageContent']) < 14  ? $lastMessage['messageContent'] :  substr($lastMessage['messageContent'], 0, 14) . "..."; 
+                                                    if($lastMessage['userId'] == $userId) {
+
+                                                        echo strlen($lastMessage['messageContent']) < 14  ? 'You: '. $lastMessage['messageContent'] :  substr($lastMessage['messageContent'], 0, 14) . "..."; 
+                                                    } else {
+                                                        echo strlen($lastMessage['messageContent']) < 14  ? $lastMessage['messageContent'] :  substr($lastMessage['messageContent'], 0, 14) . "..."; 
+                                                    }
                                                 }
                                             ?>
+
                                             </div>
                                         </div>
                                     </a>

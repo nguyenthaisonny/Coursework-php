@@ -48,7 +48,7 @@ layouts('headerContact', $data)
 	<div class="container">										
 		<div class="section-title text-center">
 			<h1>Get in Touch</h1>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim. Aenean vitae metus in augue pretium ultrices.</p>
+			<p>We're thrilled to connect with you here. Whether you have questions, feedback, or simply want to say hello, this is the place to do it. At NGUYEN THAI SONNY GROUP's Forum, we value every interaction and look forward to hearing from you.</p>
 		</div>		
         <?php
                 if (!empty($smg)) {
