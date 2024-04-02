@@ -62,9 +62,10 @@ $userUnRead = countRow("SELECT id FROM messages WHERE readStatus=0 AND userId !=
           <li><a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>" class=" px-2 nav-item <?php echo !empty($_GET['page']) && $_GET['page']=='profile/profileView'  ? 'active' : null ?>">Wall</a></li>
         </ul>
 
-        <button style="cursor: default;" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 mg-btn primary" style="margin-top: 0;">
+        <button style="cursor: default;margin: 0;" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 mg-btn primary" style="margin-top: 0;">
           Hi <?php echo $userName ?> ^^
         </button>
+
 
         <?php
         echo checkAdminNotSignOut() ? "<a style='position: relative; margin-left: 10px;' class='col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3' href='?module=admin&page=message/readMessage'>" .

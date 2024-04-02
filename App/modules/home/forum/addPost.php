@@ -96,29 +96,15 @@ layouts('headerForum', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <?php 
-                            if(checkAdminNotSignOut()) {
-                                if($_GET['type']) {
-                                  echo '<button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                                  <a class="mediumAnker" href="?module=home&page=forum/addPost"'.$_GET['type'].'>
-          
-                                      New post <i class="fa-solid fa-plus"></i>
-                                  </a>
-                                    </button>' ; 
-                                } else {
-                                    echo '<button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                                  <a class="mediumAnker" href="?module=home&page=forum/addPost">
-          
-                                      New post <i class="fa-solid fa-plus"></i>
-                                  </a>
-                                    </button>' ; 
-                                }
-                            
-                            } else {
-                                echo ' <div style="padding-right: 62px;color: rgb(104, 85, 224);font-weight: 600;">
-                                Filter Topic Here: </div>';
-                            }
-                     ?>
+                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%; <?php echo !checkAdminNotSignOut() ? 'display: none;' : '' ?>">
+                        <a class="mediumAnker" href="?module=home&page=forum/addPost<?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">
+
+                            New post <i class="fa-solid fa-plus"></i>
+                        </a>
+                    </button>
+                    <div style="padding-right: 62px;color: rgb(104, 85, 224);font-weight: 600;<?php echo checkAdminNotSignOut() ? 'display: none;' : '' ?>">
+                                Filter Topic Here: 
+                    </div>
                 </div>
                 <!-- /Inner sidebar header -->
 
@@ -170,8 +156,8 @@ layouts('headerForum', $data);
                     <div style="margin: auto; font-size: 20px; color: rgb(104, 85, 224);font-weight: 600;">
                         Welcome to our forum community <span><i style="    color: rgb(254, 44, 85); " class="fa-solid fa-heart"></i></span></div>
                     <?php echo checkAdminNotSignOut() ? '<a id="deleteAll" href="?module=admin&page=manage/deleteAllPost" data-toggle="tooltip" data-placement="top" title="Delete all" style="position: absolute; right: 26px; top: 20px; color: rgb(254, 44, 85); " type="button" href="">
-<i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
-</a>' : null; ?>
+                        <i  class="fa-solid fa-delete-left" style="font-size: 26px"></i>
+                        </a>' : null; ?>
 
 
                 </div>
@@ -219,12 +205,12 @@ layouts('headerForum', $data);
                                             </div>
 
                                         </div>
-                                        <div style="<?php echo checkAdminNotSignOut() ? '' : 'display: none;'?> position: absolute; right: 13px; top: 13px;" class="dropdown show">
+                                        <div style="<?php echo checkAdminNotSignOut() ? '' : 'display: none;' ?> position: absolute; right: 13px; top: 13px;" class="dropdown show">
                                             <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
                                             </a>
 
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <div style="<?php echo checkAdminNotSignOut() ? '' : 'display: none;' ?>" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                                 <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/editPost&postId=<?php echo $item['id'] ?>&userIdPost=<?php echo $item['userId'] ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit post</a>
                                                 <a class="dropdown-item" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/deletePost&postId=<?php echo $item['id'] ?>&userIdDelete=<?php echo $item['userId'] ?>" onclick="return confirm('Delete this post?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>Delete post</a>
                                             </div>

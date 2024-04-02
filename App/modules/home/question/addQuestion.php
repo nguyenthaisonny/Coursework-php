@@ -151,12 +151,16 @@ layouts('headerPost', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a href="?module=home&page=question/addQuestion&postId=<?php echo $postId; ?>&userIdEdit=<?php echo $userIdEdit ?>" style="padding: 0 39px;">
+                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%; <?php echo checkAdminNotSignOut() ? 'display: none;' : '' ?> ">
+                        <a style="padding: 12px 38px;" href="?module=home&page=question/addQuestion&postId=<?php echo $postId; ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">
 
                             New question <i class="fa-solid fa-plus"></i>
                         </a>
                     </button>
+                    <div style="padding-right: 38px;color: rgb(104, 85, 224);font-weight: 600;<?php echo !checkAdminNotSignOut() ? 'display: none;' : '' ?>">
+                                Filter Questions Here: 
+
+                    </div>
                 </div>
                 <!-- /Inner sidebar header -->
 
