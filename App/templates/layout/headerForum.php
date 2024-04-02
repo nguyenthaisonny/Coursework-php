@@ -61,7 +61,7 @@ $userUnRead = countRow("SELECT id FROM messages WHERE readStatus=0 AND userId !=
         </ul>
           
 
-        <button class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 mg-btn primary" style="margin-top: 0;">
+        <button style="cursor: default;" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 mg-btn primary" style="margin-top: 0;">
           Hi <?php echo $userName ?> ^^
         </button>
         <?php

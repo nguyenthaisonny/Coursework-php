@@ -33,7 +33,7 @@ if (isPost()) {
     $messageDetail = getRaw("SELECT * FROM messages WHERE id = '$messageId'");
     $userDetail = getRaw("SELECT id, fullname, email, profileImage FROM users WHERE id = '$userId'");
     $adminDetail = getRaw("SELECT fullname, email FROM users WHERE id = '$adminId'");
-    
+
     if (empty($userDetail)) {
         setFlashData('smg', 'User is not exist!');
         setFlashData('smg_type', 'danger');
@@ -41,36 +41,82 @@ if (isPost()) {
 
         $filterAll = filter();
         //insert to database
-       
+
         $dataInsert = [
-            
+
             'userId' => $adminId,
             'messageSubject' => $messageDetail['messageSubject'],
             'messageContent' => $filterAll['replyContent'],
             'belong' => 'admin',
             'toUserId' => $userId
-            
+
         ];
         $insertStatus = insert('messages', $dataInsert);
         //update replystatus
         $dataUpdate = [
             'replyStatus' => 1
         ];
-        $updateStatus = update('messages',$dataUpdate, "id = '$messageId'");
+        $updateStatus = update('messages', $dataUpdate, "id = '$messageId'");
         //send mail
         $replyContent = $filterAll['replyContent'];
-        $subject = $userDetail['fullname'] . ' [Reply] ';
-        $content = 'Hi ' . $filterAll['fullname'] . '<br>';
-        $content .= '- Your message: ' . '<br>';
-        $content .= '+ Subject: ' . $messageDetail['messageSubject'] . '<br>';
-        $content .= '+ Content: ' . $messageDetail['messageContent'] . '<br>';
-        $content .= '- Our answer is: ' . '<br>';
-        $content .= $replyContent . '<br>';
+
+        $content = '<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                color: #333;
+            }
+            p {
+                color: #666;
+            }
+            .button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            
+            <p>Hello, ' . $userDetail['fullname'] . '</p>
+            <h3>Your message you sent us are: </h3>
+            <h5>Subject: ' . $messageDetail['messageSubject'] . '</h5>
+            <p>' . $messageDetail['messageContent'] . '</p>
+            <h3>We would like to answer as follows: </h3>
+            
+            <p>' . $replyContent . '</p>
+            
+            
+        </div>
+    </body>
+    </html>';
 
 
 
 
-        $content .= 'Thanks for your contribution <span>❤</span>';
+        $subject = 'Message from admin of Nguyen Thai Sonny forum';
 
         $sendMail = sendMail($userDetail['email'], $subject, $content);
         if ($sendMail && $dataInsert) {
@@ -100,12 +146,12 @@ layouts('headerReplyMessage', $data);
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container">
     <div class="email-app mb-4">
-        
-        
+
+
         <main class="message">
             <a href="?module=admin&page=message/readMessage" class="btn mg-btn rounded">Back</a>
             <div class="toolbar">
-                
+
             </div>
             <?php
             if (!empty($smg)) {
@@ -125,7 +171,7 @@ layouts('headerReplyMessage', $data);
                 <div class="content">
                     <blockquote>
                         <p>
-                             <?php echo $messageDetail['messageContent'] ?>
+                            <?php echo $messageDetail['messageContent'] ?>
                         </p>
 
                     </blockquote>
@@ -162,7 +208,7 @@ layouts('headerReplyMessage', $data);
                         <textarea class="form-control" name="replyContent" rows="12" placeholder="Click here to reply"></textarea>
                     </div>
                     <div class="form-group" style="margin-top: 16px">
-                        <button tabindex="3" type="submit" class="btn mg-btn primary">Send message</button>
+                        <button tabindex="3" type="submit" class="btn mg-btn primary">Send Message</button>
                     </div>
                 </form>
             </div>

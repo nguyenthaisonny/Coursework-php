@@ -166,7 +166,7 @@ if (!empty($userDetail)) {
         <div class="col-xl-4">
             <!-- Profile picture card-->
             <div class="card mb-4 mb-xl-0">
-                <div class="card-header">Profile Picture</div>
+                <div class="card-header">Avatar</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
                     <img width="160" height="160" class="rounded-circle" src=<?php echo !empty(getOldValue($old, 'profileImage')) ? getOldValue($old, 'profileImage') : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?> alt="">
@@ -248,7 +248,7 @@ if (!empty($userDetail)) {
 
                         <!-- Save changes button-->
                         <hr class="mt-0 mb-3">
-                        <button class="mg-btn rounded" style="margin-top: 0;" type="submit">Save changes</button>
+                        <button class="mg-btn rounded" style="margin-top: 0;" type="submit">Save Changes</button>
                     </form>
 
                 </div>

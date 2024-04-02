@@ -205,13 +205,13 @@ layouts('headerRoom', $data)
                                 foreach ($listMessage as $item) :
 
 
-
+                                    
 
                                     $count++;
                             ?>
                                     <li class="clearfix" style="position: relative;">
 
-                                        <div class="<?php echo $item['userId'] == $_GET['userId'] ? 'message other-message float-right' : 'message my-message'; ?>">
+                                        <div style="max-width: 400px" class="<?php echo $item['userId'] == $_GET['userId'] ? 'message other-message float-right' : 'message my-message'; ?>">
                                             <?php echo $item['messageContent'] ?>
                                         </div>
                                         <p style="<?php echo $item['userId'] == $_GET['userId'] ? 'position: absolute; right: 6px;; bottom: -18px; margin: 2px 0; font-size: 12px; color: #ccc ;line-height: 12px;' : 'position: absolute; left: 6px; bottom: -18px; margin: 2px 0; font-size: 12px; color: #ccc ;line-height: 12px;'; ?>"><?php echo  formatTimeDifference($item['createAt']); ?></p>

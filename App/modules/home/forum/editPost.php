@@ -121,12 +121,29 @@ layouts('headerEditPost', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a href="?module=home&page=forum/addPost" style="padding: 0 50px;">
-
-                            New post <i class="fa-solid fa-plus"></i>
-                        </a>
-                    </button>
+                    <?php 
+                            if(checkAdminNotSignOut()) {
+                                if($_GET['type']) {
+                                  echo '<button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                                  <a class="mediumAnker" href="?module=home&page=forum/addPost"'.$_GET['type'].'>
+          
+                                      New post <i class="fa-solid fa-plus"></i>
+                                  </a>
+                                    </button>' ; 
+                                } else {
+                                    echo '<button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                                  <a class="mediumAnker" href="?module=home&page=forum/addPost">
+          
+                                      New post <i class="fa-solid fa-plus"></i>
+                                  </a>
+                                    </button>' ; 
+                                }
+                            
+                            } else {
+                                echo ' <div style="padding-right: 62px;color: rgb(104, 85, 224);font-weight: 600;">
+                                Filter Topic Here: </div>';
+                            }
+                     ?>
                 </div>
                 <!-- /Inner sidebar header -->
 
@@ -223,7 +240,7 @@ layouts('headerEditPost', $data);
                                             </div>
 
                                         </div>
-                                        <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
+                                        <div style="<?php echo checkAdminNotSignOut() ? '' : 'display: none;'?>position: absolute; right: 13px; top: 13px;" class="dropdown show">
                                             <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
                                             </a>

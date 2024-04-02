@@ -121,21 +121,21 @@ $old = getFlashData('old');
                 <div class="col">
                     <div class="form-group mg-form">
                         <label for="">Fullname</label>
-                        <input name="fullname" type="fullname" class="form-control" placeholder="Enter your name" value=<?php echo getOldValue($old, 'fullname') ?>>
+                        <input name="fullname" type="fullname" class="form-control" placeholder="Enter user's name" value=<?php echo getOldValue($old, 'fullname') ?>>
                         <?php
                         echo formErr('fullname', '<span class="error" >', '</span>', $errors);
                         ?>
                     </div>
                     <div class="form-group mg-form">
                         <label for="">Email</label>
-                        <input name="email" type="email" class="form-control" placeholder="Enter your email" value=<?php echo  getOldValue($old, 'email') ?>>
+                        <input name="email" type="email" class="form-control" placeholder="Enter user's email" value=<?php echo  getOldValue($old, 'email') ?>>
                         <?php
                         echo formErr('email', '<span class="error" >', '</span>', $errors);
                         ?>
                     </div>
                     <div class="form-group mg-form">
                         <label for="">Phone number</label>
-                        <input name="phone" type="number" class="form-control" placeholder="Enter your phone" value=<?php echo  getOldValue($old, 'phone') ?>>
+                        <input name="phone" type="number" class="form-control" placeholder="Enter user's phone" value=<?php echo  getOldValue($old, 'phone') ?>>
                         <?php
 
                         echo formErr('phone', '<span class="error" >', '</span>', $errors);
@@ -145,7 +145,7 @@ $old = getFlashData('old');
                 <div class="col">
                     <div class="form-group mg-form">
                         <label for="">Password</label>
-                        <input name="password" type="password" class="form-control" placeholder="Enter your password" value=<?php echo  getOldValue($old, 'password') ?>>
+                        <input name="password" type="password" class="form-control" placeholder="Enter user's password" value=<?php echo  getOldValue($old, 'password') ?>>
                         <?php
 
                         echo formErr('password', '<span class="error" >', '</span>', $errors);
@@ -154,7 +154,7 @@ $old = getFlashData('old');
 
                     <div class="form-group mg-form">
                         <label for="">Confirmed password</label>
-                        <input name="password_confirm" type="password" class="form-control" placeholder="Confirm your password" value=<?php echo  getOldValue($old, 'password_confirm') ?>>
+                        <input name="password_confirm" type="password" class="form-control" placeholder="Confirm user's password" value=<?php echo  getOldValue($old, 'password_confirm') ?>>
                         <?php
 
                         echo formErr('password_confirm', '<span class="error" >', '</span>', $errors);

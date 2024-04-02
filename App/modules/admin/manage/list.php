@@ -90,5 +90,5 @@ layouts('headerIn', $data);
 
 
 <?php
-layouts('footerIn')
+layouts('footer')
 ?>

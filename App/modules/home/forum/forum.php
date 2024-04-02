@@ -12,6 +12,7 @@ if (!checkLogin()) {
     reDirect('?module=auth&page=login');
 }
 
+
 $listPost = getRaws("SELECT * FROM posts ORDER BY updateAt DESC");
 if (!empty($_GET['type'])) {
     $newListPost = [];
@@ -63,12 +64,30 @@ layouts('headerForum', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                    <button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
-                        <a class="mediumAnker" href="?module=home&page=forum/addPost<?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">
-
-                            New post <i class="fa-solid fa-plus"></i>
-                        </a>
-                    </button>
+                    <?php 
+                            if(checkAdminNotSignOut()) {
+                                if($_GET['type']) {
+                                  echo '<button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                                  <a class="mediumAnker" href="?module=home&page=forum/addPost"'.$_GET['type'].'>
+          
+                                      New post <i class="fa-solid fa-plus"></i>
+                                  </a>
+                                    </button>' ; 
+                                } else {
+                                    echo '<button type="button" class="mg-btn medium rounded " style="margin: 0 25%;">
+                                  <a class="mediumAnker" href="?module=home&page=forum/addPost">
+          
+                                      New post <i class="fa-solid fa-plus"></i>
+                                  </a>
+                                    </button>' ; 
+                                }
+                            
+                            } else {
+                                echo ' <div style="padding-right: 62px;color: rgb(104, 85, 224);font-weight: 600;">
+                                Filter Topic Here: </div>';
+                            }
+                     ?>
+                   
                 </div>
                 <!-- /Inner sidebar header -->
 
@@ -134,6 +153,7 @@ layouts('headerForum', $data);
 
                 <!-- Forum List -->
                 <ul class="inner-main-body p-2 p-sm-3 collapse forum-content show" id='listPost'>
+                    
                     <button id="myBtn" title="Go to top" style="border-radius: 50%;"><i class="fa-solid fa-arrow-up"></i></button>
 
                     <?php
@@ -170,7 +190,7 @@ layouts('headerForum', $data);
                                             </div>
 
                                         </div>
-                                        <div style="position: absolute; right: 13px; top: 13px;" class="dropdown show">
+                                        <div style="<?php echo checkAdminNotSignOut() ? '' : 'display: none;'?>position: absolute; right: 13px; top: 13px;" class="dropdown show">
                                             <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>
                                             </a>

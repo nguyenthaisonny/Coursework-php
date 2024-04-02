@@ -91,7 +91,7 @@ function getRaw($sql) {
     }
     return $dataFetch;
 }
-//Count Raw
+//Count Row
 function countRow($sql) {
     $result = query($sql,'',true);
     if(!empty($result)) {

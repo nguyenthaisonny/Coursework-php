@@ -9,6 +9,8 @@ const _HOST = 'localhost';
 const _DB = 'app';
 const _USER = 'root';
 const _PASS = '';
+const _EMAIL = 'sonnynguyenthai@gmail.com';
+const _EMAILPASSWORD = 'gaii cbjs xnry peld';
 // config host
 define('_WEB_HOST', 'http://'. $_SERVER['HTTP_HOST']. '/coursework/App');
 define('_WEB_HOST_TEMPLATES', _WEB_HOST. '/templates');

@@ -35,8 +35,6 @@ if (!empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
 
                 $newListReply = getRaws("SELECT * FROM replies  WHERE questionId='$questionId' ORDER BY updateAt");
                 break;
-
-            
         }
     } else {
         $newListReply = $listReply;
@@ -119,7 +117,7 @@ layouts('headerPost', $data);
                 <!-- Inner main header -->
                 <div class="inner-main-header">
                     <a class="nav-link nav-icon rounded-circle nav-link-faded mr-3 d-md-none" href="#" data-toggle="inner-sidebar"><i class="material-icons">arrow_forward_ios</i></a>
-                   
+
 
                 </div>
                 <?php
@@ -236,12 +234,14 @@ layouts('headerPost', $data);
 
 
 
+                                                    <div style="width: 50px;">
 
-                                                    <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
+                                                        <a href="?module=user&page=profile/profileView&userId=<?php echo $userId ?>">
 
-                                                        <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle">
+                                                            <img src="<?php echo !empty($userDetail['profileImage']) ? $userDetail['profileImage'] : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=826&t=st=1710127291~exp=1710127891~hmac=10efc92f9bddd8afe06fa86d74c0caf109f33b79794fd0fc982a01c8bff70758"; ?>" class="d-block ui-w-40 rounded-circle">
 
-                                                    </a>
+                                                        </a>
+                                                    </div>
                                                     <div class="media-body ml-3" style="position: absolute; left: 62px; top: 12px;">
                                                         <div style="display: flex; align-items: flex-start;">
                                                             <div style="padding-right: 4px;">
@@ -320,8 +320,8 @@ layouts('headerPost', $data);
         </div>
 
 
-        <input id='postId' type="hidden" value="<?php echo $postId?>" >
-        <input id='questionId' type="hidden" value="<?php echo $questionId?>" >
+        <input id='postId' type="hidden" value="<?php echo $postId ?>">
+        <input id='questionId' type="hidden" value="<?php echo $questionId ?>">
 
     </div>
 </div>
@@ -332,7 +332,7 @@ layouts('headerPost', $data);
 
     latest.onclick = function(e) {
 
-        const urlParams = new URLSearchParams('?module=home&page=reply/question&questionId=' + document.getElementById('questionId').value + '&postId=' +  document.getElementById('postId').value);
+        const urlParams = new URLSearchParams('?module=home&page=reply/question&questionId=' + document.getElementById('questionId').value + '&postId=' + document.getElementById('postId').value);
 
 
 

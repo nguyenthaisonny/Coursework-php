@@ -17,21 +17,68 @@ if (!$isAdmin) {
 
 
 if (isPost()) {
-   
+
 
     $filterAll = filter();
     $replyContent = $filterAll['replyContent'];
     $replySubject = $filterAll['replySubject'];
     $emailTarget = $filterAll['emailTarget'];
-    
-
-    
-    $content = 'Hi! '.  '<br>';
-    $content .= $replyContent . '<br>';
 
 
 
-    $content .= 'Thanks for your contribution <span>❤</span>';
+    $content = '<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                color: #333;
+            }
+            p {
+                color: #666;
+            }
+            .button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            
+            <p>Hello,</p>
+            <p>'.$replyContent.'</p>
+            <p>Warm regards, </p>
+            <p>Nguyen Thai Sonny</p>
+            <p>Admin of Nguyen Thai Sonny Forum</p>
+
+            
+        </div>
+    </body>
+    </html>';
+
+
+
 
     $sendMail = sendMail($emailTarget, $replySubject, $content);
     if ($sendMail) {
@@ -63,29 +110,15 @@ layouts('headerReplyMessage', $data);
         <nav>
             <a href="?module=admin&page=message/readMessage" class="btn mg-btn rounded">Back</a>
             <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">4</span></a>
+                <li class="nav-item" style="background-color: #eee;">
+                    <a class="nav-link" href="#"><i class="fa fa-inbox"></i> Inbox </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-star"></i> Stared</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-rocket"></i> Sent</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-trash-o"></i> Trash</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-bookmark"></i> Important<span class="badge badge-info">5</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-inbox"></i> Inbox <span class="badge badge-danger">4</span></a>
-                </li>
+
             </ul>
         </nav>
         <main class="message">
             <div class="toolbar">
-                <div class="btn-group">
+                <!-- <div class="btn-group">
                     <button type="button" class="btn btn-light">
                         <span class="fa fa-star"></span>
                     </button>
@@ -121,7 +154,7 @@ layouts('headerReplyMessage', $data);
                         <a class="dropdown-item" href="#">add label <span class="badge badge-success"> Clients</span></a>
                         <a class="dropdown-item" href="#">add label <span class="badge badge-warning"> News</span></a>
                     </div>
-                </div>
+                </div> -->
             </div>
             <?php
             if (!empty($smg)) {
@@ -129,7 +162,7 @@ layouts('headerReplyMessage', $data);
             }
             ?>
             <div class="details">
-               
+
                 <!-- <div class="attachments">
                     <div class="attachment">
                         <span class="badge badge-danger">zip</span> <b>bootstrap.zip</b> <i>(2,5MB)</i>
@@ -163,14 +196,14 @@ layouts('headerReplyMessage', $data);
                     </div>
                     <div class="form-group" style="margin-top: 10px;">
                         <label for="">Subject: </label>
-                        <input name="replySubject" class="form-control" placeholder="Write something" required="required">
+                        <input name="replySubject" class="form-control" placeholder="Write subject" required="required">
                     </div>
                     <div class="form-group" style="margin-top: 10px;">
-                    <label for="">Content: </label>
+                        <label for="">Content: </label>
                         <textarea class="form-control" name="replyContent" rows="12" placeholder="Write something" required="required"></textarea>
                     </div>
-                    <div class="form-group" style="margin-top: 16px;">
-                        <button tabindex="3" type="submit" class="btn btn-success" >Send message</button>
+                    <div class="form-group" style="margin-top: 16px">
+                        <button tabindex="3" type="submit" class="btn mg-btn primary">Send message</button>
                     </div>
                 </form>
             </div>

@@ -24,7 +24,14 @@ if (!empty($filterAll['id'])) {
             foreach($listQuestion as $item) {
                 $questionId = $item['id'];
 
-                $deleteReply = delete('replies', "questionId='$questionId'");
+                $deleteReply = delete('replies', "id='$questionId'");
+            }
+            // reply in another question that not belong to this user
+            $listReply = getRaws("SELECT id FROM replies WHERE userId='$userId'");
+            foreach($listReply as $item) {
+                $replyId = $item['id'];
+
+                $deleteReply = delete('replies', "id='$replyId'");
             }
             //deleteQuestion
             $listPost = getRaws("SELECT id FROM posts WHERE userId='$userId'");
@@ -40,8 +47,18 @@ if (!empty($filterAll['id'])) {
                
                 $deletePost = delete('posts', "id='$postId'");
             }
+            // deleteMessage
+            $listMessage = getRaws("SELECT id FROM messages WHERE userId='$userId'");
+            foreach($listMessage as $item) {
+                $messageId = $item['id'];
+                $deletePost = delete('messages', "id='$messageId'");
+            }
+
+                
+
+               
             $deleteUser = delete('users', "id='$userId'");
-           
+            
             if ($deleteUser) {
                 setFlashData('smg', 'Delete success');
                 setFlashData('smg_type', 'success');
