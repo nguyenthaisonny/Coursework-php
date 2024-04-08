@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('_CODE')) {
     die('Access denied...');
 }
@@ -16,6 +17,7 @@ if ($_POST) {
         if (!empty($userQuery)) {
             $passwordHash = $userQuery['password'];
             $userId = $userQuery['id'];
+            
             if (password_verify($password, $passwordHash)) {
                 //create tokenlogin
                 $tokenLogin = sha1(uniqid() . time());

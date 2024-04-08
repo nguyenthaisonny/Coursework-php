@@ -67,13 +67,13 @@ layouts('headerContact', $data)
 								<input type="email" name="emailMessage" class="form-control" placeholder="Email" style="cursor: not-allowed;"  value="<?php echo getOldValue($old, 'email')?>">
 							</div>
 							<div class="form-group col-md-12 " style="margin-top: 16px;">
-								<input type="text" name="messageSubject" class="form-control" placeholder="Subject" required="required">
+								<input style="<?php echo checkAdminNotSignOut() ? "cursor: not-allowed" : null?>" type="text" name="messageSubject" class="form-control" placeholder="Subject" required="required">
 							</div>
 							<div class="form-group col-md-12" style="margin-top: 16px;">
-								<textarea rows="6" name="messageContent" class="form-control" placeholder="Your Message" required="required"></textarea>
+								<textarea style="<?php echo checkAdminNotSignOut() ? "cursor: not-allowed" : null?>" rows="6" name="messageContent" class="form-control" placeholder="Your Message" required="required"></textarea>
 							</div>
 							<div class="col-md-12 text-center" style="margin-top: 16px;">
-								<button type="submit"  class="btn btn-contact-bg" title="Submit Your Message!">Send Message</button>
+								<button type="submit"  class="btn btn-contact-bg <?php echo checkAdminNotSignOut() ? "disabled" : null?>" title="Submit Your Message!">Send Message</button>
 							</div>
 						</div>
 					</form>
