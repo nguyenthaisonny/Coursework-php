@@ -66,7 +66,7 @@ layouts('headerIn', $data);
                 <td><?php echo $item['status'] == 1 ? '<button class="btn btn-success btn-sm">Active</button>' :  '<button class="btn btn-danger btn-sm">Not active</button>'; ?></td>
                 <td><?php echo $item['role']; ?></td>
                             
-                <td><a  style="<?php echo checkAdminInList($item['id']) ? 'display: none' : null ?>" href="<?php echo _WEB_HOST;?>/?module=admin&page=manage/edit&id=<?php echo $item['id']?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                <td><a href="<?php echo _WEB_HOST;?>/?module=admin&page=manage/edit&id=<?php echo $item['id']?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a></td>
                 <td><a  style="<?php echo checkAdminInList($item['id']) ? 'display: none' : null ?>" href="<?php echo _WEB_HOST;?>/?module=admin&page=manage/delete&id=<?php echo $item['id']?>" onclick="return confirm('Delete this row?')" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a></td>
             </tr>
 
