@@ -110,7 +110,7 @@ $old = getFlashData('old');
 
 <div class="container">
     <div class="row" style="margin: 50px auto;">
-        <h2 class="text-center text-uppercase">Add user</h2>
+        <h2 class="text-center  text-uppercase">Add user</h2>
         <?php
         if (!empty($smg)) {
             getSmg($smg, $smgType);

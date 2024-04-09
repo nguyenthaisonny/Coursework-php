@@ -37,7 +37,12 @@ layouts('headerIn', $data);
     ?>
     <p>
 
-        <a href="?module=admin&page=manage/add" class="btn btn-success btn-sm">Add user <i class="fa-solid fa-plus"></i></a>
+        <a href="?module=admin&page=manage/add" >
+            <button class="mg-btn primary">
+                Add user <i class="fa-solid fa-plus"></i>
+
+            </button>
+            </a>
     </p>
     <table class="table table-bordered">
         <thead>

@@ -12,15 +12,14 @@ $filterAll = filter();
 if (!empty($filterAll['id'])) {
     $userId = $filterAll['id'];
     
-    $postId = getRaw("SELECT id FROM posts WHERE userId = '$userId'")['id'];
-    $questionId =  getRaw("SELECT id FROM questions WHERE userId = '$userId'")['id'];
-    $replyId =  getRaw("SELECT id FROM replies WHERE userId = '$userId'")['id'];
+    
+    
     $userDetail = countRow("SELECT id FROM users WHERE id='$userId'");
     if ($userDetail > 0) {
         $deleteToken = delete('tokenlogin', "userId='$userId'");
         if ($deleteToken) {
             //delete reply
-            $listQuestion = getRaws("SELECT id FROM questions WHERE postId='$postId'");
+            $listQuestion = getRaws("SELECT id FROM questions WHERE userId='$userId'");
             foreach($listQuestion as $item) {
                 $questionId = $item['id'];
 
@@ -34,19 +33,13 @@ if (!empty($filterAll['id'])) {
                 $deleteReply = delete('replies', "id='$replyId'");
             }
             //deleteQuestion
-            $listPost = getRaws("SELECT id FROM posts WHERE userId='$userId'");
-            foreach($listPost as $item) {
-                $postId = $item['id'];
+           
+            foreach($listQuestion as $item) {
+                $questionId = $item['id'];
 
-                $deleteQuestion = delete('questions', "postId='$postId'");
+                $deleteQuestion = delete('questions', "id='$questionId'");
             }
-            // deletePost
-            foreach($listPost as $item) {
-                $postId = $item['id'];
-
-               
-                $deletePost = delete('posts', "id='$postId'");
-            }
+            
             // deleteMessage
             $listMessage = getRaws("SELECT id FROM messages WHERE userId='$userId'");
             foreach($listMessage as $item) {
