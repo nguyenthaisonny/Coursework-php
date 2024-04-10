@@ -328,12 +328,12 @@ layouts('headerEditPost', $data);
 </div>
 
 <script>
-    // handle modal
+    // handle modal 
     var myModal = new bootstrap.Modal(document.getElementById('editModal'), {})
     myModal.show()
-
+    //handle when click outside modal
     document.getElementById('editModal').onclick = function(e) {
-        console.log(e.target.className);
+        // console.log(e.target.className);
         if (e.target.className === "modal fade") {
             console.log(document.getElementById('type').value);
             if (document.getElementById('type').value != '') {

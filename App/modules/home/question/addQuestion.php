@@ -18,7 +18,9 @@ if (isGet()) {
 
     if (!empty($filterAll['postId'])) {
         $postId = $filterAll['postId'];
-        $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
+        $postDetail = getRaw("SELECT userId, postName FROM posts WHERE id = '$postId'");
+        $userIdPost = $postDetail['userId'];
+        $postName = $postDetail['postName'];
 
         // check whether exist in database
         //if exist => get info
@@ -115,7 +117,7 @@ if (isPost()) {
             $insertStatus = insert('questions', $dataInsert);
             if ($insertStatus) {
 
-                setFlashData('smg', 'A new question was just uploaded!' . $_FILES["questionImage"]["name"]);
+                setFlashData('smg', 'A new question was just uploaded!' );
                 setFlashData('smg_type', 'success');
             } else {
                 setFlashData('smg', 'System faces errors! Please try again.');
@@ -206,7 +208,9 @@ layouts('headerPost', $data);
                 <!-- Inner main header -->
                 <div class="inner-main-header">
 
-                   
+                <div class="forum-welcome" style="margin: auto;color: rgb(104, 85, 224);font-weight: 600;">
+                    <?php echo $postName; ?>    
+                </div>
 
                 </div>
                 <?php

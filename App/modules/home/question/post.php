@@ -18,7 +18,10 @@ if (isGet()) {
 
     if (!empty($filterAll['postId'])) {
         $postId = $filterAll['postId'];
-        $userIdPost = getRaw("SELECT userId FROM posts WHERE id = '$postId'")['userId'];
+        $postDetail = getRaw("SELECT userId, postName FROM posts WHERE id = '$postId'");
+        $userIdPost = $postDetail['userId'];
+        $postName = $postDetail['postName'];
+
 
 
         $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY updateAt DESC");
@@ -143,7 +146,7 @@ layouts('headerPost', $data);
                 <!-- Inner sidebar header -->
                 <div class="inner-sidebar-header justify-content-center">
                     <!-- Button trigger modal -->
-                   
+
                     <button type="button" class="mg-btn medium rounded " style="margin: 0 25%; <?php echo checkAdminNotSignOut() ? 'display: none;' : '' ?> ">
                         <a style="padding: 12px 38px;" href="?module=home&page=question/addQuestion&postId=<?php echo $postId; ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">
 
@@ -151,9 +154,9 @@ layouts('headerPost', $data);
                         </a>
                     </button>
                     <div style="padding-right: 38px;color: rgb(104, 85, 224);font-weight: 600;<?php echo !checkAdminNotSignOut() ? 'display: none;' : '' ?>">
-                                Filter Questions Here: </div>
+                        Filter Questions Here: </div>
 
-                    </div>
+                </div>
                 <!-- /Inner sidebar header -->
 
                 <!-- Inner sidebar body -->
@@ -200,8 +203,10 @@ layouts('headerPost', $data);
             <div class="inner-main">
                 <!-- Inner main header -->
                 <div class="inner-main-header">
+                    <div class="forum-welcome" style="margin: auto;color: rgb(104, 85, 224);font-weight: 600;">
+                        <?php echo $postName; ?>
+                    </div>
 
-                   
 
                 </div>
                 <?php
@@ -380,70 +385,69 @@ layouts('headerPost', $data);
 </div>
 <script>
     //handle click sort case
+    
     const latest = document.getElementById('latest');
-
     latest.onclick = function(e) {
-
         const urlParams = new URLSearchParams('?module=home&page=question/post&postId=' + document.getElementById('postId').value);
-
-
-
         window.location.search = urlParams;
-
-
-
     }
+
     const oldest = document.getElementById('oldest');
-
     oldest.onclick = function(e) {
-
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('type', 'oldest');
         window.location.search = urlParams;
-
-
-
     }
 
     const popular = document.getElementById('popular');
-
     popular.onclick = function(e) {
-
-
         const urlParams = new URLSearchParams(window.location.search);
-
         urlParams.set('type', 'popular');
         window.location.search = urlParams;
-
-
-
     }
+
     const noReplyYet = document.getElementById('noReplyYet');
-
     noReplyYet.onclick = function(e) {
-
-
         const urlParams = new URLSearchParams(window.location.search);
-
         urlParams.set('type', 'noReplyYet');
         window.location.search = urlParams;
-
-
-
     }
+
     const noneReply = document.getElementById('noneReply');
-
     noneReply.onclick = function(e) {
-
-
         const urlParams = new URLSearchParams(window.location.search);
-
         urlParams.set('type', 'noneReply');
         window.location.search = urlParams;
-
-
-
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Get the button:
     let mybutton = document.getElementById("myBtn");
     let listQuestion = document.getElementById("listQuestion");

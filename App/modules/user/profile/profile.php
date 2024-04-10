@@ -76,24 +76,16 @@ if (isPost()) {
             $target_dir = './templates/img/imgProfile/';
             $profileImage = $target_dir . $_FILES["profileImage"]["name"];
             move_uploaded_file($_FILES["profileImage"]["tmp_name"], $profileImage);
-            //validat image
 
 
 
             //handle insert to database
-
-            $ok = 'ok';
             $dataUpdate = [
                 'fullname' => $filterAll['fullname'],
                 'email' => $filterAll['email'],
                 'phone' => $filterAll['phone'],
                 'profileImage' => $profileImage,
                 'description' => $filterAll['description']
-
-
-
-
-
 
             ];
         } else {
@@ -105,12 +97,6 @@ if (isPost()) {
                 'phone' => $filterAll['phone'],
                 'profileImage' => $oldImage['profileImage'],
                 'description' => $filterAll['description']
-
-
-
-
-
-
 
             ];
         }
@@ -262,3 +248,13 @@ if (!empty($userDetail)) {
 <?php
 layouts('footerIn')
 ?>
+
+
+
+
+
+
+
+
+
+

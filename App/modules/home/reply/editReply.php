@@ -100,7 +100,7 @@ if (isPost()) {
                     setFlashData('smg_type', 'danger');
                 }
             } else {
-                setFlashData('smg', 'Can not edit reply of another user!'.$replyId);
+                setFlashData('smg', 'Can not edit reply of another user!');
                 setFlashData('smg_type', 'danger');
             }
             

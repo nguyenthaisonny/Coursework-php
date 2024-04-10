@@ -177,7 +177,7 @@ layouts('headerForum', $data);
                                             </div>
 
                                         </div>
-                                        <div style="<?php echo checkAdminNotSignOut() ? '' : 'display: none;'?> position: absolute; right: 13px; top: 13px;" class="dropdown show">
+                                        <div style="<?php echo !checkAdminNotSignOut() ? 'display: none;' : null?> position: absolute; right: 13px; top: 13px;" class="dropdown show">
 
                                             <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i style="color:black;" class="fa-solid fa-ellipsis icon-hover"></i>

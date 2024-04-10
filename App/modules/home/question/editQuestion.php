@@ -15,13 +15,13 @@ $filterAll = filter();
 
 
 if (!empty($filterAll['postId']) && !empty($filterAll['questionId'])) {
-    $questionId = $filterAll['questionId'];
     $postId = $filterAll['postId'];
-
-
-    $userIdQuestion = getRaw("SELECT userId FROM questions WHERE id = '$questionId'")['userId'];
-    $questionDetail = getRaw("SELECT title, content, questionImage FROM questions WHERE id = '$questionId'");
-
+    $postDetail = getRaw("SELECT userId, postName FROM posts WHERE id = '$postId'");
+    $postName = $postDetail['postName'];
+    
+    $questionId = $_GET['questionId'];
+    $questionDetail = getRaw("SELECT title, content FROM questions WHERE id='$questionId'");
+    
     $listQuestion = getRaws("SELECT * FROM questions WHERE postId='$postId' ORDER BY updateAt DESC");
     if (!empty($_GET['type'])) {
         $newListQuestion = [];
@@ -56,9 +56,10 @@ if (isPost()) {
             $loginToken = getSession('loginToken');
             $queryToken = getRaw("SELECT userId FROM tokenlogin WHERE token = '$loginToken'");
             $userIdLogin = $queryToken['userId'];
-            $userIdQuestion = $filterAll['userIdQuestion'];
             $postId = $filterAll['postId'];
             $questionId = $_GET['questionId'];
+            $userIdQuestion = getRaw("SELECT userId FROM questions WHERE id='$questionId'")['userId'];
+
 
             if ($userIdLogin == $userIdQuestion || checkAdminNotSignOut()) {
 
@@ -126,8 +127,6 @@ $smgType = getFlashData(('smg_type'));
 
 if (!empty($questionDetail)) {
     $old = $questionDetail;
-    // print_r($old);
-
 }
 
 
@@ -152,7 +151,7 @@ layouts('headerEditQuestion', $data);
                         </a>
                     </button>
                     <div style="padding-right: 38px;color: rgb(104, 85, 224);font-weight: 600;<?php echo !checkAdminNotSignOut() ? 'display: none;' : '' ?>">
-                                Filter Questions Here: 
+                        Filter Questions Here:
 
                     </div>
                 </div>
@@ -170,7 +169,7 @@ layouts('headerEditQuestion', $data);
                                     <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
                                         <div class="simplebar-content" style="padding: 16px;">
                                             <nav class="nav nav-pills nav-gap-y-1 flex-column">
-                                            <a id='latest' href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo empty($_GET['type']) ? 'active' : '' ?>">Latest</a>
+                                                <a id='latest' href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo empty($_GET['type']) ? 'active' : '' ?>">Latest</a>
                                                 <a id="oldest" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'oldest') ? 'active' : '' ?>">Oldest</a>
                                                 <a id="popular" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'popular') ? 'active' : '' ?>">Popular</a>
                                                 <a id="noneReply" href="javascript:void(0)" class="nav-link nav-link-faded has-icon <?php echo (!empty($_GET['type']) && $_GET['type'] == 'noneReply') ? 'active' : '' ?>">None of reply</a>
@@ -200,11 +199,13 @@ layouts('headerEditQuestion', $data);
                 <!-- Inner main header -->
                 <div class="inner-main-header">
 
-                   
+                    <div class="forum-welcome" style="margin: auto;color: rgb(104, 85, 224);font-weight: 600;">
+                        <?php echo $postName; ?>
+                    </div>
 
                 </div>
-<!-- list questions -->
-<div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
+                <!-- list questions -->
+                <div class="inner-main-body p-2 p-sm-3 forum-content collapse show" id="listQuestion">
                     <button id="myBtn" title="Go to top" style="border-radius: 50%; right: 168px"><i class="fa-solid fa-arrow-up"></i></button>
                     <a style="margin-bottom: 16px" href="<?php echo _WEB_HOST; ?>/?module=home&page=forum/forum" class="btn btn-light btn-sm has-icon " data-target=".forum-content"><i class="fa-solid fa-backward"></i></a>
                     <div class="row">
@@ -331,47 +332,47 @@ layouts('headerEditQuestion', $data);
             <!-- /Inner main -->
         </div>
 
-    <!-- edit Question Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit question</h5>
+        <!-- edit Question Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="text-align: center;" id="exampleModalLabel">Edit question</h5>
 
-                </div>
-                <div class="modal-body">
-                    <form method="post" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label class="col-form-label">Title:</label>
-                            <input name="title" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'title') ?>">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-form-label">Content</label>
-                            <input name="content" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'content') ?>">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-form-label">Image</label>
-                            <input name="questionImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile" value=<?php echo  getOldValue($old, 'questionImage') ?>>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="col-form-label">Title:</label>
+                                <input name="title" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'title') ?>">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Content</label>
+                                <input name="content" type="text" class="form-control" required="required" value="<?php echo  getOldValue($old, 'content') ?>">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Image</label>
+                                <input name="questionImage" class="form-control" id="inputUsername" type="file" placeholder="Choose your image profile">
 
-                        </div>
+                            </div>
 
-                        <input type="hidden" id="type" value="<?php echo !empty($_GET['type']) ? $_GET['type'] : '' ?>">
+                            <input type="hidden" id="type" value="<?php echo !empty($_GET['type']) ? $_GET['type'] : '' ?>">
 
-                        <input type="hidden" name='userIdQuestion' value="<?php echo $userIdQuestion; ?>">
-                        <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
-                        <div class="modal-footer">
-                        </div>
-                        <button type="button" class="mg-btn  rounded small">
-                            <a style="padding: 12px 84px" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $_GET['postId'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">Back</a>
-                        </button>
-                        <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
-                    </form>
+                            
+                            <input id="postId" type="hidden" name='postId' value="<?php echo $postId; ?>">
+                            <div class="modal-footer">
+                            </div>
+                            <button type="button" class="mg-btn  rounded small">
+                                <a style="padding: 12px 84px" href="<?php echo _WEB_HOST; ?>/?module=home&page=question/post&postId=<?php echo $_GET['postId'] ?><?php echo !empty($_GET['type']) ? '&type=' . $_GET['type'] : '' ?>">Back</a>
+                            </button>
+                            <button type="submit" class="mg-btn  primary" style="margin-left: 60px;">Upload</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 </div>
 <script>
     var myModal = new bootstrap.Modal(document.getElementById('editModal'), {})

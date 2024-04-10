@@ -73,7 +73,7 @@ function delete($table, $condition='') {
     $result= query($sql);
     return $result;
 }
-// Get Raws
+// Get Rows
 function getRaws($sql) {
     $result = query($sql,'',true);
     if(is_object($result)) {
@@ -82,7 +82,7 @@ function getRaws($sql) {
     }
     return $dataFetch;
 }
-//Get 1 Raw
+//Get 1 Row
 function getRaw($sql) {
     $result = query($sql,'',true);
     if(is_object($result)) {
