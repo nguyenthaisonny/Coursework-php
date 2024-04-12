@@ -17,11 +17,22 @@ if (isGet()) {
     $friendId = $filterAll['friendId'];
     $friendDetail = getRaw("SELECT fullname, profileImage, description FROM users WHERE id = '$friendId'");
     $listMessageUser = getRaws("SELECT * FROM messages WHERE userId = '$userId' AND toUserId='$friendId' ORDER BY 'createAt' DESC");
-//     echo '<pre>';
-//    print_r($friendDetail);
-//    echo '</pre>';
+    //     echo '<pre>';
+    //    print_r($friendDetail);
+    //    echo '</pre>';
 
     $listMessageFriend = getRaws("SELECT * FROM messages WHERE userId = '$friendId' AND toUserId='$userId'  ORDER BY 'createAt' DESC");
+    //update read status
+    if (!empty($listMessageFriend)) {
+
+        foreach ($listMessageFriend as $item) {
+            $messageId = $item['id'];
+            $dataUpdate = [
+                'readStatus' => 1
+            ];
+            update('messages', $dataUpdate, "id='$messageId'");
+        }
+    }
     $listMessage = array_merge($listMessageUser, $listMessageFriend);
     // sort listMessage to latest
     $ord = array();
@@ -108,11 +119,10 @@ layouts('headerRoom', $data)
                                     } else {
                                         // check read status
                                         $lastMessageId = $lastMessage['id'];
-    
+
                                         $queryReadStatus = getRaw("SELECT readStatus FROM messages WHERE id = $lastMessageId");
-                                        if($queryReadStatus['readStatus'] == 1) {
+                                        if ($queryReadStatus['readStatus'] == 1) {
                                             $readStatus = true;
-                                           
                                         }
                                         if ($lastMessage['userId'] == $_GET['friendId'] && $lastMessage['toUserId'] == $_GET['userId']) {
                                             $readStatus = true;
@@ -143,7 +153,7 @@ layouts('headerRoom', $data)
                                                 <?php echo $item['fullname'] ?>
                                                 <?php echo checkAdminInList($friendId) ? '<span style="color: #20D5EC; font-size: 14px;"><i class="fa-solid fa-circle-check"></i></span>' : null; ?>
                                             </div>
-                                            <div style="<?php echo $myMessage || $readStatus ? 'color: #65676b;': 'color: black; font-weight:600;'?>">
+                                            <div style="<?php echo $myMessage || $readStatus ? 'color: #65676b;' : 'color: black; font-weight:600;' ?>">
 
 
                                                 <?php
@@ -205,7 +215,7 @@ layouts('headerRoom', $data)
                                 foreach ($listMessage as $item) :
 
 
-                                    
+
 
                                     $count++;
                             ?>
