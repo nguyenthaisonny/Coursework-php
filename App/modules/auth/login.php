@@ -17,7 +17,7 @@ if ($_POST) {
         if (!empty($userQuery)) {
             $passwordHash = $userQuery['password'];
             $userId = $userQuery['id'];
-            
+
             if (password_verify($password, $passwordHash)) {
                 //create tokenlogin
                 $tokenLogin = sha1(uniqid() . time());
@@ -30,8 +30,8 @@ if ($_POST) {
 
                 if ($inserStatus) {
                     // insert success
-                   
-                    setSession('loginToken', $tokenLogin); 
+
+                    setSession('loginToken', $tokenLogin);
 
                     reDirect('?module=home&page=forum/forum');
                 } else {
@@ -44,6 +44,10 @@ if ($_POST) {
                 setFlashData('smg_type', 'danger');
                 reDirect('?module=auth&page=login');
             }
+        } else {
+            setFlashData('smg', 'This email is not exist!');
+            setFlashData('smg_type', 'danger');
+            reDirect('?module=auth&page=login');
         }
     } else {
         setFlashData('smg', 'Please type email and password');
@@ -85,7 +89,7 @@ layouts('header', $data);
         </form>
         <button class="mg-btn large rounded">
 
-            <a class="largeAnker" href="?module=auth&page=register" >Sign up</a>
+            <a class="largeAnker" href="?module=auth&page=register">Sign up</a>
         </button>
 
 

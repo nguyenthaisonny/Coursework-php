@@ -195,7 +195,7 @@ function checkLogin()
         } else {
             if($queryStatus['status'] == 0) {
 
-                setFlashData('smg', 'Your account has not been actived! Please check your email again.');
+                setFlashData('smg', 'Your account has not been active! Please check your email again.');
                 setFlashData('smg_type', 'danger');
             }
             removeSession('loginToken');

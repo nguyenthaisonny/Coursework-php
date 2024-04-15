@@ -97,7 +97,7 @@ if (isPost()) {
                 $updateStatus = update('questions', $dataUpdate, "id= $questionId");
                 if ($updateStatus) {
 
-                    setFlashData('smg', 'This post was just updated');
+                    setFlashData('smg', 'This question was just updated');
                     setFlashData('smg_type', 'success');
                 } else {
                     setFlashData('smg', 'System faces errors! Please try again.');

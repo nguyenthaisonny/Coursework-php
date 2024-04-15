@@ -13,13 +13,11 @@ if (isGet()) {
     $filterAll = filter();
     $userId = $filterAll['userId'];
 
-    $listFriend = getRaws("SELECT * FROM users");
     $friendId = $filterAll['friendId'];
+    $listFriend = getRaws("SELECT * FROM users");
     $friendDetail = getRaw("SELECT fullname, profileImage, description FROM users WHERE id = '$friendId'");
     $listMessageUser = getRaws("SELECT * FROM messages WHERE userId = '$userId' AND toUserId='$friendId' ORDER BY 'createAt' DESC");
-    //     echo '<pre>';
-    //    print_r($friendDetail);
-    //    echo '</pre>';
+    
 
     $listMessageFriend = getRaws("SELECT * FROM messages WHERE userId = '$friendId' AND toUserId='$userId'  ORDER BY 'createAt' DESC");
     //update read status

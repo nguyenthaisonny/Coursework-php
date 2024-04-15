@@ -170,7 +170,7 @@ layouts('headerReplyMessage', $data);
                 </div>
                 <div class="content">
                     <blockquote>
-                        <p>
+                        <p style="word-wrap: break-word;">
                             <?php echo $messageDetail['messageContent'] ?>
                         </p>
 
