@@ -21,7 +21,7 @@ $smgType = getFlashData(('smg_type'));
 
 
 
-$listUsers = getRaws("SELECT * FROM users ORDER BY updateAt DESC");
+$listUsers = getRaws("SELECT * FROM users ORDER BY updateAt");
 // echo '<pre>';
 // print_r($listUsers);
 // echo '</pre>';
