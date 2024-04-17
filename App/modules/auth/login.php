@@ -19,6 +19,13 @@ if ($_POST) {
             $userId = $userQuery['id'];
 
             if (password_verify($password, $passwordHash)) {
+                //check account is online or not
+                $userLoggin = getRaws("SELECT * FROM tokenlogin WHERE userId='$userId'");
+                if (sizeof($userLoggin) > 0) {
+                    setFlashData('smg', 'Your account is online at a another device');
+                    setFlashData('smg_type', 'danger');
+                    reDirect('?module=auth&page=login');
+                }
                 //create tokenlogin
                 $tokenLogin = sha1(uniqid() . time());
                 //insert to tokenlogin table
